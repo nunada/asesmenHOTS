@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Pelatihan - Materi 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 32px 32px;
+            scroll-behavior: smooth;
+        }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Animasi Kuis */
+        .quiz-option { transition: all 0.2s ease-in-out; }
+        .quiz-option.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
+        .quiz-option.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .quiz-option.disabled { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Top Header Brand (Modern & Elegant - Non Sticky) -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 py-4 sm:py-6 px-4 sm:px-6 lg:px-8 relative shadow-[0_4px_30px_rgba(0,0,0,0.03)] z-40">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+            <!-- Box Logo -->
+            <div class="flex items-center gap-3 sm:gap-4 p-2 sm:p-3 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm ring-1 ring-slate-900/5">
+                <img src="https://i.ibb.co.com/Gv1xXFQG/logo-Unesa.png" alt="UNESA" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
+                <div class="w-px h-10 sm:h-14 bg-slate-200"></div>
+                <img src="https://i.ibb.co.com/Rp23J5jP/image.png" alt="Al-Kautsar" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
+            </div>
+            <!-- Title -->
+            <div class="text-center sm:text-left border-l-0 sm:border-l-2 border-slate-200 sm:pl-5">
+                <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-900 via-indigo-800 to-blue-700 tracking-tight leading-tight mb-1">
+                    Modul Pelatihan
+                </h1>
+                <p class="text-xs sm:text-sm lg:text-base text-slate-500 font-semibold tracking-wide uppercase">Asesmen HOTS Berbantuan AI</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Navigasi (Glassmorphism Sticky) -->
+    <nav class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white sticky top-0 z-50 shadow-lg border-b border-indigo-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-14 sm:h-16"> 
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex gap-2 lg:gap-3 items-center">
+                    <a href="index.html" class="px-4 py-2 hover:bg-white/10 rounded-xl text-sm font-medium transition-all">Beranda</a>
+                    <a href="materi-1.html" class="px-4 py-2 bg-white/20 rounded-xl text-sm font-bold shadow-inner border border-white/20 transition-all">Materi 1</a>
+                    <a href="materi-2.html" class="px-4 py-2 hover:bg-white/10 rounded-xl text-sm font-medium transition-all">Materi 2</a>
+                    <a href="materi-3.html" class="px-4 py-2 hover:bg-white/10 rounded-xl text-sm font-medium transition-all">Materi 3</a>
+                    <a href="klinik-ai.html" class="ml-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(99,102,241,0.5)] flex items-center gap-2">
+                        <span>✨</span> Klinik AI
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Bar -->
+                <div class="md:hidden flex items-center justify-between w-full">
+                    <span class="text-xs font-bold tracking-widest text-blue-200 uppercase flex items-center gap-2">Menu Utama</span>
+                    <button id="mobile-menu-btn" class="p-2 text-blue-100 hover:text-white hover:bg-white/10 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-white/50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-blue-900 border-t border-blue-800 shadow-2xl z-50">
+            <div class="px-4 pt-3 pb-4 space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-800 hover:text-white transition-colors">Beranda</a>
+                <a href="materi-1.html" class="block px-4 py-3 rounded-xl text-sm font-bold bg-white/10 text-white border border-white/10 shadow-inner">Materi 1</a>
+                <a href="materi-2.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-800 hover:text-white transition-colors">Materi 2</a>
+                <a href="materi-3.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-800 hover:text-white transition-colors">Materi 3</a>
+                <a href="klinik-ai.html" class="block px-4 py-3 mt-4 rounded-xl text-sm font-bold bg-indigo-500 text-white shadow-md flex items-center justify-center gap-2">✨ Masuk Klinik AI</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+        
+        <!-- Hero Section -->
+        <div class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-12 text-center relative overflow-hidden mb-8 group hover:shadow-md transition-shadow">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500"></div>
+            <span class="inline-flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-blue-50 text-blue-700 text-xs font-bold tracking-wider mb-5 uppercase border border-blue-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                Materi 1
+            </span>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-5 leading-tight">
+                Tantangan Pendidikan Abad 21 <br class="hidden sm:block"> & Transformasi Peran Guru
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto font-medium">
+                Memahami pergeseran paradigma mengajar, urgensi Keterampilan 4C di lingkungan pondok pesantren, dan bagaimana <em>Artificial Intelligence</em> (AI) hadir sebagai rekan kolaborasi yang tangguh bagi pendidik.
+            </p>
+        </div>
+
+        <!-- Konten Utama -->
+        <div class="space-y-8">
+            
+            <!-- Bagian 1: Pergeseran Paradigma -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">1</span> 
+                    Pergeseran Paradigma Pendidikan
+                </h3>
+                <div class="text-slate-600 text-sm sm:text-base leading-relaxed text-justify space-y-4">
+                    <p>Dunia berubah dengan kecepatan yang belum pernah terjadi sebelumnya. Saat ini, siswa memiliki akses informasi tak terbatas di ujung jari mereka melalui internet. Hal ini menuntut adanya pergeseran cara kita mendidik generasi muda, termasuk di lingkungan pendidikan pesantren.</p>
+                    <p>Model pendidikan konvensional (Abad ke-20) yang memposisikan guru sebagai satu-satunya <strong>pusat transfer ilmu</strong> dan menitikberatkan pada hafalan fakta, kini dirasa tidak lagi cukup untuk membekali siswa. Siswa masa kini tidak kekurangan informasi; mereka justru kebanjiran informasi. Yang mereka butuhkan adalah kemampuan memfilter, menganalisis, dan memanfaatkan informasi tersebut untuk memecahkan masalah nyata.</p>
+                </div>
+
+                <!-- Bagan Abad 20 vs 21 -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-8 mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <!-- Abad 20 Card -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm w-full md:w-64 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-slate-100 rounded-bl-full -z-10"></div>
+                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-slate-700 mb-2">Pendidikan Abad 20</h4>
+                        <ul class="text-xs text-slate-500 space-y-2 text-left">
+                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Pembelajaran Pasif (Mendengar)</li>
+                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Guru Satu-satunya Sumber</li>
+                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Fokus pada Hafalan Materi</li>
+                        </ul>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="text-slate-300 md:rotate-0 rotate-90 my-2 md:my-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </div>
+
+                    <!-- Abad 21 Card -->
+                    <div class="bg-gradient-to-b from-blue-50 to-white p-5 rounded-xl border border-blue-200 shadow-md ring-2 ring-blue-500/20 w-full md:w-64 text-center transform md:scale-105 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-100 rounded-bl-full -z-10"></div>
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <h4 class="font-bold text-blue-900 mb-2">Pendidikan Abad 21</h4>
+                        <ul class="text-xs text-slate-700 space-y-2 text-left font-medium">
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Keterampilan Analisis (HOTS)</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Guru sebagai Fasilitator</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Pemecahan Masalah Kolaboratif</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 2: Keterampilan 4C -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">2</span> 
+                    Urgensi Keterampilan 4C
+                </h3>
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    Agar santri dan siswa mampu bersaing di era digital, kurikulum saat ini dirancang untuk menumbuhkan <strong>Keterampilan 4C</strong>. Asesmen yang merangsang kemampuan berpikir tingkat tinggi <em>(High Order Thinking Skills/HOTS)</em> adalah instrumen utama untuk mengukur dan melatih 4C ini.
+                </p>
+
+                <!-- 4C Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Critical Thinking -->
+                    <div class="p-5 rounded-2xl bg-orange-50 border border-orange-100 flex gap-4 items-start hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-orange-900 text-sm mb-1">Critical Thinking</h4>
+                            <p class="text-xs text-orange-800/80 leading-relaxed"><strong>(Berpikir Kritis)</strong>. Mampu membedah masalah kompleks, menyaring kebenaran informasi dari hoaks, dan menarik kesimpulan berdasarkan bukti serta logika yang kuat.</p>
+                        </div>
+                    </div>
+                    <!-- Creativity -->
+                    <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100 flex gap-4 items-start hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-purple-900 text-sm mb-1">Creativity</h4>
+                            <p class="text-xs text-purple-800/80 leading-relaxed"><strong>(Kreativitas)</strong>. Kemampuan menciptakan solusi baru dan segar. Melihat permasalahan dari sudut pandang yang berbeda <em>(out of the box)</em> dan tidak takut berinovasi.</p>
+                        </div>
+                    </div>
+                    <!-- Collaboration -->
+                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 flex gap-4 items-start hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-emerald-900 text-sm mb-1">Collaboration</h4>
+                            <p class="text-xs text-emerald-800/80 leading-relaxed"><strong>(Kolaborasi)</strong>. Kecakapan bekerja sama secara fleksibel dalam sebuah tim, menghargai keberagaman pendapat, serta bersinergi demi mencapai tujuan bersama.</p>
+                        </div>
+                    </div>
+                    <!-- Communication -->
+                    <div class="p-5 rounded-2xl bg-cyan-50 border border-cyan-100 flex gap-4 items-start hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-cyan-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-cyan-900 text-sm mb-1">Communication</h4>
+                            <p class="text-xs text-cyan-800/80 leading-relaxed"><strong>(Komunikasi)</strong>. Mampu mengartikulasikan ide, gagasan, dan solusi secara terstruktur dan persuasif, baik secara lisan, tulisan, maupun media digital.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 3: Revolusi AI -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-violet-100 text-violet-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">3</span> 
+                    Revolusi AI dalam Dunia Pendidikan
+                </h3>
+                <div class="text-slate-600 text-sm sm:text-base leading-relaxed text-justify space-y-4 mb-6">
+                    <p>Kehadiran <strong>Kecerdasan Buatan (AI) Generatif</strong> seperti Google Gemini atau ChatGPT telah menciptakan gelombang besar di seluruh sektor, termasuk pendidikan. Bagi sebagian orang, ini dianggap sebagai ancaman (takut siswa menyontek massal). Namun, bagi pendidik yang adaptif, AI adalah senjata rahasia.</p>
+                    <p>Dalam menyusun instrumen evaluasi berstandar HOTS, guru seringkali kehabisan ide untuk membuat skenario studi kasus atau merumuskan rubrik penilaian yang komprehensif. Di sinilah AI mengambil peran sebagai <strong>asisten tanpa lelah</strong> yang siap diajak berdiskusi <em>(brainstorming)</em> kapan saja.</p>
+                </div>
+                
+                <div class="bg-violet-50 border border-violet-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-6">
+                    <div class="w-20 h-20 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-violet-200 text-3xl">🤖</div>
+                    <div>
+                        <h4 class="font-bold text-violet-900 mb-2">Apa yang BISA dilakukan AI untuk Guru?</h4>
+                        <ul class="text-sm text-violet-800 space-y-1.5 list-disc list-inside">
+                            <li>Membuat puluhan ide studi kasus yang relevan dengan lingkungan sekolah.</li>
+                            <li>Menyusun tabel rubrik penilaian (skor 1-4) dalam hitungan detik.</li>
+                            <li>Menganalisis draf soal buatan guru dan memberikan saran perbaikan tingkat kognitif.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 4: Etika Penggunaan AI -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-rose-100 text-rose-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">4</span> 
+                    Etika dan Batasan Penggunaan AI
+                </h3>
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    Sistem AI tidak memiliki empati, pengalaman pedagogis, maupun pemahaman kultural pesantren seperti yang Anda miliki. Oleh karena itu, ada koridor etika mutlak yang wajib dipatuhi oleh setiap pendidik saat menggunakan AI:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-slate-400">
+                        <div class="text-xl shrink-0">🛡️</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Jaga Privasi Data Siswa</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong>Dilarang keras</strong> mengunggah data pribadi siswa (nama asli, NIK, alamat lengkap, atau daftar nilai riil) ke dalam platform AI terbuka. Jika Anda ingin meminta AI menganalisis deskripsi nilai, selalu gunakan nama samaran/inisial.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-yellow-400">
+                        <div class="text-xl shrink-0">⚠️</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Waspada <em>"Halusinasi"</em> AI</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">AI generatif didesain untuk memprediksi kata demi kata agar terdengar natural, bukan untuk menjadi ensiklopedia mutlak kebenaran. Terkadang AI mengalami <em>halusinasi</em> (menghasilkan info meyakinkan yang nyatanya salah konsep). <strong>Guru harus selalu memvalidasi fakta dan kunci jawaban.</strong></p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-emerald-400">
+                        <div class="text-xl shrink-0">💡</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Prinsip <em>Human in the Loop</em></h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Jadikan AI sebagai "dapur persiapan". Hasil akhir yang disajikan kepada siswa haruslah hasil yang sudah dikurasi, direvisi, dan diberi sentuhan kasih sayang serta pemahaman karakter siswa oleh sang Guru.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 5: Kuis Cek Pemahaman -->
+            <section class="bg-slate-900 rounded-[2rem] shadow-lg border border-slate-800 p-6 sm:p-10 mb-10 text-white relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-48 h-48 bg-blue-500 rounded-full blur-[80px] opacity-30"></div>
+                <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-indigo-500 rounded-full blur-[80px] opacity-30"></div>
+                
+                <div class="relative z-10">
+                    <h3 class="text-xl sm:text-2xl font-bold mb-2">Cek Pemahaman Anda 📝</h3>
+                    <p class="text-slate-400 mb-8 text-sm">Uji pemahaman konseptual Anda terkait materi Pergeseran Abad 21 dan AI.</p>
+
+                    <div class="space-y-8">
+                        <!-- Q1 -->
+                        <div class="quiz-question" id="q1">
+                            <p class="font-semibold text-slate-200 mb-3 text-sm">1. Manakah dari berikut ini yang merepresentasikan pendekatan pembelajaran Abad ke-21 yang ideal?</p>
+                            <div class="space-y-2">
+                                <button onclick="checkAnswer('q1', 0)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">A. Guru mendiktekan seluruh isi buku paket agar siswa fokus menghafal.</button>
+                                <button onclick="checkAnswer('q1', 1)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">B. Guru menjadi fasilitator, mengarahkan siswa untuk memecahkan masalah melalui kolaborasi.</button>
+                                <button onclick="checkAnswer('q1', 2)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">C. Membiarkan siswa belajar sendiri sepenuhnya menggunakan internet tanpa bimbingan.</button>
+                            </div>
+                            <p class="feedback text-xs font-bold mt-3 hidden"></p>
+                        </div>
+
+                        <div class="h-px bg-slate-700/50"></div>
+
+                        <!-- Q2 -->
+                        <div class="quiz-question" id="q2">
+                            <p class="font-semibold text-slate-200 mb-3 text-sm">2. Apa tindakan paling tepat yang harus dilakukan guru jika ingin membuat soal dengan bantuan AI?</p>
+                            <div class="space-y-2">
+                                <button onclick="checkAnswer('q2', 0)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">A. Menyalin (copy-paste) mentah-mentah soal buatan AI langsung ke kertas ujian siswa.</button>
+                                <button onclick="checkAnswer('q2', 1)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">B. Menghindari AI sama sekali karena mesin bisa memberikan jawaban yang salah konsep (halusinasi).</button>
+                                <button onclick="checkAnswer('q2', 2)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">C. Menggunakan draf AI sebagai inspirasi, lalu memvalidasi konsep dan menyuntingnya sesuai konteks kelas.</button>
+                            </div>
+                            <p class="feedback text-xs font-bold mt-3 hidden"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-400 text-xs sm:text-sm bg-white border-t border-slate-200 mt-auto">
+        <p>&copy; 2026 Tim PKM Pondok Pesantren Al-Kautsar Pandaan. Dibuat untuk tujuan pendidikan.</p>
+    </footer>
+
+    <script>
+        // Toggle Mobile Menu
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Quiz Logic
+        const answers = { q1: 1, q2: 2 }; // Kunci jawaban yang benar (index)
+
+        function checkAnswer(questionId, selectedIdx) {
+            const container = document.getElementById(questionId);
+            const buttons = container.querySelectorAll('.quiz-option');
+            const feedback = container.querySelector('.feedback');
+            const correctIdx = answers[questionId];
+
+            // Disable all buttons in this question
+            buttons.forEach(btn => btn.classList.add('disabled'));
+
+            if (selectedIdx === correctIdx) {
+                buttons[selectedIdx].classList.add('correct');
+                // override tailwind hover effect for correct answer
+                buttons[selectedIdx].style.backgroundColor = '#059669'; 
+                buttons[selectedIdx].style.color = 'white';
+                buttons[selectedIdx].style.borderColor = '#059669';
+                
+                feedback.innerHTML = '✅ <strong>Tepat Sekali!</strong> Anda memahami konsepnya.';
+                feedback.className = 'feedback text-xs mt-3 text-emerald-400 block';
+            } else {
+                buttons[selectedIdx].classList.add('wrong');
+                buttons[selectedIdx].style.backgroundColor = '#dc2626';
+                buttons[selectedIdx].style.color = 'white';
+                buttons[selectedIdx].style.borderColor = '#dc2626';
+                
+                buttons[correctIdx].classList.add('correct'); 
+                buttons[correctIdx].style.backgroundColor = '#059669';
+                buttons[correctIdx].style.color = 'white';
+                
+                feedback.innerHTML = '❌ <strong>Kurang Tepat.</strong> Perhatikan jawaban yang ditandai hijau.';
+                feedback.className = 'feedback text-xs mt-3 text-rose-400 block';
+            }
+        }
+    </script>
+</body>
+</html>
