@@ -5,27 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio Soal AI - Modul Pelatihan</title>
     
+    <!-- Script Pendukung -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- Konfigurasi MathJax untuk Rumus Matematika (SVG) -->
-    <script>
-        window.MathJax = {
-            svg: { fontCache: 'global' },
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
-            startup: { typeset: true }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
     <style>
+        /* Desain Utama & Background */
         body { 
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
             background-color: #f8fafc;
             background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
             background-size: 32px 32px;
+            margin: 0;
+            padding: 0;
         }
         
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -47,47 +41,31 @@
         .markdown-body em { font-style: italic; }
         .markdown-body ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 0.75em; }
         .markdown-body ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 0.75em; }
-        .markdown-body code { background-color: rgba(0,0,0,0.1); padding: 0.1em 0.3em; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
         
-        /* Desain Tabel AI */
+        /* Tabel di Layar Chat */
         .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 1em; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .markdown-body th { background-color: #f1f5f9; font-weight: 700; text-align: left; padding: 12px; border: 1px solid #e2e8f0; }
         .markdown-body td { padding: 12px; border: 1px solid #e2e8f0; vertical-align: top; }
-        .markdown-body tr:nth-child(even) { background-color: #f8fafc; }
         
-        /* CSS Khusus Untuk Teks Arab */
+        /* CSS Khusus Huruf Arab (Otomatis Rata Kanan & Ukuran Besar) */
         .arabic-text {
             font-family: 'Amiri', 'Tahoma', serif !important;
             font-size: 1.8em !important;
             line-height: 2.2 !important;
-            display: inline-block;
+            display: block;
             text-align: right;
             direction: rtl;
-        }
-
-        /* Responsive MathJax Container */
-        .markdown-body mjx-container {
-            max-width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        /* Template Cetak PDF Tersembunyi */
-        #print-container {
-            position: absolute;
-            top: 0;
-            left: -5000px;
-            width: 210mm;
-            background-color: white;
-            font-family: 'Tahoma', 'Arial', sans-serif;
+            margin: 15px 0;
             color: #1e293b;
         }
     </style>
 </head>
-<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
 
+<body>
+<!-- BUNGKUSAN UTAMA APLIKASI (Untuk disembunyikan saat cetak PDF) -->
+<div id="app-wrapper" class="h-screen flex flex-col overflow-hidden w-full relative">
+
+    <!-- HEADER -->
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 py-4 sm:py-6 px-4 sm:px-6 lg:px-8 z-40 relative shadow-[0_4px_30px_rgba(0,0,0,0.03)] flex-none">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <div class="flex items-center gap-3 sm:gap-4 p-2 sm:p-3 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm ring-1 ring-slate-900/5">
@@ -104,10 +82,10 @@
         </div>
     </header>
 
+    <!-- NAVIGASI -->
     <nav class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white shadow-lg border-b border-indigo-700/50 flex-none z-30 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-14 sm:h-16"> 
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex gap-2 lg:gap-3 items-center">
                     <a href="index.html" class="px-4 py-2 hover:bg-white/10 rounded-xl text-sm font-medium transition-all">Beranda</a>
                     <a href="materi-1.html" class="px-4 py-2 hover:bg-white/10 rounded-xl text-sm font-medium transition-all">Materi 1</a>
@@ -118,17 +96,15 @@
                     </a>
                 </div>
                 
-                <!-- Mobile Menu Bar -->
                 <div class="md:hidden flex items-center justify-between w-full">
                     <span class="text-xs font-bold tracking-widest text-blue-200 uppercase flex items-center gap-2">Menu Utama</span>
-                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="p-2 text-blue-100 hover:text-white hover:bg-white/10 rounded-xl transition-colors">
+                    <button id="mobile-menu-btn" class="p-2 text-blue-100 hover:text-white hover:bg-white/10 rounded-xl transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-blue-900 border-t border-blue-800 shadow-2xl z-50">
             <div class="px-4 pt-3 pb-4 space-y-2">
                 <a href="index.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-blue-100 hover:bg-blue-800 hover:text-white transition-colors">Beranda</a>
@@ -140,9 +116,10 @@
         </div>
     </nav>
 
+    <!-- AREA UTAMA APLIKASI -->
     <main class="flex-1 max-w-7xl mx-auto w-full p-4 flex flex-col md:flex-row gap-4 sm:gap-6 overflow-hidden relative">
         
-        <!-- Left Panel: Pengaturan & Data Guru -->
+        <!-- SIDEBAR PENGATURAN -->
         <aside id="settings-panel" class="w-full md:w-[340px] lg:w-[400px] glass-panel rounded-3xl shadow-lg flex flex-col overflow-y-auto shrink-0 transition-transform duration-300 z-20 absolute md:relative inset-y-4 md:inset-0 left-4 right-4 md:left-0 md:right-0 pb-10 md:pb-0">
             <div class="p-5 sm:p-6 flex-1">
                 
@@ -151,19 +128,17 @@
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         Persiapan
                     </h2>
-                    <button onclick="document.getElementById('settings-panel').classList.add('-translate-x-[120%]')" class="md:hidden p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200">
+                    <button id="close-settings" class="md:hidden p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
 
-                <!-- API Key Section -->
                 <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 mb-6 shadow-sm">
                     <label class="block text-xs font-bold text-indigo-900 mb-2 uppercase tracking-wide">1. Koneksi AI (API Key)</label>
                     <div class="flex gap-2">
                         <input type="password" id="api-key" placeholder="Paste API Key..." class="w-full text-sm px-3 py-2.5 rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-mono shadow-inner">
                         <button onclick="simpanApiKey()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-md transition-colors whitespace-nowrap">Simpan</button>
                     </div>
-                    
                     <details class="mt-3 group">
                         <summary class="text-xs font-semibold text-indigo-600 cursor-pointer hover:text-indigo-800 list-none flex items-center gap-1">
                             <svg class="w-4 h-4 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -178,15 +153,12 @@
                     </details>
                 </div>
 
-                <!-- Identity Form -->
                 <div class="space-y-4">
                     <label class="block text-xs font-bold text-slate-800 uppercase tracking-wide">2. Data Diri & Konteks</label>
-                    
                     <div>
                         <span class="block text-xs font-semibold text-slate-500 mb-1">Nama Lengkap</span>
                         <input type="text" id="guru-nama" placeholder="Cth: Budi Santoso, M.Pd" class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm">
                     </div>
-                    
                     <div>
                         <span class="block text-xs font-semibold text-slate-500 mb-1">Instansi / Sekolah</span>
                         <select id="guru-instansi" class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-medium shadow-sm">
@@ -197,7 +169,6 @@
                             <option value="MA AL-KAUTSAR">MA AL-KAUTSAR</option>
                         </select>
                     </div>
-
                     <div>
                         <span class="block text-xs font-semibold text-slate-500 mb-1">Mata Pelajaran (Spesifik)</span>
                         <input type="text" id="guru-mapel" placeholder="Cth: Fiqih Kelas 8" class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-white shadow-sm">
@@ -213,138 +184,134 @@
             </div>
         </aside>
 
+        <!-- AREA CHAT -->
         <section class="flex-1 glass-panel rounded-3xl shadow-lg border border-white flex flex-col overflow-hidden relative transition-opacity duration-300 opacity-50 pointer-events-none" id="chat-panel">            
             
-            <!-- Mobile Header -->
             <div class="md:hidden bg-white/80 border-b border-slate-100 p-3 flex justify-between items-center shrink-0 shadow-sm z-10 relative">
                 <div class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-lg shadow-inner">🤖</div>
-                    <span class="font-bold text-sm text-slate-800">Asisten AI</span>
+                    <span class="font-bold text-sm text-slate-800">Asisten AI (Gemini)</span>
                 </div>
-                <button onclick="document.getElementById('settings-panel').classList.remove('-translate-x-[120%]')" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100 shadow-sm">
-                    Pengaturan
+                <button id="open-settings" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100 shadow-sm">
+                    Buka Pengaturan
                 </button>
             </div>
 
-            <!-- Formulir Kalkulator Prompt -->
+            <!-- Kalkulator K-P-T-F -->
             <div class="bg-indigo-50 border-b border-indigo-100 shrink-0 z-10 relative shadow-sm">
                 <div class="p-3 sm:p-4 flex justify-between items-center cursor-pointer hover:bg-indigo-100/50 transition-colors" onclick="document.getElementById('prompt-calc').classList.toggle('hidden')">
                     <h3 class="font-bold text-indigo-900 text-sm flex items-center gap-2">
                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        Formulir Prompt K-P-T-F (Klik untuk Buka/Tutup)
+                        Rumus Prompt K-P-T-F (Klik)
                     </h3>
-                    <span class="text-indigo-400 text-xs font-medium">Buka/Tutup</span>
+                    <span class="text-indigo-400 text-xs font-medium">Lihat/Tutup</span>
                 </div>
-                
-                <div id="prompt-calc" class="hidden p-3 sm:p-4 pt-0 bg-indigo-50 max-h-[40vh] overflow-y-auto">
-                    <div class="space-y-3 bg-white p-4 rounded-xl border border-indigo-100 shadow-sm">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Konteks (K)</label>
-                            <input type="text" id="kptf-k" class="w-full text-sm p-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Cth: Siswa MTs Kelas 8 Materi Zakat">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Peran AI (P)</label>
-                            <input type="text" id="kptf-p" class="w-full text-sm p-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Cth: Bertindaklah sebagai ahli pembuat soal HOTS">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Tugas (T)</label>
-                            <textarea id="kptf-t" rows="2" class="w-full text-sm p-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Cth: Buatkan 1 soal kasus analisis (C4)"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Format (F)</label>
-                            <input type="text" id="kptf-f" class="w-full text-sm p-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Cth: Sajikan Tabel Rubrik Penilaian 1-4">
-                        </div>
-                        <button onclick="salinKptfKeChat()" class="w-full py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded-lg text-sm transition-colors mt-2">
-                            Salin ke Kolom Chat ↓
-                        </button>
-                    </div>
+                <div id="prompt-calc" class="hidden p-3 sm:p-4 pt-0 text-xs text-slate-600 max-h-[35vh] overflow-y-auto">
+                    <ul class="space-y-1.5 font-medium bg-white p-3 rounded-xl border border-indigo-100 shadow-sm">
+                        <li><strong class="text-indigo-700">K</strong> = Konteks (Cth: <em>"Untuk siswa MTs kls 8 materi Shalat"</em>)</li>
+                        <li><strong class="text-indigo-700">P</strong> = Peran (Cth: <em>"Bertindaklah sebagai pembuat soal"</em>)</li>
+                        <li><strong class="text-indigo-700">T</strong> = Tugas (Cth: <em>"Buatkan 1 soal kasus level Analisis C4"</em>)</li>
+                        <li><strong class="text-indigo-700">F</strong> = Format (Cth: <em>"Sajikan tabel rubrik skor 1-4"</em>)</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Area Riwayat Chat -->
+            <!-- AREA PESAN -->
             <div id="chat-history" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 bg-slate-50/50">
                 <div class="flex gap-3 sm:gap-4 max-w-[90%]">
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-blue-500 text-white flex items-center justify-center shrink-0 shadow-md font-bold text-lg sm:text-xl">🤖</div>
                     <div class="bg-white border border-slate-200 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-slate-700 leading-relaxed">
-                        <p>Halo Bapak/Ibu Guru! Saya adalah Asisten AI yang didukung oleh <strong>Gemini 3.6 Flash</strong>.</p>
-                        <p>Saya bisa membantu Anda merumuskan Ide Konteks (Stimulus), menyusun soal HOTS, membuat Rubrik Penilaian Autentik, serta membuat tabel dan menggambar ilustrasi pendukung pembelajaran.</p>
-                        <p class="mt-2 text-xs font-bold text-indigo-600 bg-indigo-50 p-2 rounded-lg border border-indigo-100">💡 Masukkan API Key, isi form di sebelah kiri, lalu klik "Mulai Sesi" untuk mengobrol dengan saya.</p>
+                        <p>Halo Bapak/Ibu Guru! Saya adalah Asisten AI pendamping pembuatan Soal HOTS.</p>
+                        <p class="mt-2 text-xs font-bold text-indigo-600 bg-indigo-50 p-2 rounded-lg border border-indigo-100">💡 Masukkan API Key, lengkapi data diri di kiri, lalu klik "Mulai Sesi" untuk mengobrol dengan saya.</p>
                     </div>
-                </div>
-                
-                <!-- Indikator Mengetik AI -->
-                <div id="ai-typing" class="hidden items-center gap-3 text-sm text-slate-500 bg-transparent p-2">
-                    <div class="flex gap-1">
-                        <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce"></div>
-                        <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                        <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                    </div>
-                    <span class="font-medium">AI sedang menyusun jawaban...</span>
                 </div>
             </div>
 
+            <!-- INDIKATOR MENGETIK (Diletakkan di luar chat-history agar tidak error) -->
+            <div id="ai-typing" class="hidden p-4 items-center gap-3 text-sm text-slate-500 bg-white/50 border-t border-slate-100">
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                    <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                </div>
+                <span class="font-medium">AI sedang memproses...</span>
+            </div>
+
+            <!-- KOLOM INPUT -->
             <div class="bg-white border-t border-slate-200 p-3 sm:p-4 shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] relative z-10">
-                
                 <div id="file-preview-area" class="hidden flex-wrap gap-2 mb-3 bg-slate-50 p-2 rounded-xl border border-slate-100"></div>
 
                 <div class="flex gap-2 sm:gap-3 items-end relative">
-                    <label class="cursor-pointer p-3 sm:p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition-colors shrink-0 flex items-center justify-center group relative shadow-sm border border-slate-200 h-[48px] sm:h-[52px]" title="Sisipkan Gambar (Max 2MB)">
+                    <label class="cursor-pointer p-3 sm:p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition-colors shrink-0 flex items-center justify-center group relative shadow-sm border border-slate-200 h-[48px] sm:h-[52px]" title="Sisipkan Gambar">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
                         <input type="file" id="file-upload" accept="image/png, image/jpeg, image/webp" class="hidden" onchange="handleFileSelect(event)" disabled>
                     </label>
 
                     <div class="flex-1 bg-white border border-slate-300 rounded-2xl shadow-inner focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all overflow-hidden relative">
-                        <textarea id="user-message" rows="1" placeholder="Ketik prompt Anda di sini... (Enter untuk kirim, Shift+Enter untuk baris baru)" class="w-full bg-transparent text-sm px-4 py-3.5 outline-none resize-y min-h-[48px] max-h-[30vh] text-slate-700 leading-relaxed block" style="height: 52px;" disabled onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); kirimPesan(); }"></textarea>
+                        <textarea id="user-message" rows="1" placeholder="Ketik pesan Anda di sini... (Enter untuk kirim)" class="w-full bg-transparent text-sm px-4 py-3.5 outline-none resize-y min-h-[48px] max-h-[30vh] text-slate-700 leading-relaxed block" style="height: 52px;" disabled></textarea>
                     </div>
 
-                    <button onclick="kirimPesan()" id="btn-send" class="p-3 sm:p-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl shadow-md transition-transform hover:scale-105 active:scale-95 shrink-0 flex items-center justify-center h-[48px] sm:h-[52px]" disabled>
+                    <button id="btn-send" class="p-3 sm:p-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl shadow-md transition-transform hover:scale-105 active:scale-95 shrink-0 flex items-center justify-center h-[48px] sm:h-[52px]" disabled>
                         <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
                     </button>
                 </div>
                 
                 <div class="mt-3 flex justify-between items-center text-[11px] text-slate-400 font-medium px-1">
-                    <span>AI cerdas dapat melakukan kesalahan. Harap validasi setiap hitungan.</span>
-                    <button onclick="akhiriSesiDanPDF(event)" class="text-indigo-600 hover:text-indigo-800 font-bold px-3 py-1.5 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1 border border-indigo-200">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span>Otomatis tersimpan ke Google Sheets.</span>
+                    <button onclick="akhiriSesiDanPDF(event)" class="text-white font-bold px-3 py-1.5 bg-orange-500 rounded-lg hover:bg-orange-600 shadow-md transition-colors flex gap-1 items-center">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         Selesai & Unduh Laporan
                     </button>
                 </div>
             </div>
-
         </section>
     </main>
 
-    <div id="print-container">
-        <!-- Akan diisi otomatis oleh JavaScript -->
-    </div>
+</div> <!-- Akhir bungkusan aplikasi -->
 
-    <!-- Toast Notification -->
+    <!-- TOAST NOTIFIKASI -->
     <div id="toast-notif" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span id="toast-msg" class="text-sm font-medium">Notifikasi</span>
     </div>
 
     <script>
-        // Konfigurasi Database & API
-        const GOOGLE_SCRIPT_URL_CHAT = 'https://script.google.com/macros/s/AKfycbw75yiR-f54QhrLBUsKAYhBKeXHzWaSbFddOod-tL9_X701jitLGsZJS4NzDa1N9zOM8A/exec'; 
+        // === STATE & INISIALISASI ===
         let apiKey = localStorage.getItem('gemini_api_key') || '';
         let sessionActive = false;
         let systemPrompt = "";
         let chatHistoryData = []; 
-        let selectedFiles = [];
+        let selectedFiles = []; 
         
         const chatHistoryDOM = document.getElementById('chat-history');
         const aiTypingIndicator = document.getElementById('ai-typing');
         const userInputBox = document.getElementById('user-message');
         const btnSend = document.getElementById('btn-send');
-        const fileUpload = document.getElementById('file-upload');
 
-        // Init on load
         window.onload = () => {
             if (apiKey) document.getElementById('api-key').value = apiKey;
             if(localStorage.getItem('pkm_nama')) document.getElementById('guru-nama').value = localStorage.getItem('pkm_nama');
             if(localStorage.getItem('pkm_instansi')) document.getElementById('guru-instansi').value = localStorage.getItem('pkm_instansi');
             if(localStorage.getItem('pkm_mapel')) document.getElementById('guru-mapel').value = localStorage.getItem('pkm_mapel');
+            
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+            document.getElementById('open-settings').addEventListener('click', () => {
+                document.getElementById('settings-panel').classList.remove('-translate-x-[120%]');
+            });
+            document.getElementById('close-settings').addEventListener('click', () => {
+                document.getElementById('settings-panel').classList.add('-translate-x-[120%]');
+            });
+            
+            // Event Listener Pengirim Pesan (Enter)
+            userInputBox.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    kirimPesan();
+                }
+            });
+            btnSend.addEventListener('click', kirimPesan);
         };
 
         function showToast(msg) {
@@ -362,32 +329,14 @@
             showToast("API Key berhasil disimpan!");
         }
 
-        function salinKptfKeChat() {
-            const k = document.getElementById('kptf-k').value.trim();
-            const p = document.getElementById('kptf-p').value.trim();
-            const t = document.getElementById('kptf-t').value.trim();
-            const f = document.getElementById('kptf-f').value.trim();
-            
-            let gabungan = "";
-            if(k) gabungan += `Konteks: ${k}\n`;
-            if(p) gabungan += `Peran: ${p}\n`;
-            if(t) gabungan += `Tugas: ${t}\n`;
-            if(f) gabungan += `Format: ${f}`;
-            
-            userInputBox.value = gabungan;
-            userInputBox.focus();
-            document.getElementById('prompt-calc').classList.add('hidden');
-        }
-
         function mulaiSesi() {
             if(!apiKey) { alert("Harap simpan API Key terlebih dahulu!"); document.getElementById('api-key').focus(); return; }
-            
             const nama = document.getElementById('guru-nama').value.trim();
             const instansi = document.getElementById('guru-instansi').value; 
             const mapel = document.getElementById('guru-mapel').value.trim();
 
             if(!nama || !instansi || !mapel) {
-                alert("Harap lengkapi Nama, Instansi, dan Mata Pelajaran di pengaturan kiri sebelum memulai.");
+                alert("Harap lengkapi Nama, Instansi, dan Mata Pelajaran sebelum memulai.");
                 return;
             }
 
@@ -395,27 +344,19 @@
             localStorage.setItem('pkm_instansi', instansi);
             localStorage.setItem('pkm_mapel', mapel);
 
-            systemPrompt = `Kamu adalah Asisten Guru yang ahli dalam evaluasi HOTS. 
-Info Pengguna: Nama ${nama}, Guru ${mapel} di ${instansi}.
-Aturan Mutlak:
-1. Sapa guru dengan ramah menggunakan namanya.
-2. Jika diminta membuat TABEL, gunakan format tabel markdown yang benar dengan ENTER antar baris (jangan gabungkan ||).
-3. Jika diminta membuat GAMBAR/ILUSTRASI/GRAFIK, gunakan murni tag HTML <svg> lengkap. JANGAN dibungkus dalam markdown code block (\`\`\`html atau sejenisnya).
-4. Kaitkan masalah dengan pendidikan/agama/pesantren jika relevan.`;
+            systemPrompt = `Anda adalah Asisten AI Ahli Kurikulum dan Evaluasi Pendidikan yang bertugas membantu Guru menyusun instrumen penilaian HOTS.\nInformasi Guru:\n- Nama: ${nama}\n- Instansi: ${instansi}\n- Mapel: ${mapel}\n\nATURAN MUTLAK:\n1. Kaitkan konteks kasus dengan kehidupan nyata/pesantren.\n2. Fokus arahkan soal di ranah C4, C5, atau C6 Taksonomi Bloom.\n3. Jika membuat soal, wajib sertakan: Stimulus, Pertanyaan, Kunci Jawaban, Pedoman Penskoran.\n4. Sapa Guru dengan Bapak/Ibu ${nama}.`;
 
             sessionActive = true;
-            
-            // Buka Kunci Layar Chat
             document.getElementById('chat-panel').classList.remove('opacity-50', 'pointer-events-none');
-            userInputBox.disabled = false;
-            btnSend.disabled = false;
-            fileUpload.disabled = false;
+            document.getElementById('user-message').disabled = false;
+            document.getElementById('btn-send').disabled = false;
+            document.getElementById('file-upload').disabled = false;
             
             document.getElementById('btn-mulai').innerHTML = 'Sesi Aktif ✓';
             document.getElementById('btn-mulai').classList.replace('bg-slate-900', 'bg-emerald-600');
             
             if(window.innerWidth < 768) document.getElementById('settings-panel').classList.add('-translate-x-[120%]');
-            showToast(`Sesi dimulai! Silakan mulai mengobrol.`);
+            showToast(`Sesi dimulai! Silakan sapa AI di kolom chat.`);
             userInputBox.focus();
         }
 
@@ -423,94 +364,131 @@ Aturan Mutlak:
             const files = event.target.files;
             if (files.length === 0) return;
             const file = files[0];
-            if(file.size > 2 * 1024 * 1024) { alert("Ukuran gambar terlalu besar! Maksimal 2MB."); return; }
+            if(file.size > 2 * 1024 * 1024) { alert("Gambar maksimal 2MB."); return; }
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64String = e.target.result.split(',')[1];
-                selectedFiles.push({ inlineData: { data: base64String, mimeType: file.type } });
-                
+                selectedFiles.push({
+                    inlineData: { data: base64String, mimeType: file.type },
+                    driveData: { data: base64String, mimeType: file.type, name: file.name }
+                });
+
                 const previewArea = document.getElementById('file-preview-area');
                 previewArea.classList.remove('hidden');
                 previewArea.classList.add('flex');
-                
                 const imgContainer = document.createElement('div');
-                imgContainer.className = 'relative inline-block border-2 border-indigo-200 rounded-lg overflow-hidden h-16 w-16 bg-white shrink-0 shadow-sm';
-                imgContainer.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">
-                    <div class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-bl-lg cursor-pointer text-[10px]" onclick="this.parentElement.remove(); selectedFiles = []; document.getElementById('file-preview-area').classList.add('hidden');">✕</div>`;
+                imgContainer.className = 'relative inline-block border-2 border-indigo-200 rounded-lg overflow-hidden h-16 w-16 shrink-0';
+                imgContainer.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover">
+                    <div class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 flex items-center justify-center cursor-pointer text-[10px]" onclick="this.parentElement.remove(); selectedFiles = [];">✕</div>
+                `;
                 previewArea.appendChild(imgContainer);
             };
             reader.readAsDataURL(file);
         }
 
+        // === FUNGSI PENGIRIMAN (ANTI-MACET) ===
         async function kirimPesan() {
-            if(!sessionActive) { alert("Silakan klik 'Mulai Sesi' terlebih dahulu."); return; }
-            
+            if(!sessionActive) return;
             const message = userInputBox.value.trim();
             if(!message && selectedFiles.length === 0) return;
 
+            // Kosongkan dan matikan input sementara
             userInputBox.value = '';
-            userInputBox.style.height = '52px';
             userInputBox.disabled = true;
             btnSend.disabled = true;
             
             const attachedFiles = [...selectedFiles];
+            const driveFilesToUpload = attachedFiles.map(f => f.driveData); // Siapkan gambar utk Google Drive
+            
             document.getElementById('file-preview-area').innerHTML = '';
             document.getElementById('file-preview-area').classList.add('hidden');
             selectedFiles = [];
 
-            appendMessage(message, 'user', attachedFiles);
-            chatHistoryData.push({ role: 'user', content: message });
+            // Cetak di layar (Aman dengan Try-Catch)
+            try {
+                appendMessage(message, 'user', attachedFiles);
+            } catch (e) { console.error("Gagal cetak pesan user:", e); }
+            
+            // --- PERBAIKAN: SUSUN HISTORI CHAT DENGAN FORMAT RESMI GEMINI ---
+            let userParts = [];
+            if(chatHistoryData.length === 0) {
+                userParts.push({ text: `[SYSTEM INSTRUCTION: ${systemPrompt}]\n\nUser: ${message}` });
+            } else {
+                userParts.push({ text: message });
+            }
 
-            chatHistoryDOM.appendChild(aiTypingIndicator); // Pastikan indikator ada di urutan paling bawah
+            if(attachedFiles.length > 0) {
+                attachedFiles.forEach(f => userParts.push({ inlineData: f.inlineData }));
+            }
+
+            // Simpan peran 'user'
+            chatHistoryData.push({ role: 'user', parts: userParts });
+
+            // Tampilkan titik-titik AI berpikir
             aiTypingIndicator.classList.remove('hidden');
             aiTypingIndicator.classList.add('flex');
             chatHistoryDOM.scrollTop = chatHistoryDOM.scrollHeight;
 
             try {
-                // MENGGUNAKAN GEMINI 3.6 FLASH SESUAI PERMINTAAN AWAL
+                // MENGGUNAKAN GEMINI 3.6 FLASH (Sesuai Konfigurasi Awal)
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
                 
-                let parts = [];
-                if(chatHistoryData.length === 1) {
-                    parts.push({ text: `[SYSTEM INSTRUCTION: ${systemPrompt}]\n\nUser Input: ${message}` });
-                } else {
-                    parts.push({ text: message });
+                // --- PERBAIKAN: KIRIM SEMUA RIWAYAT OBROLAN ---
+                const payload = { contents: chatHistoryData };
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if(!response.ok) {
+                    const errInfo = await response.json();
+                    throw new Error(errInfo.error?.message || "Status " + response.status);
                 }
-
-                if(attachedFiles.length > 0) {
-                    attachedFiles.forEach(file => parts.push({ inlineData: file.inlineData }));
-                }
-
-                const payload = { contents: [{ parts: parts }] };
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-
-                if(!response.ok) throw new Error(`Status ${response.status}. Cek koneksi internet Anda.`);
                 
                 const result = await response.json();
-                
                 if(result.candidates && result.candidates.length > 0) {
                     const responseText = result.candidates[0].content.parts[0].text;
+                    
+                    // Sembunyikan titik-titik
                     aiTypingIndicator.classList.add('hidden');
                     aiTypingIndicator.classList.remove('flex');
                     
-                    appendMessage(responseText, 'ai');
-                    chatHistoryData.push({ role: 'ai', content: responseText });
-                } else {
-                    throw new Error("Respon API kosong.");
-                }
+                    try { 
+                        appendMessage(responseText, 'ai'); 
+                    } catch(e) { console.error("Gagal cetak pesan AI:", e); }
+                    
+                    // --- PERBAIKAN: SIMPAN SEBAGAI 'model' AGAR DIINGAT AI ---
+                    chatHistoryData.push({ role: 'model', parts: [{ text: responseText }] });
+                    
+                    // OTOMATIS KIRIM KE GOOGLE SHEETS SETIAP KALI AI MENJAWAB
+                    autoKirimKeSheets(message, responseText, driveFilesToUpload);
 
+                } else {
+                    throw new Error("Respon kosong.");
+                }
             } catch (error) {
+                console.error(error);
                 aiTypingIndicator.classList.add('hidden');
                 aiTypingIndicator.classList.remove('flex');
-                appendMessage(`⚠️ **Error:** ${error.message}`, 'ai');
+                
+                try {
+                    appendMessage(`⚠️ **Gagal terhubung API:** ${error.message}`, 'ai');
+                } catch(e) {}
+                
             } finally {
+                // Hidupkan input kembali walau berhasil/gagal
                 userInputBox.disabled = false;
                 btnSend.disabled = false;
                 userInputBox.focus();
+                chatHistoryDOM.scrollTop = chatHistoryDOM.scrollHeight;
             }
         }
 
+        // === FUNGSI FORMAT TEKS (PENYEBAB BUG SEBELUMNYA SUDAH DIATASI) ===
         function appendMessage(text, sender, files = null) {
             const wrapper = document.createElement('div');
             wrapper.className = `flex gap-3 sm:gap-4 max-w-[95%] sm:max-w-[85%] ${sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`;
@@ -521,7 +499,7 @@ Aturan Mutlak:
                 if(nama && nama.length > 0) avatarGuru = nama.charAt(0).toUpperCase();
             }
 
-            const avatarHTML = sender === 'user' 
+            const avatar = sender === 'user' 
                 ? `<div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-700 border border-slate-300 flex items-center justify-center shrink-0 shadow-sm font-bold text-sm sm:text-base">${avatarGuru}</div>`
                 : `<div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-blue-500 text-white flex items-center justify-center shrink-0 shadow-md font-bold text-lg sm:text-xl">🤖</div>`;
             
@@ -529,162 +507,169 @@ Aturan Mutlak:
                 ? 'bg-indigo-600 text-white rounded-tr-none shadow-md' 
                 : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-sm';
             
-            let processedText = text;
-            let extractedSVGs = [];
-
-            if (sender === 'ai') {
-                // 1. Perbaiki Tabel Error dari AI (Bongkar tabel 1 baris jadi banyak baris)
-                processedText = processedText.replace(/\|\|/g, "|\n|").replace(/\|\s*\|/g, "|\n|").replace(/:---c:/g, ":---:");
-
-                // 2. Amankan Gambar SVG agar tidak dibaca Markdown
-                // Lepaskan pelindung markdown bawaan AI (jika AI bandel)
-                processedText = processedText.replace(/(```html|```xml|```svg)\s*([\s\S]*?)\s*```/gi, '$2');
-                
-                processedText = processedText.replace(/<svg[\s\S]*?<\/svg>/gi, function(match) {
-                    extractedSVGs.push(match);
-                    return `SVGPLACEHOLDER_${extractedSVGs.length - 1}_END`;
-                });
-
-                // 3. Render Markdown Teks
-                if (typeof marked !== 'undefined') {
-                    marked.setOptions({ breaks: true, gfm: true });
-                    processedText = marked.parse(processedText);
+            let formattedText = text;
+            
+            // Pengaman Format Teks
+            try {
+                if (sender === 'ai') {
+                    if(typeof marked !== 'undefined') {
+                        formattedText = marked.parse(text); 
+                    } else {
+                        formattedText = text.replace(/\n/g, '<br>');
+                    }
+                } else if (sender === 'user') {
+                    formattedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
                 }
+            } catch(e) {
+                console.error("Format error:", e);
+                formattedText = text.replace(/\n/g, '<br>'); // Fallback jika gagal format
+            }
 
-                // 4. Deteksi Huruf Arab dan Perbesar
-                processedText = processedText.replace(/([\u0600-\u06FF]+(?:[\s\d\-.,'"+!]+[\u0600-\u06FF]+)*)/g, '<span class="arabic-text">$1</span>');
-
-                // 5. Kembalikan Gambar SVG
-                extractedSVGs.forEach((svg, index) => {
-                    const placeholder = new RegExp(`SVGPLACEHOLDER_${index}_END`, 'g');
-                    processedText = processedText.replace(placeholder, `<div style="text-align:center; margin: 15px 0;">${svg}</div>`);
-                });
-                
-            } else if (sender === 'user') {
-                processedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+            // DETEKSI HURUF ARAB (Rapi, Besar, RTL)
+            if(sender === 'ai') {
+                formattedText = formattedText.replace(/([\u0600-\u06FF]+(?:[\s,.\-0-9'":;]*[\u0600-\u06FF]+)*)/g, '<span class="arabic-text">$1</span>');
             }
 
             let imagesHtml = '';
             if (files && files.length > 0) {
                 imagesHtml = '<div class="flex gap-2 mb-3 flex-wrap">';
-                files.forEach(f => {
-                    imagesHtml += `<img src="data:${f.inlineData.mimeType};base64,${f.inlineData.data}" class="max-w-[200px] max-h-[200px] rounded-xl border-2 border-white/20 shadow-sm object-cover">`;
-                });
+                files.forEach(f => { imagesHtml += `<img src="data:${f.inlineData.mimeType};base64,${f.inlineData.data}" class="max-w-[200px] rounded-xl border border-white/20">`; });
                 imagesHtml += '</div>';
             }
 
-            const textHtml = processedText.trim() !== '' ? `<div class="markdown-body">${processedText}</div>` : '';
+            // BUNGKUS TEKS ASLI: class "isi-teks-chat" dan "data-sender" akan dipungut oleh PDF (Tanpa Avatar)
+            const textHtml = formattedText.trim() !== '' ? `<div class="isi-teks-chat markdown-body" data-sender="${sender}">${formattedText}</div>` : '';
 
             wrapper.innerHTML = `
-                ${avatarHTML}
+                ${avatar}
                 <div class="${bubbleBg} p-4 sm:p-5 rounded-2xl text-sm leading-relaxed overflow-x-auto min-w-[120px]">
                     ${imagesHtml}
                     ${textHtml}
                 </div>
             `;
             
-            chatHistoryDOM.insertBefore(wrapper, aiTypingIndicator);
+            // BUG UTAMA SEBELUMNYA DI SINI: Jangan gunakan insertBefore ke typingIndicator, gunakan appendChild!
+            chatHistoryDOM.appendChild(wrapper);
             chatHistoryDOM.scrollTop = chatHistoryDOM.scrollHeight;
-
-            // Trigger MathJax untuk merender rumus SVG di dalam chat baru
-            if (window.MathJax && sender === 'ai') {
-                MathJax.typesetPromise([wrapper]).catch((err) => console.log('MathJax Error:', err));
-            }
         }
 
-        function akhiriSesiDanPDF(event) {
-            if(chatHistoryData.length === 0) { alert("Anda belum memulai percakapan."); return; }
+        // === FUNGSI KIRIM KE GOOGLE SHEETS ===
+        function autoKirimKeSheets(pesanGuru, pesanAI, filesToDrive = []) {
+            // SILAKAN GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE SCRIPT BAPAK/IBU
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbw75yiR-f54QhrLBUsKAYhBKeXHzWaSbFddOod-tL9_X701jitLGsZJS4NzDa1N9zOM8A/exec"; 
             
-            const btn = event.currentTarget;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ Menyusun PDF...';
-            btn.disabled = true;
+            if(googleScriptUrl === "TARUH_URL_WEB_APP_DI_SINI") {
+                console.warn("URL Google Script belum diatur. Mengabaikan pengiriman.");
+                return;
+            }
 
-            const printContainer = document.getElementById('print-container');
-            const nama = localStorage.getItem('pkm_nama') || 'Anonim';
-            const instansi = localStorage.getItem('pkm_instansi') || '-';
-            const mapel = localStorage.getItem('pkm_mapel') || '-';
-
-            // 1. Susun Kop Surat Resmi
-            let htmlContent = `
-                <div style="padding: 40px; background: white; font-family: 'Tahoma', sans-serif;">
-                    <div style="text-align: center; border-bottom: 3px double #334155; padding-bottom: 20px; margin-bottom: 30px;">
-                        <h2 style="margin: 0; font-size: 24px; color: #0f172a;">Laporan Hasil Konsultasi Studio AI</h2>
-                        <h3 style="margin: 5px 0 0 0; font-size: 16px; font-weight: normal; color: #475569;">Program Pelatihan Asesmen HOTS</h3>
-                    </div>
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 14px;">
-                        <tr><td style="width: 150px; font-weight: bold; padding: 5px 0;">Nama Guru</td><td>: ${nama}</td></tr>
-                        <tr><td style="font-weight: bold; padding: 5px 0;">Instansi / Sekolah</td><td>: ${instansi}</td></tr>
-                        <tr><td style="font-weight: bold; padding: 5px 0;">Mata Pelajaran</td><td>: ${mapel}</td></tr>
-                        <tr><td style="font-weight: bold; padding: 5px 0;">Waktu Unduh</td><td>: ${new Date().toLocaleString('id-ID')}</td></tr>
-                    </table>
-                    <div>
-            `;
-
-            // 2. Susun Riwayat Obrolan agar Rapih di Kertas PDF
-            const bubbles = document.querySelectorAll('#chatBox .chat-bubble, #chat-history .flex');
-            bubbles.forEach(bubble => {
-                if(bubble.id === 'ai-typing' || bubble.classList.contains('hidden')) return;
-                
-                const isUser = bubble.innerHTML.includes('bg-slate-200'); // Deteksi avatar user
-                let contentHTML = bubble.querySelector('.markdown-body') ? bubble.querySelector('.markdown-body').innerHTML : bubble.innerText;
-
-                htmlContent += `
-                    <div style="margin-bottom: 20px; padding: 15px; border-radius: 8px; border: 1px solid ${isUser ? '#bfdbfe' : '#e2e8f0'}; background-color: ${isUser ? '#eff6ff' : '#f8fafc'}; page-break-inside: avoid;">
-                        <strong style="color: ${isUser ? '#1d4ed8' : '#334155'}; font-size: 14px;">${isUser ? 'Pertanyaan Guru:' : 'Tanggapan AI:'}</strong>
-                        <div style="margin-top: 10px; font-size: 14px; line-height: 1.6; color: #1e293b;">
-                            ${contentHTML}
-                        </div>
-                    </div>
-                `;
-            });
-            htmlContent += `</div><div style="text-align: right; margin-top: 40px; font-size: 12px; color: #64748b;"><em>Dicetak dari Sistem Studio Soal AI</em></div></div>`;
-            printContainer.innerHTML = htmlContent;
-
-            // 3. Render PDF
-            const opt = {
-                margin:       10,
-                filename:     `Laporan_AI_${nama.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(printContainer).save().then(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                printContainer.innerHTML = ''; // Bersihkan kontainer
-                showToast("Laporan PDF berhasil diunduh!");
-                
-                // 4. Lapor Diam-diam ke Google Sheets
-                kirimLaporanKeSheet();
-            }).catch(err => {
-                console.error(err);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("Terjadi kesalahan saat membuat PDF.");
-            });
-        }
-
-        function kirimLaporanKeSheet() {
-            if(GOOGLE_SCRIPT_URL_CHAT === 'TARUH_URL_WEB_APP_APPS_SCRIPT_ANDA_DISINI') return; // Skip jika belum diatur
-
-            const fullHistory = chatHistoryData.map(m => (m.role === 'user' ? 'GURU:\n' : 'AI:\n') + m.content).join('\n\n-----\n\n');
             const payload = {
                 nama: localStorage.getItem('pkm_nama') || 'Anonim',
                 instansi: localStorage.getItem('pkm_instansi') || '-',
                 mapel: localStorage.getItem('pkm_mapel') || '-',
-                histori: fullHistory + "\n\n(--- GURU TELAH MENGUNDUH PDF ---)"
+                user_message: pesanGuru, // Dikirim terpisah agar rapi di excel
+                ai_response: pesanAI,
+                files: filesToDrive 
             };
 
-            fetch(GOOGLE_SCRIPT_URL_CHAT, {
+            fetch(googleScriptUrl, { 
                 method: 'POST', 
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            }).then(() => {
-                console.log("Log tersimpan ke Sheets.");
-            }).catch(err => console.error("Gagal menyimpan ke Sheets:", err));
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload) 
+            }).catch(err => console.error("Auto-save error:", err));
+        }
+
+        // === FUNGSI CETAK PDF (DIJAMIN TIDAK KOSONG, TABEL BERGARIS) ===
+        function akhiriSesiDanPDF(event) {
+            if(chatHistoryData.length === 0) { alert("Belum ada chat!"); return; }
+            
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Memproses Laporan...';
+            
+            const originalScroll = window.scrollY;
+
+            // 1. Buat Kontainer Baru Khusus Laporan PDF
+            const pdfMaster = document.createElement('div');
+            pdfMaster.id = "pdf-temp-container";
+            pdfMaster.style.backgroundColor = "#ffffff";
+            pdfMaster.style.padding = "40px";
+            pdfMaster.style.color = "#000000";
+            pdfMaster.style.fontFamily = "'Plus Jakarta Sans', Arial, sans-serif";
+            
+            // Suntikkan CSS khusus ke dalam PDF agar tabel bergaris hitam dan Arab rapi
+            pdfMaster.innerHTML = `
+                <style>
+                    #pdf-temp-container table { width: 100%; border-collapse: collapse; margin-bottom: 1em; }
+                    #pdf-temp-container th, #pdf-temp-container td { border: 1px solid #000; padding: 8px; text-align: left; }
+                    #pdf-temp-container th { background-color: #f1f5f9; font-weight: bold; }
+                    #pdf-temp-container .arabic-text { font-family: 'Amiri', 'Tahoma', serif; font-size: 1.8em; line-height: 2.2; display: block; text-align: right; direction: rtl; }
+                </style>
+                <div style="text-align: center; border-bottom: 3px double #000; padding-bottom: 20px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 22px; font-weight: bold;">Laporan Hasil Konsultasi Studio AI</h2>
+                    <h3 style="margin: 5px 0 0 0; font-size: 16px; font-weight: normal;">Program Pelatihan Asesmen HOTS</h3>
+                </div>
+                <table style="width: 100%; border: none; margin-bottom: 25px; font-size: 15px;">
+                    <tr><td style="width: 150px; border:none; padding: 4px 0; font-weight:bold;">Nama Guru</td><td style="border:none; padding: 4px 0;">: ${document.getElementById('guru-nama').value}</td></tr>
+                    <tr><td style="border:none; padding: 4px 0; font-weight:bold;">Instansi / Sekolah</td><td style="border:none; padding: 4px 0;">: ${document.getElementById('guru-instansi').value}</td></tr>
+                    <tr><td style="border:none; padding: 4px 0; font-weight:bold;">Mata Pelajaran</td><td style="border:none; padding: 4px 0;">: ${document.getElementById('guru-mapel').value}</td></tr>
+                    <tr><td style="border:none; padding: 4px 0; font-weight:bold;">Waktu Cetak</td><td style="border:none; padding: 4px 0;">: ${new Date().toLocaleString('id-ID')}</td></tr>
+                </table>
+            `;
+
+            const chatIsiArea = document.createElement('div');
+            
+            // 2. Comot Teksnya Saja (Pungut yang class-nya 'isi-teks-chat', Avatar tidak ikut)
+            document.querySelectorAll('.isi-teks-chat').forEach(bubble => {
+                const isUser = bubble.getAttribute('data-sender') === 'user';
+                const gelembungBaru = document.createElement('div');
+                gelembungBaru.style.marginBottom = "20px";
+                gelembungBaru.style.padding = "15px";
+                gelembungBaru.style.borderRadius = "8px";
+                gelembungBaru.style.backgroundColor = isUser ? "#eff6ff" : "#f8fafc";
+                gelembungBaru.style.border = isUser ? "1px solid #bfdbfe" : "1px solid #e2e8f0";
+                
+                gelembungBaru.innerHTML = `<strong style="color: ${isUser ? '#1e40af' : '#334155'}; font-size: 15px;">${isUser ? 'Pertanyaan Guru:' : 'Tanggapan AI:'}</strong><div style="margin-top: 10px;">${bubble.innerHTML}</div>`;
+                chatIsiArea.appendChild(gelembungBaru);
+            });
+            
+            pdfMaster.appendChild(chatIsiArea);
+            document.body.appendChild(pdfMaster);
+
+            // 3. Sembunyikan Aplikasi Asli, Munculkan Laporan (Lepas Kunci Layar)
+            const webAsli = document.getElementById('app-wrapper');
+            webAsli.style.display = 'none'; // Sembunyikan web
+            document.body.style.overflow = 'auto'; // Lepas kunci scroll agar tidak terpotong!
+            
+            window.scrollTo(0, 0); // Kunci atas agar tidak terpotong
+
+            // 4. Lakukan Pemotretan & Cetak PDF
+            const opt = {
+                margin:       15,
+                filename:     `Instrumen_AI_${document.getElementById('guru-nama').value.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(pdfMaster).save().then(() => {
+                // 5. Rapihkan Kembali (Hapus Laporan, Munculkan Web Asli)
+                document.body.removeChild(pdfMaster);
+                document.body.style.overflow = ''; // Kunci lagi scroll-nya
+                webAsli.style.display = 'flex';
+                window.scrollTo(0, originalScroll);
+                
+                btn.innerHTML = originalText;
+                showToast("Selesai! Laporan PDF tersimpan.");
+            }).catch(err => {
+                console.error("Gagal cetak:", err);
+                document.body.removeChild(pdfMaster);
+                document.body.style.overflow = '';
+                webAsli.style.display = 'flex';
+                btn.innerHTML = originalText;
+                alert("Gagal memproses PDF.");
+            });
         }
     </script>
 </body>
