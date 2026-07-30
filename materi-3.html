@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modul Pelatihan - Materi 3</title>
+    <title>Materi 3 — Praktik Mendesain Tugas HOTS Berbantuan AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -40,7 +40,7 @@
             <div class="flex items-center gap-3 sm:gap-4 p-2 sm:p-3 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm ring-1 ring-slate-900/5">
                 <img src="https://i.ibb.co.com/Gv1xXFQG/logo-Unesa.png" alt="UNESA" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
                 <div class="w-px h-10 sm:h-14 bg-slate-200"></div>
-                <img src="https://i.ibb.co.com/Rp23J5jP/image.png" alt="Al-Kautsar" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
+                <img src="https://i.ibb.co.com/C5QhKmqc/al-kautsar.png" alt="Al-Kautsar" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
             </div>
             <!-- Title -->
             <div class="text-center sm:text-left border-l-0 sm:border-l-2 border-slate-200 sm:pl-5">
@@ -344,17 +344,383 @@
                 </div>
             </section>
 
-            <!-- Bagian 5: CTA -->
+            <!-- Bagian 5: Studi Kasus Alur Kerja -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+                    <span class="bg-teal-100 text-teal-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">5</span>
+                    Enam Situasi Nyata di Meja Guru
+                </h3>
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    Setiap guru datang dengan bekal berbeda. Ada yang sudah punya modul lengkap, ada yang hanya punya tumpukan soal lama, ada pula yang benar-benar mulai dari kertas kosong. Keenam situasi berikut mencakup hampir semua kemungkinan itu. Buka yang paling mirip dengan keadaan Anda hari ini — <strong>prompt di dalamnya bisa langsung dipakai</strong>.
+                </p>
+
+                <div class="space-y-3" id="kasusList">
+
+                    <!-- Kasus 1 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">1</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Sudah punya bahan, ingin didiskusikan</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Modul dan buku paket saya lengkap, tapi mentok cari ide stimulus."</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Bu Halimah mengajar IPA di MTs. Ia punya modul dan buku paket bab Pencemaran Lingkungan, dan sudah tahu tujuan pembelajarannya. Yang ia butuhkan bukan materi baru, melainkan <strong>teman berpikir</strong> untuk menemukan konteks yang dekat dengan santri.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 1 — SERAHKAN BAHANNYA, MINTA IDE</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Bertindaklah sebagai ahli asesmen IPA madrasah.
+
+Berikut ringkasan materi yang saya ajarkan:
+[tempel ringkasan modul / tujuan pembelajaran Anda di sini]
+
+Konteks: MTs kelas VII, materi pencemaran air.
+Siswa saya tinggal di asrama pesantren.
+
+Belum perlu membuat soal. Usulkan dulu 8 ide
+stimulus kontekstual yang mungkin dialami santri
+di lingkungan pesantren. Tulis ringkas satu baris
+per ide, beserta level kognitif yang paling cocok.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Mengapa jangan langsung minta soal?</strong> Karena ide stimulus adalah bagian yang paling menentukan mutu. Dengan meminta 8 ide dulu, Anda tetap memegang kendali pemilihan — dan biasanya 2–3 di antaranya memicu ide Anda sendiri yang lebih baik.</p>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 2 — PILIH, LALU KEMBANGKAN</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Saya pilih ide nomor 3 (air wudhu keruh saat
+musim hujan). Kembangkan menjadi 3 butir soal
+uraian level C4-C5, lengkap dengan kunci.
+
+Panjang stimulus maksimal 70 kata.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 3 — RAPIKAN</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Butir 2 masih terasa hafalan. Ganti agar benar-benar
+menuntut siswa menimbang dua pilihan tindakan.
+
+Lalu buatkan rubrik 4 aspek untuk ketiga butir.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">WAJIB ANDA PERIKSA</p>
+                                <p class="text-xs text-amber-900 leading-relaxed">Kebenaran konsep IPA-nya, dan apakah situasi "air wudhu keruh" benar-benar pernah terjadi di pesantren Anda. AI mengarang konteks yang terdengar masuk akal, belum tentu yang nyata.</p>
+                            </div>
+                            <a href="studio-ai.html#s=punya-bahan" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 2 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">2</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Punya soal LOTS, ingin dinaikkan jadi HOTS</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Bank soal saya banyak, tapi isinya 'sebutkan' dan 'jelaskan' semua."</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Pak Umar punya 40 soal Fikih hasil kumpulan bertahun-tahun. Sayang dibuang, tetapi hampir semuanya Kuadran 1. <strong>Ini situasi paling menguntungkan</strong> — hasilnya paling cepat terasa karena materinya sudah tervalidasi bertahun-tahun.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 1 — MINTA DIPETAKAN LEBIH DULU</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Bertindaklah sebagai ahli asesmen madrasah.
+
+Berikut 10 soal Fikih MTs kelas VIII buatan saya:
+[tempel soal-soal Anda di sini]
+
+Untuk setiap soal, tentukan level kognitifnya
+(C1-C6) dan sebutkan alasan singkatnya.
+Sajikan dalam tabel: nomor, level, alasan.
+
+Belum perlu memperbaiki apa pun.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">Langkah ini sering membuka mata: soal yang kita rasa "sulit" ternyata hanya C1 dengan kalimat panjang. Lakukan ini dulu sebelum memperbaiki apa pun.</p>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 2 — NAIKKAN, TANPA MENGGANTI MATERI</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Sekarang naikkan soal nomor 1, 3, 4, dan 7
+menjadi level C4-C5.
+
+Ketentuan:
+- Materi dan cakupan isi TIDAK boleh berubah.
+- Tambahkan stimulus berupa kasus nyata yang
+  mungkin dialami santri.
+- Hindari kata kerja "sebutkan" dan "jelaskan".
+
+Sajikan berdampingan: soal asli di kolom kiri,
+soal hasil perbaikan di kolom kanan, agar saya
+mudah membandingkan.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Kunci kalimatnya:</strong> "materi tidak boleh berubah". Tanpa batasan ini AI cenderung membuat soal baru yang keluar dari cakupan yang sudah Anda ajarkan.</p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-xl">
+                                    <p class="text-[10px] font-bold text-rose-700 tracking-wider mb-1.5">SOAL ASLI (C1)</p>
+                                    <p class="text-xs text-slate-700 italic leading-relaxed">"Sebutkan syarat-syarat sahnya jual beli menurut fikih!"</p>
+                                </div>
+                                <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                    <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">HASIL PERBAIKAN (C5)</p>
+                                    <p class="text-xs text-slate-700 italic leading-relaxed">"Di koperasi pesantren, seorang santri membeli buku dengan janji membayar bulan depan, namun harganya dinaikkan Rp5.000 karena pembayaran tertunda. Nilailah keabsahan transaksi ini berdasarkan syarat jual beli, dan sebutkan syarat mana yang menjadi titik persoalannya."</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">WAJIB ANDA PERIKSA</p>
+                                <p class="text-xs text-amber-900 leading-relaxed">Apakah kasus yang dibuat AI hukum fikihnya benar-benar jelas, dan apakah masih dalam cakupan yang Anda ajarkan. Kasus yang terlalu berat justru mengukur hal lain.</p>
+                            </div>
+                            <a href="studio-ai.html#s=lots-ke-hots" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 3 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">3</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Belum punya bahan sama sekali</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Saya baru diberi tugas mengajar mapel ini. Mulai dari mana?"</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Ustadzah Fatimah baru ditugasi mengajar Akidah Akhlak kelas VII, materi "Adab kepada Guru dan Orang Tua". Belum ada modul, belum ada bank soal. <strong>Ini situasi paling rawan</strong>: bila Anda langsung minta soal, seluruh isinya adalah tebakan AI — bukan keputusan Anda.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 1 — BALIK ARAH: MINTA AI BERTANYA</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Bertindaklah sebagai pendamping guru madrasah.
+
+Saya akan menyusun asesmen Akidah Akhlak MTs
+kelas VII, materi adab kepada guru dan orang tua.
+Saya belum punya bahan apa pun.
+
+Jangan membuat soal dulu. Tanyakan kepada saya
+satu per satu hal yang perlu Anda ketahui —
+maksimal 6 pertanyaan, satu pertanyaan per pesan,
+dan tunggu jawaban saya sebelum bertanya lagi.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Inilah pola yang paling menolong saat mulai dari nol.</strong> AI akan menanyakan hal-hal seperti alokasi waktu, kedalaman materi, dan bentuk asesmen yang Anda inginkan. Menjawab pertanyaan jauh lebih mudah daripada merumuskan perintah dari nol — dan hasil akhirnya tetap keputusan Anda.</p>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 2 — MINTA KERANGKA, BUKAN SOAL</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Berdasarkan jawaban saya, susun dulu:
+1. Tujuan pembelajaran (3-4 butir)
+2. Indikator pencapaian untuk tiap tujuan
+3. Usulan bentuk asesmen yang paling sesuai
+
+Tampilkan dalam tabel. Soalnya nanti saja.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANGKAH 3 — BARU MINTA SOALNYA</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Kerangkanya saya setujui, dengan satu perubahan:
+indikator nomor 2 ganti menjadi [tulis versi Anda].
+
+Sekarang susun 4 butir soal untuk indikator 1 dan 2,
+level C4-C5, stimulus dari kehidupan santri,
+lengkap dengan kunci dan rubrik.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">WAJIB ANDA PERIKSA</p>
+                                <p class="text-xs text-amber-900 leading-relaxed">Kesesuaian tujuan pembelajaran dengan kurikulum yang berlaku di madrasah Anda — cocokkan dengan dokumen resmi, jangan bersandar pada ingatan AI. Untuk materi adab dan akidah, periksa juga kepatutan setiap contoh perilaku yang dimunculkan.</p>
+                            </div>
+                            <a href="studio-ai.html#s=dari-nol" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 4 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">4</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Soal sudah ada, rubrik dan kisi-kisi belum</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Menilai soal uraian selalu terasa subjektif dan bikin ragu."</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Soal HOTS sudah jadi, tetapi saat memeriksa 30 lembar jawaban Pak Yusuf bingung memberi nilai — jawaban siswa beragam dan semua terasa "ada benarnya". Inilah kelemahan HOTS tanpa rubrik: penilaian jadi bergantung suasana hati.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">PROMPT UNTUK RUBRIK</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Bertindaklah sebagai ahli evaluasi pembelajaran.
+
+Berikut soal uraian HOTS saya:
+[tempel soal Anda di sini]
+
+Susun rubrik penskoran analitik dengan 4 aspek:
+ketepatan konsep, kekuatan argumen, kelengkapan
+bukti/dalil, dan kejelasan penyampaian.
+
+Ketentuan:
+- Skala 1-4 untuk setiap aspek.
+- Tuliskan deskriptor yang KONKRET dan dapat
+  diamati untuk setiap skor, bukan kata sifat
+  seperti "baik" atau "cukup".
+- Sertakan contoh potongan jawaban siswa untuk
+  skor 4 dan skor 2, agar saya punya pembanding.
+- Sajikan dalam tabel.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Dua kalimat yang membedakan rubrik terpakai dan rubrik hiasan:</strong> permintaan deskriptor konkret, dan permintaan contoh potongan jawaban. Tanpa keduanya, Anda akan menerima rubrik berisi "sangat baik / baik / cukup / kurang" yang tidak menolong saat memeriksa.</p>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANJUTAN — KISI-KISI</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Sekarang buatkan kisi-kisi untuk seluruh soal saya.
+
+Kolom: nomor soal, tujuan pembelajaran, indikator
+soal, level kognitif, bentuk soal, dan bobot skor.
+
+Total bobot harus tepat 100.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">WAJIB ANDA PERIKSA</p>
+                                <p class="text-xs text-amber-900 leading-relaxed">Jumlah bobot benar-benar 100 — AI cukup sering keliru berhitung. Periksa juga apakah deskriptor skor 3 dan 4 betul-betul bisa dibedakan; kalau Anda sendiri ragu membedakannya, siswa pun akan merasa penilaian tidak adil.</p>
+                            </div>
+                            <a href="studio-ai.html#s=rubrik" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 5 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">5</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Soalnya bagus, tapi tidak cocok untuk siswa saya</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Kemampuan baca siswa saya beragam. Satu soal tidak bisa untuk semua."</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Di satu kelas Bu Aisyah, sebagian santri lancar membaca teks panjang, sebagian lain masih terbata. Soal HOTS yang sama membuat kelompok kedua gagal — bukan karena tidak bisa berpikir, tetapi karena <strong>tersandung bahasa, bukan tersandung konsep</strong>.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">PROMPT — TIGA JENJANG KESULITAN</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Berikut soal HOTS saya:
+[tempel soal Anda di sini]
+
+Buat tiga versi soal ini untuk kemampuan membaca
+yang berbeda, tetapi LEVEL KOGNITIFNYA HARUS TETAP
+SAMA (jangan diturunkan menjadi hafalan):
+
+- Versi A: stimulus maksimal 40 kata, kalimat pendek,
+  istilah sulit diganti kata sehari-hari.
+- Versi B: seperti soal asli saya.
+- Versi C: stimulus lebih kaya, ditambah satu data
+  pembanding agar analisisnya lebih menantang.
+
+Untuk setiap versi, sebutkan apa yang Anda ubah
+dan tegaskan mengapa levelnya tetap sama.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Perhatikan huruf kapital itu.</strong> Tanpa penegasan tersebut, AI hampir selalu "menyederhanakan" dengan cara menurunkan level berpikir — versi A berubah menjadi soal hafalan. Yang kita inginkan adalah bahasanya yang disederhanakan, bukan berpikirnya.</p>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">LANJUTAN — VERSI PARALEL ANTIKERJASAMA</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Buat 3 versi paralel dari soal ini untuk 3 kelas
+berbeda: konteks dan angkanya berbeda, tetapi
+tingkat kesulitan dan level kognitifnya setara.
+
+Sertakan kunci untuk masing-masing versi.</p>
+                            </div>
+
+                            <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">WAJIB ANDA PERIKSA</p>
+                                <p class="text-xs text-amber-900 leading-relaxed">Apakah versi A benar-benar masih C4, atau sudah turun jadi C2 secara diam-diam. Untuk versi paralel, pastikan tingkat kesulitannya betul-betul setara — kalau tidak, penilaian antarkelas menjadi tidak adil.</p>
+                            </div>
+                            <a href="studio-ai.html#s=sesuaikan" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 6 -->
+                    <div class="kasus border border-slate-200 rounded-2xl overflow-hidden">
+                        <button class="kasus-head w-full flex items-center gap-3 p-4 text-left hover:bg-slate-50 transition-colors">
+                            <span class="w-9 h-9 shrink-0 rounded-xl bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center">6</span>
+                            <span class="flex-1">
+                                <span class="block font-bold text-slate-800 text-sm sm:text-base leading-tight">Ingin soal buatan sendiri diperiksa</span>
+                                <span class="block text-[11px] sm:text-xs text-slate-500 mt-0.5">"Saya sudah buat sendiri. Apakah ini sudah benar-benar HOTS?"</span>
+                            </span>
+                            <svg class="kasus-chev w-5 h-5 text-slate-400 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="kasus-body hidden border-t border-slate-200 p-4 sm:p-5 space-y-4">
+                            <div class="p-3.5 bg-slate-50 rounded-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">SITUASI</p>
+                                <p class="text-xs text-slate-600 leading-relaxed">Ini pemakaian AI yang paling sering dilupakan, padahal <strong>paling banyak menumbuhkan kemampuan guru</strong>. Alih-alih meminta AI membuat, Anda tetap berkarya sendiri lalu meminta pendapat kedua. Kemampuan Anda naik, dan kendali tetap sepenuhnya di tangan Anda.</p>
+                            </div>
+
+                            <p class="text-[10px] font-bold text-teal-700 tracking-wider">PROMPT — MINTA KRITIK, BUKAN PUJIAN</p>
+                            <div class="p-3.5 bg-slate-900 rounded-xl">
+                                <p class="text-[11px] sm:text-xs font-mono text-slate-100 whitespace-pre-wrap leading-relaxed">Bertindaklah sebagai penelaah soal yang kritis dan
+tidak segan menunjukkan kelemahan.
+
+Berikut soal buatan saya:
+[tempel soal Anda di sini]
+
+Telaah dengan jujur. Untuk setiap butir sebutkan:
+1. Level kognitif sebenarnya, beserta alasannya.
+2. Apakah stimulusnya benar-benar diperlukan untuk
+   menjawab, atau hanya tempelan yang bisa dilewati.
+3. Apakah ada kemungkinan tafsir ganda.
+4. Apakah jawabannya bisa ditebak tanpa memahami
+   materi.
+5. Satu usulan perbaikan yang paling berdampak.
+
+Jangan memuji. Jangan membuat soal baru.
+Fokus pada kelemahan yang perlu saya perbaiki.</p>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed"><strong class="text-slate-800">Kalimat "jangan memuji" itu penting.</strong> Tanpa itu, AI cenderung membuka dengan "Soal Anda sudah bagus!" lalu memberi kritik yang lunak. Butir nomor 2 juga sering paling membuka mata — banyak stimulus panjang yang ternyata bisa dilewati siswa tanpa memengaruhi jawaban.</p>
+
+                            <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">TIP UNTUK MUSYAWARAH GURU</p>
+                                <p class="text-xs text-emerald-900 leading-relaxed">Pola ini sangat cocok dipakai bersama dalam rapat KKG atau musyawarah guru mata pelajaran: setiap guru membawa dua soal, ditelaah AI, lalu hasil telaahnya didiskusikan bersama. AI menjadi pemicu diskusi, keputusan tetap milik forum guru.</p>
+                            </div>
+                            <a href="studio-ai.html#s=periksa" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-colors">✨ Buka skenario ini di Studio AI</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benang merah -->
+                <div class="mt-8 p-5 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-2xl">
+                    <h4 class="font-bold text-teal-900 text-sm sm:text-base mb-3">Benang merah keenam kasus</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">1.</span><span><strong>Jangan minta hasil akhir di pesan pertama.</strong> Minta pemetaan, ide, atau kerangka lebih dulu.</span></p>
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">2.</span><span><strong>Berikan bahan yang Anda punya.</strong> Menempelkan soal atau modul lama selalu mengalahkan perintah yang panjang.</span></p>
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">3.</span><span><strong>Tuliskan larangan, bukan hanya permintaan.</strong> "Materi tidak boleh berubah", "jangan memuji", "level jangan diturunkan".</span></p>
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">4.</span><span><strong>Kerjakan bertahap.</strong> Soal dulu, rubrik kemudian, kisi-kisi terakhir.</span></p>
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">5.</span><span><strong>Selalu ada yang wajib Anda periksa.</strong> Setiap kasus di atas menyertakannya, dan tidak ada yang bisa dilewati.</span></p>
+                        <p class="text-xs text-teal-900 leading-relaxed flex gap-2"><span class="font-bold shrink-0">6.</span><span><strong>Keputusan akhir tetap milik Anda.</strong> AI menyusun pilihan; guru yang memilih.</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 6: CTA -->
             <section class="mt-10">
                 <div class="flex flex-col sm:flex-row items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 border border-indigo-100 rounded-3xl p-6 sm:p-8 shadow-sm gap-6 hover:shadow-md transition-shadow">
                     <div class="text-center sm:text-left">
                         <h4 class="text-lg sm:text-xl font-extrabold text-indigo-900 mb-2">Waktunya Anda Praktik! 🚀</h4>
                         <p class="text-slate-600 text-sm max-w-lg">
-                            Teori dan langkah-langkahnya sudah Anda kuasai. Sekarang, mari masuk ke <strong>Ruang Klinik AI</strong>. Kami telah menyediakan sistem otomatis untuk membantu Anda meramu soal dengan asisten AI.
+                            Teori dan langkah-langkahnya sudah Anda kuasai. Sekarang masuk ke <strong>Studio AI</strong> — keenam skenario di atas sudah tersedia sebagai pilihan siap pakai, lengkap dengan kalkulator prompt dan tempat menempelkan bahan Anda.
                         </p>
                     </div>
-                    <a href="klinik-ai.html" class="px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_6px_20px_rgba(79,70,229,0.4)] transition-all flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto text-sm group">
-                        Masuk Klinik AI 
+                    <a href="studio-ai.html" class="px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_6px_20px_rgba(79,70,229,0.4)] transition-all flex items-center justify-center gap-2 whitespace-nowrap w-full sm:w-auto text-sm group">
+                        ✨ Masuk Studio AI
                         <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
                 </div>
@@ -372,6 +738,28 @@
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
+
+        // Akordeon studi kasus
+        document.querySelectorAll('#kasusList .kasus').forEach(function (kartu) {
+            const head = kartu.querySelector('.kasus-head');
+            const body = kartu.querySelector('.kasus-body');
+            const chev = kartu.querySelector('.kasus-chev');
+            head.addEventListener('click', function () {
+                const buka = body.classList.contains('hidden');
+                body.classList.toggle('hidden', !buka);
+                chev.style.transform = buka ? 'rotate(180deg)' : '';
+                kartu.classList.toggle('border-teal-300', buka);
+                kartu.classList.toggle('shadow-sm', buka);
+            });
+        });
+
+        // Buka otomatis kasus yang dirujuk dari tautan #kasus-N
+        (function () {
+            const m = (location.hash || '').match(/^#kasus-(\d)$/);
+            if (!m) return;
+            const kartu = document.querySelectorAll('#kasusList .kasus')[Number(m[1]) - 1];
+            if (kartu) { kartu.querySelector('.kasus-head').click(); kartu.scrollIntoView({ behavior:'smooth', block:'center' }); }
+        })();
 
         // Tab Logic untuk Mapel
         function bukaMapel(tabId) {

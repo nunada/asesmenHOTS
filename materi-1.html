@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modul Pelatihan - Materi 1</title>
+    <title>Materi 1 — Konsep HOTS &amp; Asesmen Autentik</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -17,23 +17,39 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Animasi Kuis */
-        .quiz-option { transition: all 0.2s ease-in-out; }
-        .quiz-option.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
-        .quiz-option.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
-        .quiz-option.disabled { opacity: 0.6; pointer-events: none; }
+        /* Animasi Tab & Kuis */
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .quiz-btn { transition: all 0.2s ease; }
+        .quiz-btn.correct { background-color: #10b981; color: white; border-color: #10b981; }
+        .quiz-btn.wrong { background-color: #ef4444; color: white; border-color: #ef4444; }
+        .quiz-btn.disabled { opacity: 0.6; pointer-events: none; }
+
+        /* Latihan penempatan kuadran */
+        .kq-btn {
+            font-size: 10px; font-weight: 700; line-height: 1.3;
+            padding: 8px 6px; border-radius: .75rem;
+            border: 1px solid #e2e8f0; background: #f8fafc; color: #475569;
+            transition: all .18s ease; cursor: pointer;
+        }
+        .kq-btn:hover { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; }
+        .kq-btn.correct { background: #10b981; border-color: #10b981; color: #fff; }
+        .kq-btn.wrong { background: #f43f5e; border-color: #f43f5e; color: #fff; }
+        .kq.answered .kq-btn { pointer-events: none; }
+        .kq.answered .kq-btn:not(.correct):not(.wrong) { opacity: .45; }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <!-- Top Header Brand (Modern & Elegant - Non Sticky) -->
     <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 py-4 sm:py-6 px-4 sm:px-6 lg:px-8 relative shadow-[0_4px_30px_rgba(0,0,0,0.03)] z-40">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <!-- Box Logo -->
             <div class="flex items-center gap-3 sm:gap-4 p-2 sm:p-3 bg-slate-50 border border-slate-100 rounded-2xl shadow-sm ring-1 ring-slate-900/5">
                 <img src="https://i.ibb.co.com/Gv1xXFQG/logo-Unesa.png" alt="UNESA" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
                 <div class="w-px h-10 sm:h-14 bg-slate-200"></div>
-                <img src="https://i.ibb.co.com/Rp23J5jP/image.png" alt="Al-Kautsar" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
+                <img src="https://i.ibb.co.com/C5QhKmqc/al-kautsar.png" alt="Al-Kautsar" class="h-12 sm:h-16 lg:h-[4.5rem] w-auto object-contain transition-transform hover:scale-105">
             </div>
             <!-- Title -->
             <div class="text-center sm:text-left border-l-0 sm:border-l-2 border-slate-200 sm:pl-5">
@@ -45,7 +61,6 @@
         </div>
     </header>
 
-    <!-- Menu Navigasi (Glassmorphism Sticky) -->
     <nav class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white sticky top-0 z-50 shadow-lg border-b border-indigo-700/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-14 sm:h-16"> 
@@ -85,226 +100,557 @@
     <main class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
         
         <!-- Hero Section -->
-        <div class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-12 text-center relative overflow-hidden mb-8 group hover:shadow-md transition-shadow">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500"></div>
-            <span class="inline-flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-blue-50 text-blue-700 text-xs font-bold tracking-wider mb-5 uppercase border border-blue-100">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        <div class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-12 text-center relative overflow-hidden mb-8">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+            <span class="inline-flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold tracking-wider mb-5 uppercase border border-emerald-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 Materi 1
             </span>
             <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-5 leading-tight">
-                Tantangan Pendidikan Abad 21 <br class="hidden sm:block"> & Transformasi Peran Guru
+                Konsep HOTS dan <br class="hidden sm:block"> Asesmen Autentik
             </h2>
             <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto font-medium">
-                Memahami pergeseran paradigma mengajar, urgensi Keterampilan 4C di lingkungan pondok pesantren, dan bagaimana <em>Artificial Intelligence</em> (AI) hadir sebagai rekan kolaborasi yang tangguh bagi pendidik.
+                Membongkar miskonsepsi seputar soal sulit, memahami Taksonomi Bloom Revisi, dan mengukur kemampuan siswa melalui permasalahan dunia nyata.
             </p>
+            <div class="mt-6 inline-flex flex-wrap items-center justify-center gap-2 text-xs font-semibold">
+                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-100">Anda di sini</span>
+                <a href="materi-2.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors">Materi 2: AI &amp; Prompting →</a>
+                <a href="materi-3.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors">Materi 3: Praktik →</a>
+            </div>
         </div>
 
-        <!-- Konten Utama -->
         <div class="space-y-8">
             
-            <!-- Bagian 1: Pergeseran Paradigma -->
+            <!-- Bagian 1: Definisi & Miskonsepsi -->
             <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
                 <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
-                    <span class="bg-blue-100 text-blue-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">1</span> 
-                    Pergeseran Paradigma Pendidikan
+                    <span class="bg-teal-100 text-teal-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">1</span> 
+                    Apa itu HOTS? (Mitos vs Fakta)
                 </h3>
-                <div class="text-slate-600 text-sm sm:text-base leading-relaxed text-justify space-y-4">
-                    <p>Dunia berubah dengan kecepatan yang belum pernah terjadi sebelumnya. Saat ini, siswa memiliki akses informasi tak terbatas di ujung jari mereka melalui internet. Hal ini menuntut adanya pergeseran cara kita mendidik generasi muda, termasuk di lingkungan pendidikan pesantren.</p>
-                    <p>Model pendidikan konvensional (Abad ke-20) yang memposisikan guru sebagai satu-satunya <strong>pusat transfer ilmu</strong> dan menitikberatkan pada hafalan fakta, kini dirasa tidak lagi cukup untuk membekali siswa. Siswa masa kini tidak kekurangan informasi; mereka justru kebanjiran informasi. Yang mereka butuhkan adalah kemampuan memfilter, menganalisis, dan memanfaatkan informasi tersebut untuk memecahkan masalah nyata.</p>
-                </div>
-
-                <!-- Bagan Abad 20 vs 21 -->
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-8 mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <!-- Abad 20 Card -->
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm w-full md:w-64 text-center relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-16 h-16 bg-slate-100 rounded-bl-full -z-10"></div>
-                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        </div>
-                        <h4 class="font-bold text-slate-700 mb-2">Pendidikan Abad 20</h4>
-                        <ul class="text-xs text-slate-500 space-y-2 text-left">
-                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Pembelajaran Pasif (Mendengar)</li>
-                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Guru Satu-satunya Sumber</li>
-                            <li class="flex items-start gap-2"><span class="text-red-500 font-bold shrink-0">✗</span> Fokus pada Hafalan Materi</li>
-                        </ul>
-                    </div>
-
-                    <!-- Arrow -->
-                    <div class="text-slate-300 md:rotate-0 rotate-90 my-2 md:my-0">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </div>
-
-                    <!-- Abad 21 Card -->
-                    <div class="bg-gradient-to-b from-blue-50 to-white p-5 rounded-xl border border-blue-200 shadow-md ring-2 ring-blue-500/20 w-full md:w-64 text-center transform md:scale-105 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-100 rounded-bl-full -z-10"></div>
-                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        </div>
-                        <h4 class="font-bold text-blue-900 mb-2">Pendidikan Abad 21</h4>
-                        <ul class="text-xs text-slate-700 space-y-2 text-left font-medium">
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Keterampilan Analisis (HOTS)</li>
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Guru sebagai Fasilitator</li>
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold shrink-0">✓</span> Pemecahan Masalah Kolaboratif</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Bagian 2: Keterampilan 4C -->
-            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
-                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
-                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">2</span> 
-                    Urgensi Keterampilan 4C
-                </h3>
-                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
-                    Agar santri dan siswa mampu bersaing di era digital, kurikulum saat ini dirancang untuk menumbuhkan <strong>Keterampilan 4C</strong>. Asesmen yang merangsang kemampuan berpikir tingkat tinggi <em>(High Order Thinking Skills/HOTS)</em> adalah instrumen utama untuk mengukur dan melatih 4C ini.
+                <p class="text-slate-600 mb-8 text-sm sm:text-base leading-relaxed text-justify">
+                    HOTS (<em>Higher Order Thinking Skills</em>) adalah keterampilan kognitif tingkat tinggi yang mengharuskan siswa untuk menghubungkan informasi baru dengan informasi di memori, lalu menyusunnya ulang untuk menyelesaikan suatu masalah tak terduga. Sayangnya, banyak miskonsepsi di lapangan.
                 </p>
 
-                <!-- 4C Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Critical Thinking -->
-                    <div class="p-5 rounded-2xl bg-orange-50 border border-orange-100 flex gap-4 items-start hover:shadow-md transition-shadow">
-                        <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Mitos -->
+                    <div class="bg-red-50/50 border border-red-100 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-red-600 font-bold mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Mitos Umum (Salah)
                         </div>
-                        <div>
-                            <h4 class="font-bold text-orange-900 text-sm mb-1">Critical Thinking</h4>
-                            <p class="text-xs text-orange-800/80 leading-relaxed"><strong>(Berpikir Kritis)</strong>. Mampu membedah masalah kompleks, menyaring kebenaran informasi dari hoaks, dan menarik kesimpulan berdasarkan bukti serta logika yang kuat.</p>
-                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex gap-2 items-start"><span class="text-red-400 font-bold">✗</span> "Soal HOTS itu berarti soalnya harus sangat sulit dan menjebak."</li>
+                            <li class="flex gap-2 items-start"><span class="text-red-400 font-bold">✗</span> "Teks bacaannya harus sangat panjang agar terlihat HOTS."</li>
+                            <li class="flex gap-2 items-start"><span class="text-red-400 font-bold">✗</span> "HOTS hanya untuk anak-anak pintar atau jenjang SMA ke atas."</li>
+                        </ul>
                     </div>
-                    <!-- Creativity -->
-                    <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100 flex gap-4 items-start hover:shadow-md transition-shadow">
-                        <div class="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-purple-900 text-sm mb-1">Creativity</h4>
-                            <p class="text-xs text-purple-800/80 leading-relaxed"><strong>(Kreativitas)</strong>. Kemampuan menciptakan solusi baru dan segar. Melihat permasalahan dari sudut pandang yang berbeda <em>(out of the box)</em> dan tidak takut berinovasi.</p>
-                        </div>
-                    </div>
-                    <!-- Collaboration -->
-                    <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 flex gap-4 items-start hover:shadow-md transition-shadow">
-                        <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-emerald-900 text-sm mb-1">Collaboration</h4>
-                            <p class="text-xs text-emerald-800/80 leading-relaxed"><strong>(Kolaborasi)</strong>. Kecakapan bekerja sama secara fleksibel dalam sebuah tim, menghargai keberagaman pendapat, serta bersinergi demi mencapai tujuan bersama.</p>
-                        </div>
-                    </div>
-                    <!-- Communication -->
-                    <div class="p-5 rounded-2xl bg-cyan-50 border border-cyan-100 flex gap-4 items-start hover:shadow-md transition-shadow">
-                        <div class="w-10 h-10 rounded-full bg-cyan-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-cyan-900 text-sm mb-1">Communication</h4>
-                            <p class="text-xs text-cyan-800/80 leading-relaxed"><strong>(Komunikasi)</strong>. Mampu mengartikulasikan ide, gagasan, dan solusi secara terstruktur dan persuasif, baik secara lisan, tulisan, maupun media digital.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <!-- Bagian 3: Revolusi AI -->
-            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
-                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
-                    <span class="bg-violet-100 text-violet-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">3</span> 
-                    Revolusi AI dalam Dunia Pendidikan
-                </h3>
-                <div class="text-slate-600 text-sm sm:text-base leading-relaxed text-justify space-y-4 mb-6">
-                    <p>Kehadiran <strong>Kecerdasan Buatan (AI) Generatif</strong> seperti Google Gemini atau ChatGPT telah menciptakan gelombang besar di seluruh sektor, termasuk pendidikan. Bagi sebagian orang, ini dianggap sebagai ancaman (takut siswa menyontek massal). Namun, bagi pendidik yang adaptif, AI adalah senjata rahasia.</p>
-                    <p>Dalam menyusun instrumen evaluasi berstandar HOTS, guru seringkali kehabisan ide untuk membuat skenario studi kasus atau merumuskan rubrik penilaian yang komprehensif. Di sinilah AI mengambil peran sebagai <strong>asisten tanpa lelah</strong> yang siap diajak berdiskusi <em>(brainstorming)</em> kapan saja.</p>
-                </div>
-                
-                <div class="bg-violet-50 border border-violet-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-6">
-                    <div class="w-20 h-20 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-violet-200 text-3xl">🤖</div>
-                    <div>
-                        <h4 class="font-bold text-violet-900 mb-2">Apa yang BISA dilakukan AI untuk Guru?</h4>
-                        <ul class="text-sm text-violet-800 space-y-1.5 list-disc list-inside">
-                            <li>Membuat puluhan ide studi kasus yang relevan dengan lingkungan sekolah.</li>
-                            <li>Menyusun tabel rubrik penilaian (skor 1-4) dalam hitungan detik.</li>
-                            <li>Menganalisis draf soal buatan guru dan memberikan saran perbaikan tingkat kognitif.</li>
+                    <!-- Fakta -->
+                    <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-emerald-600 font-bold mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Fakta Sebenarnya
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex gap-2 items-start"><span class="text-emerald-500 font-bold">✓</span> Sulit belum tentu HOTS. Rumus kompleks yang sekadar dihafal tetap tergolong LOTS (Ingatan).</li>
+                            <li class="flex gap-2 items-start"><span class="text-emerald-500 font-bold">✓</span> Fokus pada analisis data, evaluasi argumen, atau menciptakan solusi.</li>
+                            <li class="flex gap-2 items-start"><span class="text-emerald-500 font-bold">✓</span> Bisa diterapkan sejak jenjang TK/SD (sesuai konteks dunia mereka).</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- Bagian 4: Etika Penggunaan AI -->
-            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+            <!-- Bagian 2: Interaktif Taksonomi Bloom -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10 overflow-hidden relative">
                 <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
-                    <span class="bg-rose-100 text-rose-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">4</span> 
-                    Etika dan Batasan Penggunaan AI
+                    <span class="bg-cyan-100 text-cyan-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">2</span> 
+                    Taksonomi Bloom (Revisi Anderson)
                 </h3>
-                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
-                    Sistem AI tidak memiliki empati, pengalaman pedagogis, maupun pemahaman kultural pesantren seperti yang Anda miliki. Oleh karena itu, ada koridor etika mutlak yang wajib dipatuhi oleh setiap pendidik saat menggunakan AI:
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed">
+                    Klik level kognitif di bawah ini untuk melihat Kata Kerja Operasional (KKO) dan contoh penggunaannya.
                 </p>
 
+                <div class="flex flex-col lg:flex-row gap-6">
+                    <!-- Tangga Bloom (Buttons) -->
+                    <div class="w-full lg:w-1/3 flex flex-col justify-end space-y-2">
+                        <!-- C6 -->
+                        <button onclick="openTab('c6')" id="btn-c6" class="tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-rose-50 text-rose-700 hover:bg-rose-500 hover:text-white transform hover:translate-x-2">
+                            C6 - Mencipta (Create) <span class="float-right">🔥</span>
+                        </button>
+                        <!-- C5 -->
+                        <button onclick="openTab('c5')" id="btn-c5" class="tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-orange-50 text-orange-700 hover:bg-orange-500 hover:text-white transform hover:translate-x-2">
+                            C5 - Mengevaluasi (Evaluate) <span class="float-right">🔥</span>
+                        </button>
+                        <!-- C4 -->
+                        <button onclick="openTab('c4')" id="btn-c4" class="tab-btn active w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-amber-500 text-white shadow-md transform translate-x-2">
+                            C4 - Menganalisis (Analyze) <span class="float-right">🔥</span>
+                        </button>
+                        <div class="h-px bg-slate-200 my-2 relative">
+                            <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Batas HOTS</span>
+                        </div>
+                        <!-- C3 -->
+                        <button onclick="openTab('c3')" id="btn-c3" class="tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-emerald-50 text-emerald-700 hover:bg-emerald-500 hover:text-white transform hover:translate-x-2">
+                            C3 - Menerapkan (Apply)
+                        </button>
+                        <!-- C2 -->
+                        <button onclick="openTab('c2')" id="btn-c2" class="tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-sky-50 text-sky-700 hover:bg-sky-500 hover:text-white transform hover:translate-x-2">
+                            C2 - Memahami (Understand)
+                        </button>
+                        <!-- C1 -->
+                        <button onclick="openTab('c1')" id="btn-c1" class="tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-slate-100 text-slate-700 hover:bg-slate-500 hover:text-white transform hover:translate-x-2">
+                            C1 - Mengingat (Remember)
+                        </button>
+                    </div>
+
+                    <!-- Panel Konten Tab -->
+                    <div class="w-full lg:w-2/3">
+                        <div class="bg-slate-50 border border-slate-200 p-5 sm:p-6 rounded-2xl h-full shadow-inner">
+                            
+                            <!-- Konten C6 -->
+                            <div id="c6" class="tab-content">
+                                <h4 class="font-extrabold text-rose-600 text-xl mb-2">C6: Mencipta (Create)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Memadukan berbagai elemen untuk membentuk sebuah struktur baru yang koheren, fungsional, atau orisinal.</p>
+                                <div class="bg-white p-4 rounded-xl border border-rose-100 mb-4">
+                                    <span class="block text-xs font-bold text-rose-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Merancang, Membangun, Merumuskan, Menciptakan, Merekonstruksi, Mengarang.</p>
+                                </div>
+                                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                                    <span class="block text-xs font-bold text-rose-800 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-rose-900 italic">"Rancanglah sebuah purwarupa (prototype) alat penjernih air sederhana menggunakan bahan bekas yang ada di asrama pesantren!"</p>
+                                </div>
+                            </div>
+
+                            <!-- Konten C5 -->
+                            <div id="c5" class="tab-content">
+                                <h4 class="font-extrabold text-orange-600 text-xl mb-2">C5: Mengevaluasi (Evaluate)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Memberikan penilaian, keputusan, atau kritik berdasarkan kriteria dan standar tertentu secara logis.</p>
+                                <div class="bg-white p-4 rounded-xl border border-orange-100 mb-4">
+                                    <span class="block text-xs font-bold text-orange-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Menilai, Mengkritik, Mempertahankan argumen, Memvalidasi, Menguji kelayakan.</p>
+                                </div>
+                                <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                                    <span class="block text-xs font-bold text-orange-800 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-orange-900 italic">"Berdasarkan dua artikel berita tersebut, argumen tokoh manakah yang lebih valid secara saintifik? Jelaskan alasanmu!"</p>
+                                </div>
+                            </div>
+
+                            <!-- Konten C4 (Default Active) -->
+                            <div id="c4" class="tab-content active">
+                                <h4 class="font-extrabold text-amber-600 text-xl mb-2">C4: Menganalisis (Analyze)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Memecah materi atau informasi kompleks ke dalam bagian-bagian komponen, menentukan bagaimana bagian tersebut saling berhubungan.</p>
+                                <div class="bg-white p-4 rounded-xl border border-amber-100 mb-4">
+                                    <span class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Mendiagnosis, Menguraikan, Membandingkan, Mengkorelasikan, Menemukan akar masalah.</p>
+                                </div>
+                                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                                    <span class="block text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-amber-900 italic">"Perhatikan grafik peningkatan suhu harian ini. Mengapa suhu pada pukul 14.00 di daerah A jauh lebih ekstrem dibandingkan daerah B yang banyak pepohonan?"</p>
+                                </div>
+                            </div>
+
+                            <!-- Konten C3 -->
+                            <div id="c3" class="tab-content">
+                                <h4 class="font-extrabold text-emerald-600 text-xl mb-2">C3: Menerapkan (Apply)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Menggunakan prosedur atau rumus yang telah dipelajari ke dalam situasi standar yang tidak terduga.</p>
+                                <div class="bg-white p-4 rounded-xl border border-emerald-100 mb-4">
+                                    <span class="block text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Menghitung, Mempraktikkan, Melaksanakan, Menggunakan (rumus), Mendemonstrasikan.</p>
+                                </div>
+                                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                                    <span class="block text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-emerald-900 italic">"Sebuah mobil melaju dengan kecepatan 60km/jam. Hitunglah jarak yang ditempuh mobil tersebut dalam waktu 3 jam!" (Ini LOTS - penerapan rumus biasa).</p>
+                                </div>
+                            </div>
+
+                            <!-- Konten C2 -->
+                            <div id="c2" class="tab-content">
+                                <h4 class="font-extrabold text-sky-600 text-xl mb-2">C2: Memahami (Understand)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Membangun makna dari instruksi lisan, tertulis, dan grafis. Mampu menjelaskan dengan bahasa sendiri.</p>
+                                <div class="bg-white p-4 rounded-xl border border-sky-100 mb-4">
+                                    <span class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Menjelaskan, Meringkas, Mengklasifikasikan, Mencontohkan, Merangkum.</p>
+                                </div>
+                                <div class="bg-sky-50 p-4 rounded-xl border border-sky-200">
+                                    <span class="block text-xs font-bold text-sky-800 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-sky-900 italic">"Jelaskan menggunakan bahasamu sendiri, bagaimana proses fotosintesis terjadi pada tumbuhan malam hari!"</p>
+                                </div>
+                            </div>
+
+                            <!-- Konten C1 -->
+                            <div id="c1" class="tab-content">
+                                <h4 class="font-extrabold text-slate-600 text-xl mb-2">C1: Mengingat (Remember)</h4>
+                                <p class="text-sm text-slate-600 mb-4 font-medium">Mengambil pengetahuan relevan dari memori jangka panjang. Sekadar hafalan murni.</p>
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 mb-4">
+                                    <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Kata Kerja Operasional (KKO)</span>
+                                    <p class="text-sm text-slate-700">Menyebutkan, Menghafal, Menuliskan, Mengingat, Menunjukkan nama.</p>
+                                </div>
+                                <div class="bg-slate-100 p-4 rounded-xl border border-slate-300">
+                                    <span class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Contoh Pertanyaan</span>
+                                    <p class="text-sm text-slate-800 italic">"Sebutkan tiga jenis tulang yang menyusun kerangka manusia!"</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 3: Asesmen Autentik -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">3</span> 
+                    Asesmen Autentik
+                </h3>
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    HOTS berjalan beriringan dengan <strong class="text-indigo-900 font-semibold bg-indigo-50 px-1 rounded">Asesmen Autentik</strong>. Anda tidak bisa mengukur keterampilan mencipta (C6) hanya dengan tes Pilihan Ganda (PG). Asesmen Autentik adalah evaluasi yang meminta siswa untuk mendemonstrasikan keterampilan mereka dalam situasi dunia nyata.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div class="p-5 border border-slate-100 bg-slate-50 rounded-2xl flex flex-col items-center text-center">
+                        <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">🌍</div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-2">Konteks Nyata</h4>
+                        <p class="text-xs text-slate-500">Bukan angka khayal. Mengangkat masalah lingkungan sekolah, berita terkini, atau studi kasus pesantren.</p>
+                    </div>
+                    <div class="p-5 border border-slate-100 bg-slate-50 rounded-2xl flex flex-col items-center text-center">
+                        <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">🎯</div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-2">Multi-Solusi</h4>
+                        <p class="text-xs text-slate-500">Tidak ada satu jawaban pasti benar. Yang dinilai adalah kualitas nalar dan logika argumentasi siswa.</p>
+                    </div>
+                    <div class="p-5 border border-slate-100 bg-slate-50 rounded-2xl flex flex-col items-center text-center">
+                        <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">📊</div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-2">Rubrik Jelas</h4>
+                        <p class="text-xs text-slate-500">Wajib menggunakan rubrik penskoran terstruktur (misal skala 1-4) agar penilaian tidak subjektif.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian 4: Matriks HOTS x Autentik -->
+            <section class="bg-white rounded-[2rem] shadow-sm border border-slate-200 p-6 sm:p-10">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                    <span class="bg-amber-100 text-amber-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">4</span>
+                    Dua Hal yang Sering Dikira Satu
+                </h3>
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    Inilah sumber kekeliruan paling umum: <strong>HOTS dan autentik itu dua ukuran yang berbeda dan berdiri sendiri.</strong> HOTS berbicara tentang <em>seberapa tinggi proses berpikirnya</em> (C1–C6). Autentik berbicara tentang <em>seberapa nyata situasi dan cara penilaiannya</em>. Karena keduanya terpisah, sebuah tugas bisa saja nyata tapi dangkal, atau rumit tapi jauh dari kehidupan siswa. Empat kemungkinan berikut memakai satu materi yang sama — <strong>Zakat Mal</strong> — supaya perbedaannya terasa jelas.
+                </p>
+
+                <!-- Diagram matriks -->
+                <div class="mb-8 overflow-x-auto">
+                    <div class="min-w-[300px]">
+                        <div class="flex items-stretch gap-2">
+                            <div class="flex items-center justify-center w-8 sm:w-10 shrink-0">
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 tracking-widest whitespace-nowrap" style="writing-mode:vertical-rl;transform:rotate(180deg)">TINGKAT BERPIKIR →</span>
+                            </div>
+                            <div class="flex-1 grid grid-cols-2 gap-2 sm:gap-3">
+                                <div class="p-3 sm:p-4 rounded-2xl bg-amber-50 border-2 border-amber-200 min-h-[92px] flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold text-amber-700 tracking-wider">KUADRAN 3</span>
+                                    <p class="text-xs sm:text-sm font-bold text-amber-900 leading-tight mt-0.5">HOTS, belum autentik</p>
+                                    <p class="text-[10px] sm:text-xs text-amber-700/80 mt-1 leading-snug">Berpikirnya tinggi, tapi masih di atas kertas</p>
+                                </div>
+                                <div class="p-3 sm:p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 min-h-[92px] flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold text-emerald-700 tracking-wider">KUADRAN 4 ★</span>
+                                    <p class="text-xs sm:text-sm font-bold text-emerald-900 leading-tight mt-0.5">HOTS + autentik</p>
+                                    <p class="text-[10px] sm:text-xs text-emerald-700/80 mt-1 leading-snug">Sasaran kita di pelatihan ini</p>
+                                </div>
+                                <div class="p-3 sm:p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 min-h-[92px] flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold text-rose-700 tracking-wider">KUADRAN 1</span>
+                                    <p class="text-xs sm:text-sm font-bold text-rose-900 leading-tight mt-0.5">LOTS, tidak autentik</p>
+                                    <p class="text-[10px] sm:text-xs text-rose-700/80 mt-1 leading-snug">Hafalan murni di lembar soal</p>
+                                </div>
+                                <div class="p-3 sm:p-4 rounded-2xl bg-sky-50 border-2 border-sky-200 min-h-[92px] flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold text-sky-700 tracking-wider">KUADRAN 2</span>
+                                    <p class="text-xs sm:text-sm font-bold text-sky-900 leading-tight mt-0.5">LOTS, tapi autentik</p>
+                                    <p class="text-[10px] sm:text-xs text-sky-700/80 mt-1 leading-snug">Kegiatannya nyata, mikirnya ringan</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <div class="w-8 sm:w-10 shrink-0"></div>
+                            <div class="flex-1 text-center">
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 tracking-widest">KEAUTENTIKAN →</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empat kartu rinci -->
                 <div class="space-y-4">
-                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-slate-400">
-                        <div class="text-xl shrink-0">🛡️</div>
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">Jaga Privasi Data Siswa</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed"><strong>Dilarang keras</strong> mengunggah data pribadi siswa (nama asli, NIK, alamat lengkap, atau daftar nilai riil) ke dalam platform AI terbuka. Jika Anda ingin meminta AI menganalisis deskripsi nilai, selalu gunakan nama samaran/inisial.</p>
+
+                    <!-- K1 -->
+                    <div class="rounded-2xl border border-rose-200 overflow-hidden">
+                        <div class="bg-rose-50 px-4 sm:px-5 py-3 border-b border-rose-200 flex items-center gap-3">
+                            <span class="w-7 h-7 shrink-0 rounded-lg bg-rose-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+                            <div>
+                                <h4 class="font-bold text-rose-900 text-sm sm:text-base leading-tight">LOTS &amp; Tidak Autentik</h4>
+                                <p class="text-[11px] text-rose-700/80">Yang paling sering kita buat karena paling cepat dinilai</p>
+                            </div>
+                        </div>
+                        <div class="p-4 sm:p-5 space-y-3">
+                            <div class="p-3 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1">CONTOH SOAL</p>
+                                <p class="text-sm text-slate-700 italic leading-relaxed">"Sebutkan delapan golongan penerima zakat (<em>asnaf</em>) sesuai QS. At-Taubah ayat 60!"</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-3 bg-rose-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-rose-700 tracking-wider mb-1.5">MENGAPA LOTS</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Siswa hanya perlu <strong>mengingat</strong> (C1). Yang hafal pasti benar; yang paham tapi lupa urutan justru salah.</p>
+                                </div>
+                                <div class="p-3 bg-rose-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-rose-700 tracking-wider mb-1.5">MENGAPA TIDAK AUTENTIK</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Tidak ada situasi, tidak ada pembaca, tidak ada produk. Jawabannya tunggal dan dinilai benar/salah.</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed"><strong class="text-slate-700">Bukan berarti haram.</strong> Soal jenis ini tetap berguna untuk memastikan hafalan dasar sudah ada. Yang salah adalah bila <em>seluruh</em> asesmen kita berhenti di sini.</p>
                         </div>
                     </div>
-                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-yellow-400">
-                        <div class="text-xl shrink-0">⚠️</div>
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">Waspada <em>"Halusinasi"</em> AI</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">AI generatif didesain untuk memprediksi kata demi kata agar terdengar natural, bukan untuk menjadi ensiklopedia mutlak kebenaran. Terkadang AI mengalami <em>halusinasi</em> (menghasilkan info meyakinkan yang nyatanya salah konsep). <strong>Guru harus selalu memvalidasi fakta dan kunci jawaban.</strong></p>
+
+                    <!-- K2 -->
+                    <div class="rounded-2xl border border-sky-200 overflow-hidden">
+                        <div class="bg-sky-50 px-4 sm:px-5 py-3 border-b border-sky-200 flex items-center gap-3">
+                            <span class="w-7 h-7 shrink-0 rounded-lg bg-sky-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                            <div>
+                                <h4 class="font-bold text-sky-900 text-sm sm:text-base leading-tight">LOTS tetapi Autentik</h4>
+                                <p class="text-[11px] text-sky-700/80">Terlihat keren dan sibuk, padahal berpikirnya masih rendah</p>
+                            </div>
+                        </div>
+                        <div class="p-4 sm:p-5 space-y-3">
+                            <div class="p-3 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1">CONTOH TUGAS</p>
+                                <p class="text-sm text-slate-700 italic leading-relaxed">"Kunjungi panitia zakat masjid pesantren. Catat siapa saja penerima zakat tahun ini, lalu buat laporan berisi daftar nama dan golongan asnaf-nya."</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-3 bg-sky-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-sky-700 tracking-wider mb-1.5">SUDAH AUTENTIK</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Situasinya nyata, ada narasumber sungguhan, ada produk berupa laporan. Siswa keluar dari ruang kelas.</p>
+                                </div>
+                                <div class="p-3 bg-rose-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-rose-700 tracking-wider mb-1.5">TETAPI MASIH LOTS</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Tugasnya hanya <strong>mencatat dan menyalin</strong> (C1–C2). Tidak ada yang perlu dianalisis, dinilai, atau diputuskan.</p>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">CARA MENAIKKANNYA</p>
+                                <p class="text-xs text-emerald-900 leading-relaxed">Cukup tambahkan satu tuntutan berpikir di ujungnya: <em>"…lalu <strong>nilailah</strong> apakah pembagian tahun ini sudah sesuai skala prioritas asnaf, dan <strong>usulkan</strong> perbaikan untuk tahun depan beserta dalilnya."</em> Satu kalimat, kuadran berubah.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex gap-4 p-4 rounded-xl bg-slate-50 border-l-4 border-emerald-400">
-                        <div class="text-xl shrink-0">💡</div>
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">Prinsip <em>Human in the Loop</em></h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">Jadikan AI sebagai "dapur persiapan". Hasil akhir yang disajikan kepada siswa haruslah hasil yang sudah dikurasi, direvisi, dan diberi sentuhan kasih sayang serta pemahaman karakter siswa oleh sang Guru.</p>
+
+                    <!-- K3 -->
+                    <div class="rounded-2xl border border-amber-200 overflow-hidden">
+                        <div class="bg-amber-50 px-4 sm:px-5 py-3 border-b border-amber-200 flex items-center gap-3">
+                            <span class="w-7 h-7 shrink-0 rounded-lg bg-amber-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+                            <div>
+                                <h4 class="font-bold text-amber-900 text-sm sm:text-base leading-tight">HOTS tetapi Tidak Autentik</h4>
+                                <p class="text-[11px] text-amber-700/80">Berpikirnya sudah tinggi, tapi masih hidup di atas kertas</p>
+                            </div>
                         </div>
+                        <div class="p-4 sm:p-5 space-y-3">
+                            <div class="p-3 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1">CONTOH SOAL</p>
+                                <p class="text-sm text-slate-700 italic leading-relaxed">"Bandingkan pendapat Imam Syafi'i dan Imam Hanafi mengenai nisab zakat emas. Simpulkan pendapat mana yang dalilnya lebih kuat dan jelaskan alasanmu." <span class="not-italic text-slate-400">(soal uraian, ujian tulis 30 menit)</span></p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="p-3 bg-emerald-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">SUDAH HOTS</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Menuntut <strong>membandingkan</strong> (C4) lalu <strong>menilai</strong> kekuatan dalil (C5). Jawaban bisa beragam asal argumennya kuat.</p>
+                                </div>
+                                <div class="p-3 bg-amber-50/60 rounded-xl">
+                                    <p class="text-[10px] font-bold text-amber-700 tracking-wider mb-1.5">BELUM AUTENTIK</p>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Murni perdebatan teks. Tidak ada kasus nyata, tidak ada pihak yang benar-benar terbantu, dan hasilnya berhenti di buku tulis.</p>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">CARA MENAIKKANNYA</p>
+                                <p class="text-xs text-emerald-900 leading-relaxed">Beri kasus nyata dan pembaca sungguhan: <em>"Seorang pedagang emas di Pandaan bertanya berapa zakat yang harus ia keluarkan. Susun jawaban tertulis untuk beliau, sebutkan pendapat yang kamu pilih beserta alasannya, dengan bahasa yang mudah dipahami orang awam."</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- K4 -->
+                    <div class="rounded-2xl border-2 border-emerald-300 overflow-hidden shadow-sm">
+                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-4 sm:px-5 py-3 border-b border-emerald-200 flex items-center gap-3">
+                            <span class="w-7 h-7 shrink-0 rounded-lg bg-emerald-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+                            <div>
+                                <h4 class="font-bold text-emerald-900 text-sm sm:text-base leading-tight">HOTS &amp; Autentik ★</h4>
+                                <p class="text-[11px] text-emerald-700/80">Inilah yang akan kita rancang bersama di Materi 3</p>
+                            </div>
+                        </div>
+                        <div class="p-4 sm:p-5 space-y-3">
+                            <div class="p-3 bg-slate-50 border-l-4 border-emerald-400 rounded-r-xl">
+                                <p class="text-[10px] font-bold text-slate-500 tracking-wider mb-1">CONTOH TUGAS KINERJA</p>
+                                <p class="text-sm text-slate-700 italic leading-relaxed">"Panitia zakat pesantren menerima 20 pengajuan calon penerima, sementana dana hanya cukup untuk 12 orang. Berdasarkan data pengajuan yang tersedia: <strong>(a)</strong> rancang skema prioritas pembagian, <strong>(b)</strong> susun alasan fikih untuk setiap keputusan, <strong>(c)</strong> presentasikan usulanmu kepada takmir masjid dalam 5 menit. Penilaian memakai rubrik empat aspek yang sudah dibagikan sejak awal."</p>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div class="p-2.5 bg-white border border-emerald-100 rounded-xl text-center">
+                                    <p class="text-[10px] font-bold text-emerald-700">C6</p>
+                                    <p class="text-[10px] text-slate-500 leading-snug mt-0.5">Merancang skema baru</p>
+                                </div>
+                                <div class="p-2.5 bg-white border border-emerald-100 rounded-xl text-center">
+                                    <p class="text-[10px] font-bold text-emerald-700">Konteks nyata</p>
+                                    <p class="text-[10px] text-slate-500 leading-snug mt-0.5">Data &amp; masalah betulan</p>
+                                </div>
+                                <div class="p-2.5 bg-white border border-emerald-100 rounded-xl text-center">
+                                    <p class="text-[10px] font-bold text-emerald-700">Ada pembaca</p>
+                                    <p class="text-[10px] text-slate-500 leading-snug mt-0.5">Takmir, bukan guru saja</p>
+                                </div>
+                                <div class="p-2.5 bg-white border border-emerald-100 rounded-xl text-center">
+                                    <p class="text-[10px] font-bold text-emerald-700">Rubrik terbuka</p>
+                                    <p class="text-[10px] text-slate-500 leading-snug mt-0.5">Diketahui sejak awal</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed"><strong class="text-slate-700">Perhatikan:</strong> materinya sama sekali tidak berubah sejak Kuadran 1 — tetap zakat, tetap delapan asnaf. Yang berubah hanya <em>tuntutan berpikirnya</em> dan <em>kemasan situasinya</em>. Anda tidak perlu materi baru untuk naik ke kuadran ini.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel lintas mata pelajaran -->
+                <div class="mt-8">
+                    <h4 class="font-bold text-slate-800 text-sm sm:text-base mb-1">Pola yang sama pada mata pelajaran lain</h4>
+                    <p class="text-xs text-slate-500 mb-4">Satu materi, empat kemasan. Silakan cari padanannya untuk mata pelajaran Anda.</p>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left text-xs min-w-[640px]">
+                            <thead class="bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3 font-bold text-slate-700 w-[15%]">Mapel</th>
+                                    <th class="p-3 font-bold text-rose-700 w-[21%]">K1 · LOTS, tak autentik</th>
+                                    <th class="p-3 font-bold text-sky-700 w-[21%]">K2 · LOTS, autentik</th>
+                                    <th class="p-3 font-bold text-amber-700 w-[21%]">K3 · HOTS, tak autentik</th>
+                                    <th class="p-3 font-bold text-emerald-700 w-[22%]">K4 · HOTS &amp; autentik</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 align-top">
+                                <tr class="hover:bg-slate-50/70">
+                                    <td class="p-3 font-semibold text-slate-700">Matematika<br><span class="font-normal text-slate-400">Statistika</span></td>
+                                    <td class="p-3 text-slate-600">Hitung rata-rata dari data 7, 8, 6, 9, 5.</td>
+                                    <td class="p-3 text-slate-600">Ukur tinggi 20 teman sekelas, lalu hitung rata-ratanya.</td>
+                                    <td class="p-3 text-slate-600">Dari dua tabel nilai, tentukan kelas mana yang lebih merata dan jelaskan alasannya.</td>
+                                    <td class="p-3 text-slate-600">Analisis data konsumsi air pesantren tiga bulan, simpulkan pemborosan terbesar, usulkan target penghematan ke pengurus.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/70">
+                                    <td class="p-3 font-semibold text-slate-700">IPA<br><span class="font-normal text-slate-400">Pencemaran</span></td>
+                                    <td class="p-3 text-slate-600">Sebutkan empat penyebab pencemaran air.</td>
+                                    <td class="p-3 text-slate-600">Amati sungai dekat pesantren, fotokan, dan catat kondisinya.</td>
+                                    <td class="p-3 text-slate-600">Dari data pH lima sampel air, simpulkan mana yang paling tercemar dan mengapa.</td>
+                                    <td class="p-3 text-slate-600">Uji air wudhu pesantren, bandingkan dengan baku mutu, rancang solusi penyaringan sederhana, ajukan ke pengurus.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/70">
+                                    <td class="p-3 font-semibold text-slate-700">Bahasa Arab<br><span class="font-normal text-slate-400">Percakapan</span></td>
+                                    <td class="p-3 text-slate-600">Terjemahkan sepuluh kosakata tentang jual beli.</td>
+                                    <td class="p-3 text-slate-600">Praktikkan dialog jual beli di kantin sesuai teks yang dihafal.</td>
+                                    <td class="p-3 text-slate-600">Perbaiki lima kalimat Arab yang salah <em>i'rab</em>-nya dan jelaskan letak kesalahannya.</td>
+                                    <td class="p-3 text-slate-600">Buat papan petunjuk berbahasa Arab untuk area pesantren, uji keterbacaannya pada santri baru, lalu revisi.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/70">
+                                    <td class="p-3 font-semibold text-slate-700">SKI<br><span class="font-normal text-slate-400">Wali Songo</span></td>
+                                    <td class="p-3 text-slate-600">Sebutkan nama sembilan Wali Songo dan daerah dakwahnya.</td>
+                                    <td class="p-3 text-slate-600">Kunjungi makam wali terdekat dan tuliskan hasil kunjungannya.</td>
+                                    <td class="p-3 text-slate-600">Bandingkan strategi dakwah Sunan Kalijaga dan Sunan Giri, nilai mana yang lebih efektif pada masanya.</td>
+                                    <td class="p-3 text-slate-600">Rancang cara mengajak remaja kampung salat berjamaah dengan meniru strategi Wali Songo, ujicobakan, lalu laporkan hasilnya.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Latihan menempatkan kuadran -->
+                <div class="mt-8 p-5 sm:p-6 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <h4 class="font-bold text-slate-800 text-sm sm:text-base mb-1">Latihan: tempatkan di kuadran mana?</h4>
+                    <p class="text-xs text-slate-500 mb-5">Pilih satu jawaban. Penjelasan akan muncul setelah Anda memilih.</p>
+
+                    <div class="space-y-4" id="kuadranQuiz">
+                        <div class="kq bg-white p-4 rounded-2xl border border-slate-200" data-benar="2">
+                            <p class="text-sm text-slate-700 italic mb-3 leading-relaxed">"Wawancarai tiga pedagang di pasar Pandaan, lalu tuliskan daftar barang yang mereka jual beserta harganya."</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button class="kq-btn" data-p="1">K1 · LOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="2">K2 · LOTS, autentik</button>
+                                <button class="kq-btn" data-p="3">K3 · HOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="4">K4 · HOTS &amp; autentik</button>
+                            </div>
+                            <div class="kq-fb hidden mt-3 text-xs leading-relaxed"></div>
+                            <p class="hidden kq-exp">Kegiatannya benar-benar nyata (keluar ke pasar, narasumber asli), jadi <strong>autentik</strong>. Namun tuntutannya hanya mencatat dan menyalin — belum ada yang dianalisis atau diputuskan, jadi masih <strong>LOTS</strong>. Tambahkan satu tuntutan seperti "bandingkan harganya dengan warung pesantren, lalu simpulkan mana yang lebih hemat" agar naik ke K4.</p>
+                        </div>
+
+                        <div class="kq bg-white p-4 rounded-2xl border border-slate-200" data-benar="3">
+                            <p class="text-sm text-slate-700 italic mb-3 leading-relaxed">"Perhatikan dua grafik pertumbuhan bakteri berikut. Tentukan grafik mana yang menunjukkan pertumbuhan lebih cepat dan jelaskan dasar kesimpulanmu." <span class="not-italic text-slate-400">(soal uraian ulangan harian)</span></p>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button class="kq-btn" data-p="1">K1 · LOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="2">K2 · LOTS, autentik</button>
+                                <button class="kq-btn" data-p="3">K3 · HOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="4">K4 · HOTS &amp; autentik</button>
+                            </div>
+                            <div class="kq-fb hidden mt-3 text-xs leading-relaxed"></div>
+                            <p class="hidden kq-exp">Menganalisis grafik dan menyusun dasar kesimpulan sudah <strong>C4 — HOTS</strong>. Tetapi datanya disediakan guru, dikerjakan di lembar ulangan, dan tidak ada pihak yang memakai hasilnya, jadi <strong>belum autentik</strong>. Ini kuadran yang paling sering dicapai guru, dan sudah cukup baik untuk ulangan harian.</p>
+                        </div>
+
+                        <div class="kq bg-white p-4 rounded-2xl border border-slate-200" data-benar="1">
+                            <p class="text-sm text-slate-700 italic mb-3 leading-relaxed">"Tuliskan kembali lima syarat sah salat berjamaah seperti yang tertulis di buku paket halaman 42."</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button class="kq-btn" data-p="1">K1 · LOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="2">K2 · LOTS, autentik</button>
+                                <button class="kq-btn" data-p="3">K3 · HOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="4">K4 · HOTS &amp; autentik</button>
+                            </div>
+                            <div class="kq-fb hidden mt-3 text-xs leading-relaxed"></div>
+                            <p class="hidden kq-exp">Menyalin dari buku adalah <strong>C1</strong>, dan tidak ada konteks maupun produk nyata. Ini <strong>K1</strong>. Tetap boleh dipakai sebagai pengecekan hafalan cepat, asal bukan satu-satunya bentuk asesmen.</p>
+                        </div>
+
+                        <div class="kq bg-white p-4 rounded-2xl border border-slate-200" data-benar="4">
+                            <p class="text-sm text-slate-700 italic mb-3 leading-relaxed">"Banyak santri baru kesulitan membagi waktu antara mengaji dan tugas sekolah. Susun jadwal harian usulan untuk mereka, uji cobakan pada dua santri selama sepekan, lalu perbaiki jadwalnya berdasarkan keluhan yang muncul dan presentasikan kepada pembina asrama."</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button class="kq-btn" data-p="1">K1 · LOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="2">K2 · LOTS, autentik</button>
+                                <button class="kq-btn" data-p="3">K3 · HOTS, tak autentik</button>
+                                <button class="kq-btn" data-p="4">K4 · HOTS &amp; autentik</button>
+                            </div>
+                            <div class="kq-fb hidden mt-3 text-xs leading-relaxed"></div>
+                            <p class="hidden kq-exp">Menyusun lalu memperbaiki rancangan berdasarkan umpan balik adalah <strong>C6 — mencipta</strong>. Masalahnya nyata, ada pengguna (santri baru), ada pembaca (pembina asrama), dan ada siklus revisi. Inilah <strong>K4</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 p-4 bg-indigo-50 border border-indigo-200 rounded-2xl">
+                        <p class="text-xs text-indigo-900 leading-relaxed">
+                            <strong>Kesimpulan yang perlu dibawa ke Materi 2:</strong> menaikkan kuadran hampir selalu soal <em>menambah tuntutan berpikir</em> dan <em>memberi situasi nyata</em> — bukan mencari materi baru. Pekerjaan inilah yang bisa sangat dipercepat dengan bantuan AI, dan itu bahasan kita berikutnya.
+                        </p>
+                        <a href="materi-2.html" class="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-indigo-700 hover:text-indigo-900">Lanjut ke Materi 2 →</a>
                     </div>
                 </div>
             </section>
 
-            <!-- Bagian 5: Kuis Cek Pemahaman -->
-            <section class="bg-slate-900 rounded-[2rem] shadow-lg border border-slate-800 p-6 sm:p-10 mb-10 text-white relative overflow-hidden">
-                <div class="absolute -top-20 -right-20 w-48 h-48 bg-blue-500 rounded-full blur-[80px] opacity-30"></div>
-                <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-indigo-500 rounded-full blur-[80px] opacity-30"></div>
+            <!-- Bagian 5: Kuis Analisis HOTS vs LOTS -->
+            <section class="bg-slate-900 rounded-[2rem] shadow-lg border border-slate-800 p-6 sm:p-10 text-white relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500 rounded-full blur-[80px] opacity-30"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500 rounded-full blur-[80px] opacity-30"></div>
                 
                 <div class="relative z-10">
-                    <h3 class="text-xl sm:text-2xl font-bold mb-2">Cek Pemahaman Anda 📝</h3>
-                    <p class="text-slate-400 mb-8 text-sm">Uji pemahaman konseptual Anda terkait materi Pergeseran Abad 21 dan AI.</p>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-2 text-white">Latihan Analisis: HOTS atau LOTS? 🧠</h3>
+                    <p class="text-slate-400 mb-8 text-sm">Baca soal/tugas di bawah ini. Tentukan apakah ia masuk kategori HOTS (High) atau LOTS (Low).</p>
 
-                    <div class="space-y-8">
-                        <!-- Q1 -->
-                        <div class="quiz-question" id="q1">
-                            <p class="font-semibold text-slate-200 mb-3 text-sm">1. Manakah dari berikut ini yang merepresentasikan pendekatan pembelajaran Abad ke-21 yang ideal?</p>
-                            <div class="space-y-2">
-                                <button onclick="checkAnswer('q1', 0)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">A. Guru mendiktekan seluruh isi buku paket agar siswa fokus menghafal.</button>
-                                <button onclick="checkAnswer('q1', 1)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">B. Guru menjadi fasilitator, mengarahkan siswa untuk memecahkan masalah melalui kolaborasi.</button>
-                                <button onclick="checkAnswer('q1', 2)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">C. Membiarkan siswa belajar sendiri sepenuhnya menggunakan internet tanpa bimbingan.</button>
-                            </div>
-                            <p class="feedback text-xs font-bold mt-3 hidden"></p>
+                    <!-- Soal 1 -->
+                    <div class="quiz-container bg-slate-800/80 p-5 rounded-2xl border border-slate-700 mb-4" id="soal1">
+                        <p class="text-sm font-medium mb-4 italic text-slate-200">"Sebutkan 5 rukun Islam secara berurutan dan jelaskan artinya!"</p>
+                        <div class="flex gap-3">
+                            <button onclick="jawabKuis('soal1', 'HOTS', 'LOTS')" class="quiz-btn flex-1 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-700 font-bold text-sm">Ini HOTS</button>
+                            <button onclick="jawabKuis('soal1', 'LOTS', 'LOTS')" class="quiz-btn flex-1 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-700 font-bold text-sm">Ini LOTS</button>
                         </div>
+                        <div class="feedback mt-3 text-xs font-medium hidden"></div>
+                    </div>
 
-                        <div class="h-px bg-slate-700/50"></div>
-
-                        <!-- Q2 -->
-                        <div class="quiz-question" id="q2">
-                            <p class="font-semibold text-slate-200 mb-3 text-sm">2. Apa tindakan paling tepat yang harus dilakukan guru jika ingin membuat soal dengan bantuan AI?</p>
-                            <div class="space-y-2">
-                                <button onclick="checkAnswer('q2', 0)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">A. Menyalin (copy-paste) mentah-mentah soal buatan AI langsung ke kertas ujian siswa.</button>
-                                <button onclick="checkAnswer('q2', 1)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">B. Menghindari AI sama sekali karena mesin bisa memberikan jawaban yang salah konsep (halusinasi).</button>
-                                <button onclick="checkAnswer('q2', 2)" class="quiz-option w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-sm font-medium transition-colors">C. Menggunakan draf AI sebagai inspirasi, lalu memvalidasi konsep dan menyuntingnya sesuai konteks kelas.</button>
-                            </div>
-                            <p class="feedback text-xs font-bold mt-3 hidden"></p>
+                    <!-- Soal 2 -->
+                    <div class="quiz-container bg-slate-800/80 p-5 rounded-2xl border border-slate-700" id="soal2">
+                        <p class="text-sm font-medium mb-4 italic text-slate-200">"Kasus: Di desa X, panitia zakat membagikan daging kurban secara merata ke seluruh warga (kaya maupun miskin) dengan alasan asas kebersamaan. Evaluasilah kebijakan ini berdasarkan hukum Fiqih, apakah tepat? Berikan argumenmu!"</p>
+                        <div class="flex gap-3">
+                            <button onclick="jawabKuis('soal2', 'HOTS', 'HOTS')" class="quiz-btn flex-1 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-700 font-bold text-sm">Ini HOTS</button>
+                            <button onclick="jawabKuis('soal2', 'LOTS', 'HOTS')" class="quiz-btn flex-1 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-700 font-bold text-sm">Ini LOTS</button>
                         </div>
+                        <div class="feedback mt-3 text-xs font-medium hidden"></div>
                     </div>
                 </div>
             </section>
-        </div>
 
+        </div>
     </main>
 
-    <footer class="text-center py-8 text-slate-400 text-xs sm:text-sm bg-white border-t border-slate-200 mt-auto">
+    <footer class="text-center py-8 text-slate-400 text-xs sm:text-sm bg-white border-t border-slate-200">
         <p>&copy; 2026 Tim PKM Pondok Pesantren Al-Kautsar Pandaan. Dibuat untuk tujuan pendidikan.</p>
     </footer>
 
@@ -314,39 +660,82 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
+        // Latihan penempatan kuadran (HOTS x Autentik)
+        (function () {
+            const NAMA = { 1:'K1 · LOTS, tidak autentik', 2:'K2 · LOTS tetapi autentik',
+                           3:'K3 · HOTS tetapi tidak autentik', 4:'K4 · HOTS &amp; autentik' };
+            document.querySelectorAll('#kuadranQuiz .kq').forEach(function (kartu) {
+                const benar = kartu.dataset.benar;
+                const fb  = kartu.querySelector('.kq-fb');
+                const exp = kartu.querySelector('.kq-exp');
+                kartu.querySelectorAll('.kq-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        if (kartu.classList.contains('answered')) return;
+                        kartu.classList.add('answered');
+                        const tepat = btn.dataset.p === benar;
+                        btn.classList.add(tepat ? 'correct' : 'wrong');
+                        if (!tepat) {
+                            const b = kartu.querySelector('.kq-btn[data-p="' + benar + '"]');
+                            if (b) b.classList.add('correct');
+                        }
+                        fb.classList.remove('hidden');
+                        fb.innerHTML =
+                            '<span class="font-bold ' + (tepat ? 'text-emerald-600' : 'text-rose-600') + '">' +
+                            (tepat ? '✓ Tepat. ' : '✗ Belum tepat — jawabannya ' + NAMA[benar] + '. ') +
+                            '</span><span class="text-slate-600">' + exp.innerHTML + '</span>';
+                    });
+                });
+            });
+        })();
+
+        // Tab Logic untuk Taksonomi Bloom
+        function openTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active style from all buttons
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                // Reset to default colors based on their id
+                if(btn.id === 'btn-c6') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-rose-50 text-rose-700 hover:bg-rose-500 hover:text-white transform hover:translate-x-2';
+                if(btn.id === 'btn-c5') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-orange-50 text-orange-700 hover:bg-orange-500 hover:text-white transform hover:translate-x-2';
+                if(btn.id === 'btn-c4') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-amber-50 text-amber-700 hover:bg-amber-500 hover:text-white transform hover:translate-x-2';
+                if(btn.id === 'btn-c3') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-emerald-50 text-emerald-700 hover:bg-emerald-500 hover:text-white transform hover:translate-x-2';
+                if(btn.id === 'btn-c2') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-sky-50 text-sky-700 hover:bg-sky-500 hover:text-white transform hover:translate-x-2';
+                if(btn.id === 'btn-c1') btn.className = 'tab-btn w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-slate-100 text-slate-700 hover:bg-slate-500 hover:text-white transform hover:translate-x-2';
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active style to clicked button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            const baseColor = activeBtn.className.match(/hover:bg-(\w+)-/)[1];
+            activeBtn.className = `tab-btn active w-full p-3 rounded-xl font-bold text-sm text-left transition-all border border-transparent bg-${baseColor}-500 text-white shadow-md transform translate-x-2`;
+        }
+
         // Quiz Logic
-        const answers = { q1: 1, q2: 2 }; // Kunci jawaban yang benar (index)
-
-        function checkAnswer(questionId, selectedIdx) {
-            const container = document.getElementById(questionId);
-            const buttons = container.querySelectorAll('.quiz-option');
+        function jawabKuis(soalId, tebakan, jawabanBenar) {
+            const container = document.getElementById(soalId);
+            const btns = container.querySelectorAll('.quiz-btn');
             const feedback = container.querySelector('.feedback');
-            const correctIdx = answers[questionId];
 
-            // Disable all buttons in this question
-            buttons.forEach(btn => btn.classList.add('disabled'));
+            // Disable buttons
+            btns.forEach(btn => btn.classList.add('disabled'));
 
-            if (selectedIdx === correctIdx) {
-                buttons[selectedIdx].classList.add('correct');
-                // override tailwind hover effect for correct answer
-                buttons[selectedIdx].style.backgroundColor = '#059669'; 
-                buttons[selectedIdx].style.color = 'white';
-                buttons[selectedIdx].style.borderColor = '#059669';
-                
-                feedback.innerHTML = '✅ <strong>Tepat Sekali!</strong> Anda memahami konsepnya.';
-                feedback.className = 'feedback text-xs mt-3 text-emerald-400 block';
+            if (tebakan === jawabanBenar) {
+                event.target.classList.add('correct');
+                feedback.innerHTML = '✅ <strong>Benar!</strong> ' + (tebakan === 'LOTS' ? 'Soal ini sekadar hafalan murni (C1).' : 'Soal ini meminta siswa mengevaluasi dan berargumen (C5).');
+                feedback.className = 'feedback mt-3 text-xs font-medium text-emerald-400 block';
             } else {
-                buttons[selectedIdx].classList.add('wrong');
-                buttons[selectedIdx].style.backgroundColor = '#dc2626';
-                buttons[selectedIdx].style.color = 'white';
-                buttons[selectedIdx].style.borderColor = '#dc2626';
-                
-                buttons[correctIdx].classList.add('correct'); 
-                buttons[correctIdx].style.backgroundColor = '#059669';
-                buttons[correctIdx].style.color = 'white';
-                
-                feedback.innerHTML = '❌ <strong>Kurang Tepat.</strong> Perhatikan jawaban yang ditandai hijau.';
-                feedback.className = 'feedback text-xs mt-3 text-rose-400 block';
+                event.target.classList.add('wrong');
+                // Highlight the correct one
+                btns.forEach(btn => {
+                    if(btn.textContent.includes(jawabanBenar)) btn.classList.add('correct');
+                });
+                feedback.innerHTML = '❌ <strong>Kurang Tepat.</strong> ' + (jawabanBenar === 'LOTS' ? 'Meskipun panjang, ini hanya tes ingatan hafalan (LOTS).' : 'Kasus ini menuntut siswa untuk menilai kebijakan, masuk ranah HOTS (C5).');
+                feedback.className = 'feedback mt-3 text-xs font-medium text-rose-400 block';
             }
         }
     </script>
