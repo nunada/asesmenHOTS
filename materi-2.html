@@ -22,6 +22,88 @@
         .quiz-option.correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; }
         .quiz-option.wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
         .quiz-option.disabled { opacity: 0.6; pointer-events: none; }
+    
+        /* ==================== KETERBACAAN ====================
+           Dua perbaikan: (1) menaikkan lantai ukuran huruf agar tidak ada
+           teks di bawah ~12px, (2) memperbaiki kontras warna abu-abu.
+           Catatan kontras di latar putih: slate-400 hanya 2,6:1 dan
+           slate-300 hanya 1,5:1 — keduanya di bawah ambang WCAG AA (4,5:1).
+           Karena itu keduanya digelapkan, KECUALI bila berada di dalam blok
+           berlatar gelap — di sana justru harus tetap terang. */
+
+        /* 1. Lantai ukuran huruf */
+        .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\] { font-size: 12px !important; line-height: 1.55 !important; }
+        .text-\[11px\], .text-\[11\.5px\], .text-\[12px\] { font-size: 12.5px !important; line-height: 1.6 !important; }
+        .text-\[13px\] { font-size: 13.5px !important; line-height: 1.65 !important; }
+        .text-xs   { font-size: 13px !important;   line-height: 1.65 !important; }
+        .text-sm   { font-size: 14.5px !important; line-height: 1.7 !important; }
+        .text-base { font-size: 16.5px !important; line-height: 1.75 !important; }
+        @media (min-width: 640px) {
+          .sm\:text-\[11px\] { font-size: 12.5px !important; }
+          .sm\:text-\[13px\] { font-size: 13.5px !important; }
+          .sm\:text-xs   { font-size: 13.5px !important; line-height: 1.65 !important; }
+          .sm\:text-sm   { font-size: 15px !important;   line-height: 1.7 !important; }
+          .sm\:text-base { font-size: 17px !important;   line-height: 1.75 !important; }
+        }
+
+        /* 2. Kontras huruf di latar terang */
+        .text-slate-400 { color: #64748b !important; }   /* 2,6:1 → 4,8:1 */
+        .text-slate-300 { color: #475569 !important; }   /* 1,5:1 → 7,6:1 */
+
+        /* 3. Kecualikan blok berlatar gelap: di sana huruf dikembalikan terang */
+        .bg-slate-900 .text-slate-400, .bg-slate-900 .text-slate-300, .bg-slate-900 .text-slate-500,
+        .bg-slate-800 .text-slate-400, .bg-slate-800 .text-slate-300,
+        .bg-slate-950 .text-slate-400, .bg-indigo-900 .text-slate-400,
+        .bg-indigo-950 .text-slate-400, .bg-indigo-950 .text-slate-300 { color: #cbd5e1 !important; }
+
+        /* 4. Teks di dalam kartu berwarna lembut: naikkan sedikit ketebalan
+              agar tetap tajam pada layar ponsel beresolusi rendah */
+        .text-slate-500, .text-slate-600 { -webkit-font-smoothing: antialiased; }
+    
+        /* ==================== GAMBAR / DIAGRAM SVG ====================
+           Semua diagram memakai viewBox tanpa width/height piksel, sehingga
+           menyusut mengikuti lebar layar tanpa berubah rasio. Tailwind Preflight
+           menjadikan <svg> display:block — untuk diagram hal itu justru
+           dikehendaki, jadi tidak perlu dilawan di sini. */
+        .fig {
+            margin: 0;
+            padding: 14px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            overflow-x: auto;
+        }
+        .fig > svg {
+            display: block;
+            width: 100%;
+            min-width: 460px;      /* di bawah ini diagram digeser, bukan digencet */
+            height: auto;
+            margin: 0 auto;
+        }
+        .fig figcaption {
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            text-align: center;
+        }
+        .fig figcaption strong { color: #1e293b; }
+        .fig-note {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: .75rem;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #334155;
+        }
+        /* teks di dalam SVG memakai font halaman agar seragam */
+        .fig svg text { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+        @media print {
+            .fig { break-inside: avoid; page-break-inside: avoid; }
+            .fig > svg { min-width: 0; }
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -234,6 +316,62 @@
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         AI generatif pada dasarnya adalah <strong>mesin penerus kalimat</strong>. Ia dilatih membaca teks dalam jumlah sangat besar, lalu belajar memperkirakan kata apa yang paling wajar muncul berikutnya. Ketika Anda bertanya, ia tidak "mencari jawaban di database" — ia <em>menyusun</em> kalimat yang paling mungkin menjadi jawaban.
                     </p>
+
+                    <figure class="fig mb-4">
+                        <svg viewBox="0 0 760 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aiTitle aiDesc">
+                            <title id="aiTitle">Cara kerja AI generatif sebagai penerus kalimat</title>
+                            <desc id="aiDesc">Perintah guru masuk, AI memperkirakan kata berikutnya satu per satu berdasarkan pola teks yang pernah dibacanya, lalu keluar jawaban. Karena memperkirakan dan bukan mencari, hasilnya bisa terdengar meyakinkan tetapi salah, sehingga guru wajib memeriksa.</desc>
+
+                            <!-- 1. perintah -->
+                            <rect x="20" y="66" width="176" height="100" rx="14" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5"/>
+                            <text x="108" y="96" text-anchor="middle" font-size="14" font-weight="800" fill="#1d4ed8">PERINTAH ANDA</text>
+                            <text x="108" y="122" text-anchor="middle" font-size="13.5" fill="#1e40af">"Susun soal HOTS</text>
+                            <text x="108" y="142" text-anchor="middle" font-size="13.5" fill="#1e40af">tentang zakat…"</text>
+
+                            <polygon points="228,109 204,102 204,116" fill="#94a3b8" transform="rotate(180 216 109)"/>
+
+                            <!-- 2. mesin penerus kalimat -->
+                            <rect x="240" y="40" width="248" height="152" rx="14" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                            <text x="364" y="68" text-anchor="middle" font-size="14" font-weight="800" fill="#7e22ce">MEMPERKIRAKAN KATA</text>
+                            <text x="364" y="90" text-anchor="middle" font-size="13" fill="#6b21a8">satu per satu, berdasarkan pola</text>
+                            <text x="364" y="108" text-anchor="middle" font-size="13" fill="#6b21a8">teks yang pernah dibaca</text>
+                            <rect x="262" y="122" width="62" height="28" rx="7" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.5"/>
+                            <text x="293" y="141" text-anchor="middle" font-size="13" fill="#5b21b6">Zakat</text>
+                            <rect x="332" y="122" width="62" height="28" rx="7" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.5"/>
+                            <text x="363" y="141" text-anchor="middle" font-size="13" fill="#5b21b6">mal</text>
+                            <rect x="402" y="122" width="62" height="28" rx="7" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.5"/>
+                            <text x="433" y="141" text-anchor="middle" font-size="13" fill="#5b21b6">wajib</text>
+                            <text x="364" y="176" text-anchor="middle" font-size="13" font-style="italic" fill="#7e22ce">…dan seterusnya</text>
+
+                            <polygon points="520,109 496,102 496,116" fill="#94a3b8" transform="rotate(180 508 109)"/>
+
+                            <!-- 3. jawaban -->
+                            <rect x="532" y="66" width="208" height="100" rx="14" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5"/>
+                            <text x="636" y="94" text-anchor="middle" font-size="14" font-weight="800" fill="#15803d">JAWABAN</text>
+                            <text x="636" y="118" text-anchor="middle" font-size="13.5" fill="#166534">Kalimat yang paling wajar,</text>
+                            <text x="636" y="138" text-anchor="middle" font-size="13.5" fill="#166534">belum tentu kalimat yang</text>
+                            <text x="636" y="158" text-anchor="middle" font-size="13.5" font-weight="700" fill="#166534">paling benar</text>
+
+                            <!-- turun ke pemeriksaan guru -->
+                            <line x1="636" y1="168" x2="636" y2="200" stroke="#f59e0b" stroke-width="2.5"/>
+                            <polygon points="636,214 629,200 643,200" fill="#f59e0b"/>
+
+                            <!-- 4. guru memeriksa -->
+                            <rect x="440" y="218" width="300" height="106" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+                            <text x="590" y="246" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">GURU MEMERIKSA</text>
+                            <text x="590" y="270" text-anchor="middle" font-size="13.5" fill="#92400e">Dalil, nomor ayat, angka, dan</text>
+                            <text x="590" y="290" text-anchor="middle" font-size="13.5" fill="#92400e">kepatutan konteks pesantren.</text>
+                            <text x="590" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">Langkah ini tidak bisa dilewati.</text>
+
+                            <!-- catatan -->
+                            <rect x="20" y="218" width="396" height="106" rx="14" fill="#f8fafc" stroke="#e2e8f0"/>
+                            <text x="40" y="246" font-size="13.5" font-weight="700" fill="#334155">Karena ia memperkirakan, bukan mencari:</text>
+                            <text x="40" y="270" font-size="13.5" fill="#475569">semakin jelas dan lengkap perintah Anda,</text>
+                            <text x="40" y="290" font-size="13.5" fill="#475569">semakin sempit ruang AI untuk menebak</text>
+                            <text x="40" y="310" font-size="13.5" fill="#475569">dan semakin sedikit yang perlu disunting.</text>
+                        </svg>
+                        <figcaption>Inilah sebabnya <strong>prompting</strong> berpengaruh besar, dan sebabnya <strong>pemeriksaan guru tidak bisa dilewati</strong>.</figcaption>
+                    </figure>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="p-3.5 bg-white border border-emerald-200 rounded-xl">
                             <p class="text-[10px] font-bold text-emerald-700 tracking-wider mb-1.5">AKIBAT BAIKNYA</p>
@@ -328,6 +466,70 @@
                 <!-- Anatomi prompt -->
                 <h4 class="font-bold text-slate-800 text-sm sm:text-base mb-1">Lima unsur prompt yang baik</h4>
                 <p class="text-xs text-slate-500 mb-4">Tidak semuanya wajib ada, tetapi semakin banyak yang terisi, semakin sedikit AI menebak.</p>
+
+                <figure class="fig mb-6">
+                    <svg viewBox="0 0 760 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pTitle pDesc">
+                        <title id="pTitle">Lima unsur penyusun prompt</title>
+                        <desc id="pDesc">Peran, tugas, konteks, ketentuan, dan bentuk keluaran bertumpuk membentuk satu prompt utuh. Konteks adalah unsur yang paling sering dilupakan dan paling besar pengaruhnya.</desc>
+
+                        <!-- lapisan -->
+                        <g>
+                            <rect x="24" y="24" width="440" height="52" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                            <circle cx="56" cy="50" r="15" fill="#7e22ce"/>
+                            <text x="56" y="56" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">1</text>
+                            <text x="84" y="45" font-size="16" font-weight="800" fill="#581c87">PERAN</text>
+                            <text x="84" y="65" font-size="13.5" fill="#6b21a8">"Bertindaklah sebagai ahli asesmen madrasah."</text>
+                        </g>
+                        <g>
+                            <rect x="24" y="84" width="440" height="52" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                            <circle cx="56" cy="110" r="15" fill="#7e22ce"/>
+                            <text x="56" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">2</text>
+                            <text x="84" y="105" font-size="16" font-weight="800" fill="#581c87">TUGAS</text>
+                            <text x="84" y="125" font-size="13.5" fill="#6b21a8">"Susun 5 butir soal uraian." — satu kata kerja tegas</text>
+                        </g>
+                        <g>
+                            <rect x="24" y="144" width="440" height="64" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="4"/>
+                            <circle cx="56" cy="176" r="15" fill="#047857"/>
+                            <text x="56" y="182" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">3</text>
+                            <text x="84" y="166" font-size="16" font-weight="800" fill="#064e3b">KONTEKS</text>
+                            <text x="84" y="186" font-size="13.5" fill="#065f46">"MTs kelas VIII, Fikih, materi zakat mal,</text>
+                            <text x="84" y="203" font-size="13.5" fill="#065f46">kemampuan baca siswa sedang."</text>
+                        </g>
+                        <g>
+                            <rect x="24" y="216" width="440" height="52" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                            <circle cx="56" cy="242" r="15" fill="#7e22ce"/>
+                            <text x="56" y="248" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">4</text>
+                            <text x="84" y="237" font-size="16" font-weight="800" fill="#581c87">KETENTUAN</text>
+                            <text x="84" y="257" font-size="13.5" fill="#6b21a8">"Level C4–C5. Hindari kata 'sebutkan'."</text>
+                        </g>
+                        <g>
+                            <rect x="24" y="276" width="440" height="52" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                            <circle cx="56" cy="302" r="15" fill="#7e22ce"/>
+                            <text x="56" y="308" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">5</text>
+                            <text x="84" y="297" font-size="16" font-weight="800" fill="#581c87">BENTUK KELUARAN</text>
+                            <text x="84" y="317" font-size="13.5" fill="#6b21a8">"Sajikan dalam tabel beserta kunci."</text>
+                        </g>
+
+                        <!-- kurung penyatu -->
+                        <path d="M 476 30 L 494 30 L 494 322 L 476 322" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+                        <polygon points="500,170 522,176 500,182" fill="#94a3b8"/>
+
+                        <!-- hasil -->
+                        <rect x="530" y="96" width="206" height="160" rx="14" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5"/>
+                        <text x="633" y="126" text-anchor="middle" font-size="15" font-weight="800" fill="#15803d">HASIL YANG</text>
+                        <text x="633" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#15803d">LANGSUNG TERPAKAI</text>
+                        <text x="633" y="178" text-anchor="middle" font-size="13.5" fill="#166534">Tingkat kesulitan pas,</text>
+                        <text x="633" y="198" text-anchor="middle" font-size="13.5" fill="#166534">konteks terasa dekat,</text>
+                        <text x="633" y="218" text-anchor="middle" font-size="13.5" fill="#166534">tersaji rapi, tinggal</text>
+                        <text x="633" y="238" text-anchor="middle" font-size="13.5" fill="#166534">disunting sedikit.</text>
+
+                        <!-- penanda konteks -->
+                        <text x="530" y="290" font-size="13" font-weight="800" fill="#047857">↑ Unsur 3 diberi tanda tebal</text>
+                        <text x="530" y="310" font-size="13" fill="#475569">karena paling sering dilupakan</text>
+                        <text x="530" y="328" font-size="13" fill="#475569">dan paling besar pengaruhnya.</text>
+                    </svg>
+                    <figcaption>Bila hanya sanggup mengisi satu unsur tambahan, isilah <strong>Konteks</strong>.</figcaption>
+                </figure>
                 <div class="space-y-3 mb-8">
                     <div class="flex gap-3 p-4 rounded-2xl bg-purple-50 border border-purple-100">
                         <span class="w-7 h-7 shrink-0 rounded-lg bg-purple-600 text-white text-xs font-bold flex items-center justify-center">1</span>
@@ -454,6 +656,65 @@ pertanyaan, level kognitif, kunci jawaban.</p>
                     <p class="text-sm text-blue-900 leading-relaxed mb-4">
                         Kesalahan paling umum bukan salah menulis prompt, melainkan <strong>menerima jawaban pertama apa adanya</strong>. Percakapan dengan AI bersifat berlanjut — ia mengingat pembicaraan sebelumnya, jadi Anda tidak perlu mengulang seluruh perintah. Cukup arahkan.
                     </p>
+
+                    <figure class="fig mb-4">
+                        <svg viewBox="0 0 760 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="itTitle itDesc">
+                            <title id="itTitle">Siklus perbaikan bertahap</title>
+                            <desc id="itDesc">Prompt dikirim, AI menjawab, guru menilai. Bila belum sesuai guru memberi arahan singkat dan siklus berulang. Bila sudah sesuai, hasil dipakai setelah diperiksa kebenarannya.</desc>
+
+                            <!-- 1 kirim prompt -->
+                            <rect x="36" y="28" width="204" height="68" rx="13" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.5"/>
+                            <text x="138" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#1d4ed8">1 · KIRIM PROMPT</text>
+                            <text x="138" y="78" text-anchor="middle" font-size="13" fill="#1e40af">lima unsur terisi</text>
+
+                            <!-- 2 ai menjawab -->
+                            <rect x="520" y="28" width="204" height="68" rx="13" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2.5"/>
+                            <text x="622" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">2 · AI MENJAWAB</text>
+                            <text x="622" y="78" text-anchor="middle" font-size="13" fill="#5b21b6">draf pertama</text>
+
+                            <!-- 3 guru menilai -->
+                            <rect x="520" y="180" width="204" height="68" rx="13" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+                            <text x="622" y="208" text-anchor="middle" font-size="14" font-weight="800" fill="#b45309">3 · GURU MENILAI</text>
+                            <text x="622" y="230" text-anchor="middle" font-size="13" fill="#92400e">sudah sesuai atau belum?</text>
+
+                            <!-- 4 beri arahan -->
+                            <rect x="36" y="180" width="204" height="68" rx="13" fill="#f0f9ff" stroke="#0ea5e9" stroke-width="2.5"/>
+                            <text x="138" y="208" text-anchor="middle" font-size="14" font-weight="800" fill="#0369a1">4 · BERI ARAHAN</text>
+                            <text x="138" y="230" text-anchor="middle" font-size="13" fill="#075985">satu kalimat saja</text>
+
+                            <!-- penghubung searah putaran -->
+                            <line x1="240" y1="62" x2="504" y2="62" stroke="#60a5fa" stroke-width="2.5"/>
+                            <polygon points="518,62 504,55 504,69" fill="#60a5fa"/>
+                            <line x1="622" y1="96" x2="622" y2="164" stroke="#60a5fa" stroke-width="2.5"/>
+                            <polygon points="622,178 615,164 629,164" fill="#60a5fa"/>
+                            <line x1="520" y1="214" x2="256" y2="214" stroke="#60a5fa" stroke-width="2.5"/>
+                            <polygon points="242,214 256,207 256,221" fill="#60a5fa"/>
+                            <line x1="138" y1="180" x2="138" y2="112" stroke="#60a5fa" stroke-width="2.5"/>
+                            <polygon points="138,98 131,112 145,112" fill="#60a5fa"/>
+
+                            <!-- label cabang -->
+                            <text x="388" y="204" text-anchor="middle" font-size="13" font-weight="800" fill="#0369a1">belum sesuai → ulangi</text>
+                            <text x="638" y="266" font-size="13" font-weight="800" fill="#15803d">sudah sesuai</text>
+
+                            <!-- panel tengah -->
+                            <rect x="266" y="96" width="228" height="82" rx="13" fill="#f8fafc" stroke="#e2e8f0"/>
+                            <text x="380" y="130" text-anchor="middle" font-size="17" font-weight="800" fill="#1e40af">2–3 putaran</text>
+                            <text x="380" y="156" text-anchor="middle" font-size="13.5" fill="#475569">biasanya sudah cukup</text>
+
+                            <!-- keluar dari siklus -->
+                            <line x1="622" y1="248" x2="622" y2="272" stroke="#22c55e" stroke-width="2.5"/>
+                            <polygon points="622,286 615,272 629,272" fill="#22c55e"/>
+                            <rect x="452" y="290" width="288" height="56" rx="13" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5"/>
+                            <text x="596" y="313" text-anchor="middle" font-size="14" font-weight="800" fill="#15803d">PAKAI HASILNYA</text>
+                            <text x="596" y="334" text-anchor="middle" font-size="13" fill="#166534">setelah diperiksa kebenarannya</text>
+
+                            <!-- catatan -->
+                            <rect x="20" y="290" width="410" height="56" rx="13" fill="#f8fafc" stroke="#e2e8f0"/>
+                            <text x="38" y="311" font-size="13" font-weight="700" fill="#334155">Tidak perlu mengulang perintah. Contoh arahan:</text>
+                            <text x="38" y="332" font-size="13" font-style="italic" fill="#0369a1">"Butir 1 dan 3 masih hafalan — ganti."</text>
+                        </svg>
+                        <figcaption>Guru yang berhenti di langkah 2 mendapat hasil rata-rata. Bedanya hanya <strong>satu kalimat arahan</strong>.</figcaption>
+                    </figure>
                     <div class="space-y-2">
                         <div class="flex items-start gap-2.5 text-xs"><span class="px-2 py-0.5 bg-white text-blue-700 rounded font-bold shrink-0 border border-blue-200">Terlalu sulit</span><span class="text-slate-600 italic pt-0.5">"Butir 2 dan 4 terlalu berat untuk kelas VIII. Turunkan sedikit tanpa mengubah levelnya."</span></div>
                         <div class="flex items-start gap-2.5 text-xs"><span class="px-2 py-0.5 bg-white text-blue-700 rounded font-bold shrink-0 border border-blue-200">Masih LOTS</span><span class="text-slate-600 italic pt-0.5">"Butir 1 dan 3 masih hafalan. Ganti agar benar-benar menuntut evaluasi."</span></div>

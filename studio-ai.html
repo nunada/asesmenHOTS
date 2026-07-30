@@ -54,7 +54,7 @@
   p.ar-block { text-align: right; }
 
   /* ====== ISI JAWABAN AI ====== */
-  .prose-chat { font-size: 0.95rem; line-height: 1.75; color: #1e293b; word-break: break-word; overflow-wrap: anywhere; }
+  .prose-chat { font-size: 1rem; line-height: 1.75; color: #1e293b; word-break: break-word; overflow-wrap: anywhere; }
   .prose-chat > *:first-child { margin-top: 0; }
   .prose-chat > *:last-child { margin-bottom: 0; }
   .prose-chat h1, .prose-chat h2, .prose-chat h3, .prose-chat h4 { font-weight: 800; color: #0f172a; line-height: 1.3; margin: 1.15em 0 .5em; }
@@ -70,13 +70,13 @@
   .prose-chat a { color: #4338ca; text-decoration: underline; }
   .prose-chat blockquote { border-left: 4px solid #c7d2fe; background: #eef2ff; padding: .6em 1em; margin: .9em 0; border-radius: 0 .75rem .75rem 0; color: #3730a3; }
   .prose-chat hr { border: 0; border-top: 1px solid #e2e8f0; margin: 1.2em 0; }
-  .prose-chat code { background: #f1f5f9; color: #be185d; padding: .12em .38em; border-radius: .35rem; font-size: .88em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-  .prose-chat pre { background: #0f172a; color: #e2e8f0; padding: 1em; border-radius: .9rem; overflow-x: auto; margin: .9em 0; font-size: .84em; }
+  .prose-chat code { background: #f1f5f9; color: #a3124e; padding: .14em .4em; border-radius: .35rem; font-size: .92em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .prose-chat pre { background: #0f172a; color: #f1f5f9; padding: 1em; border-radius: .9rem; overflow-x: auto; margin: .9em 0; font-size: .9em; line-height: 1.6; }
   .prose-chat pre code { background: transparent; color: inherit; padding: 0; }
   .prose-chat img { max-width: 100%; height: auto; display: block; margin: .9em auto; border-radius: .9rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 16px rgba(0,0,0,.06); page-break-inside: avoid; break-inside: avoid; }
   /* Tabel rapi + bisa digeser di HP */
   .prose-chat .tbl-wrap { overflow-x: auto; margin: 1em 0; border: 1px solid #e2e8f0; border-radius: .9rem; }
-  .prose-chat table { width: 100%; border-collapse: collapse; font-size: .88em; }
+  .prose-chat table { width: 100%; border-collapse: collapse; font-size: .94em; }
   .prose-chat th, .prose-chat td { border: 1px solid #e2e8f0; padding: .55em .7em; text-align: left; vertical-align: top; }
   .prose-chat th { background: #f1f5f9; font-weight: 700; color: #0f172a; }
   .prose-chat tr:nth-child(even) td { background: #f8fafc; }
@@ -147,15 +147,15 @@
   }
   .sk-btn:hover { background: #eef2ff; border-color: #c7d2fe; }
   .sk-btn .sk-num {
-    width: 24px; height: 24px; flex-shrink: 0; border-radius: .6rem;
+    width: 26px; height: 26px; flex-shrink: 0; border-radius: .6rem;
     background: #e2e8f0; color: #475569;
     font-size: 11px; font-weight: 800;
     display: flex; align-items: center; justify-content: center;
     transition: all .18s ease;
   }
   .sk-btn .sk-txt { display: block; min-width: 0; }
-  .sk-btn .sk-txt strong { display: block; font-size: 12.5px; font-weight: 700; color: #1e293b; line-height: 1.3; }
-  .sk-btn .sk-txt small { display: block; font-size: 11px; color: #64748b; line-height: 1.35; margin-top: 2px; }
+  .sk-btn .sk-txt strong { display: block; font-size: 14px; font-weight: 700; color: #1e293b; line-height: 1.3; }
+  .sk-btn .sk-txt small { display: block; font-size: 12.5px; color: #475569; line-height: 1.35; margin-top: 2px; }
   .sk-btn.on { background: #eef2ff; border-color: #6366f1; box-shadow: 0 0 0 1px #6366f1 inset; }
   .sk-btn.on .sk-num { background: #4f46e5; color: #fff; }
   .sk-btn.on .sk-txt strong { color: #3730a3; }
@@ -163,11 +163,11 @@
   /* ====== CHIP PENANDA KUALITAS PROMPT ====== */
   .q-chip {
     display: inline-flex; align-items: center; gap: 4px;
-    font-size: 10.5px; font-weight: 700; line-height: 1;
-    padding: 5px 8px; border-radius: .55rem; border: 1px solid;
+    font-size: 12px; font-weight: 700; line-height: 1;
+    padding: 6px 9px; border-radius: .55rem; border: 1px solid;
   }
   .q-chip.ok { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
-  .q-chip.no { background: #f8fafc; border-color: #e2e8f0; color: #94a3b8; }
+  .q-chip.no { background: #f8fafc; border-color: #cbd5e1; color: #64748b; }
 
   .spin { animation: sp 1s linear infinite; }
   @keyframes sp { to { transform: rotate(360deg); } }
@@ -226,7 +226,44 @@
     a { color: #1e3a8a !important; text-decoration: none; }
   }
   #printArea { display: none; }
-</style>
+
+        /* ==================== KETERBACAAN ====================
+           Dua perbaikan: (1) menaikkan lantai ukuran huruf agar tidak ada
+           teks di bawah ~12px, (2) memperbaiki kontras warna abu-abu.
+           Catatan kontras di latar putih: slate-400 hanya 2,6:1 dan
+           slate-300 hanya 1,5:1 — keduanya di bawah ambang WCAG AA (4,5:1).
+           Karena itu keduanya digelapkan, KECUALI bila berada di dalam blok
+           berlatar gelap — di sana justru harus tetap terang. */
+
+        /* 1. Lantai ukuran huruf */
+        .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\] { font-size: 12px !important; line-height: 1.55 !important; }
+        .text-\[11px\], .text-\[11\.5px\], .text-\[12px\] { font-size: 12.5px !important; line-height: 1.6 !important; }
+        .text-\[13px\] { font-size: 13.5px !important; line-height: 1.65 !important; }
+        .text-xs   { font-size: 13px !important;   line-height: 1.65 !important; }
+        .text-sm   { font-size: 14.5px !important; line-height: 1.7 !important; }
+        .text-base { font-size: 16.5px !important; line-height: 1.75 !important; }
+        @media (min-width: 640px) {
+          .sm\:text-\[11px\] { font-size: 12.5px !important; }
+          .sm\:text-\[13px\] { font-size: 13.5px !important; }
+          .sm\:text-xs   { font-size: 13.5px !important; line-height: 1.65 !important; }
+          .sm\:text-sm   { font-size: 15px !important;   line-height: 1.7 !important; }
+          .sm\:text-base { font-size: 17px !important;   line-height: 1.75 !important; }
+        }
+
+        /* 2. Kontras huruf di latar terang */
+        .text-slate-400 { color: #64748b !important; }   /* 2,6:1 → 4,8:1 */
+        .text-slate-300 { color: #475569 !important; }   /* 1,5:1 → 7,6:1 */
+
+        /* 3. Kecualikan blok berlatar gelap: di sana huruf dikembalikan terang */
+        .bg-slate-900 .text-slate-400, .bg-slate-900 .text-slate-300, .bg-slate-900 .text-slate-500,
+        .bg-slate-800 .text-slate-400, .bg-slate-800 .text-slate-300,
+        .bg-slate-950 .text-slate-400, .bg-indigo-900 .text-slate-400,
+        .bg-indigo-950 .text-slate-400, .bg-indigo-950 .text-slate-300 { color: #cbd5e1 !important; }
+
+        /* 4. Teks di dalam kartu berwarna lembut: naikkan sedikit ketebalan
+              agar tetap tajam pada layar ponsel beresolusi rendah */
+        .text-slate-500, .text-slate-600 { -webkit-font-smoothing: antialiased; }
+    </style>
 </head>
 <body class="text-slate-800">
 
@@ -457,6 +494,43 @@
         <p id="skInfo" class="hidden mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-xs text-indigo-900 leading-relaxed"></p>
       </div>
 
+      <!-- Pengingat lima unsur prompt -->
+      <figure class="fig mb-6">
+        <svg viewBox="0 0 700 176" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uTitle uDesc">
+          <title id="uTitle">Lima unsur prompt yang diisi oleh kalkulator</title>
+          <desc id="uDesc">Kalkulator ini memandu Anda mengisi peran, tugas, konteks, ketentuan, dan bentuk keluaran, lalu menyusunnya menjadi satu prompt utuh.</desc>
+          <text x="350" y="26" text-anchor="middle" font-size="15" font-weight="800" fill="#334155">Kalkulator ini memandu Anda mengisi lima unsur berikut</text>
+          <g>
+            <rect x="14" y="46" width="124" height="66" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+            <text x="76" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#581c87">PERAN</text>
+            <text x="76" y="94" text-anchor="middle" font-size="12.5" fill="#6b21a8">jadilah siapa</text>
+          </g>
+          <g>
+            <rect x="150" y="46" width="124" height="66" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+            <text x="212" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#581c87">TUGAS</text>
+            <text x="212" y="94" text-anchor="middle" font-size="12.5" fill="#6b21a8">lakukan apa</text>
+          </g>
+          <g>
+            <rect x="286" y="42" width="124" height="74" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="4"/>
+            <text x="348" y="70" text-anchor="middle" font-size="14" font-weight="800" fill="#064e3b">KONTEKS</text>
+            <text x="348" y="90" text-anchor="middle" font-size="12.5" fill="#065f46">jenjang, mapel,</text>
+            <text x="348" y="107" text-anchor="middle" font-size="12.5" fill="#065f46">materi, siswa</text>
+          </g>
+          <g>
+            <rect x="422" y="46" width="124" height="66" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+            <text x="484" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#581c87">KETENTUAN</text>
+            <text x="484" y="94" text-anchor="middle" font-size="12.5" fill="#6b21a8">level &amp; batasan</text>
+          </g>
+          <g>
+            <rect x="558" y="46" width="128" height="66" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+            <text x="622" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#581c87">KELUARAN</text>
+            <text x="622" y="94" text-anchor="middle" font-size="12.5" fill="#6b21a8">bentuk sajian</text>
+          </g>
+          <text x="350" y="146" text-anchor="middle" font-size="13.5" fill="#047857" font-weight="700">Konteks diberi tanda tebal karena paling besar pengaruhnya pada mutu hasil.</text>
+          <text x="350" y="166" text-anchor="middle" font-size="13" fill="#475569">Penanda kelengkapan di bawah menunjukkan unsur mana yang belum terisi.</text>
+        </svg>
+      </figure>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Peran AI</label>
@@ -617,7 +691,7 @@
         <h2 class="text-base sm:text-lg font-bold text-slate-800 leading-tight">Ruang Percakapan</h2>
         <p id="chatMeta" class="text-[11px] sm:text-xs text-slate-500 font-semibold">Riwayat tersimpan di perangkat Anda</p>
       </div>
-      <span id="logBadge" class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold border whitespace-nowrap">•</span>
+      <span id="logBadge" class="hidden px-2.5 py-1 rounded-lg text-[11px] font-bold border whitespace-nowrap">•</span>
     </div>
 
     <!-- transcript -->
@@ -671,8 +745,12 @@
     </div>
   </section>
 
-  <!-- ================= 5. PENGATURAN REKAMAN ================= -->
-  <section class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden no-print">
+  <!-- ================= 5. PENGATURAN REKAMAN (KHUSUS PANITIA) =================
+       Disembunyikan dari peserta. Pencatatan ke Google Sheet tetap berjalan.
+       Panitia membukanya dengan menambahkan #panitia di akhir alamat halaman:
+       …/studio-ai.html#panitia
+       ========================================================================= -->
+  <section id="logSection" class="hidden bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden no-print">
     <button id="logToggle" class="w-full flex items-center gap-3 p-5 sm:p-6 text-left hover:bg-slate-50/70 transition-colors">
       <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg>
@@ -1636,7 +1714,11 @@ function setLogBadge(state, text) {
     ok:   'bg-emerald-50 text-emerald-700 border-emerald-200',
     err:  'bg-rose-50 text-rose-700 border-rose-200'
   };
-  b.className = 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold border whitespace-nowrap ' + (styles[state] || styles.off);
+  // 'hidden' harus dipertahankan: mengganti className secara utuh pernah
+  // membuat lencana ini muncul kembali kepada peserta.
+  b.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold border whitespace-nowrap '
+              + (styles[state] || styles.off)
+              + (MODE_PANITIA ? '' : ' hidden');
   b.textContent = text;
   b.title = text;
 }
@@ -1659,19 +1741,30 @@ async function logChat(ident, userTurn, aiTurn, files) {
       halaman: location.pathname.split('/').pop() || 'studio-ai.html',
       files: files.map(f => ({ name:f.name, mimeType:f.mime, data:f.b64 }))
     });
-    if (r.blind) { setLogBadge('ok', '● Terekam (buta)'); toast('Percakapan terkirim ke Sheet.', 'ok'); }
-    else { setLogBadge('ok', '● Terekam ✓ baris ' + (r.row || '?')); toast('Percakapan tercatat di Google Sheet ✓', 'ok'); }
+    if (r.blind) { setLogBadge('ok', '● Terekam (buta)'); if (MODE_PANITIA) toast('Percakapan terkirim ke Sheet.', 'ok'); }
+    else { setLogBadge('ok', '● Terekam ✓ baris ' + (r.row || '?')); if (MODE_PANITIA) toast('Percakapan tercatat di Google Sheet ✓', 'ok'); }
+    // Peserta tidak diberi notifikasi saat berhasil — cukup ramai tanpa manfaat.
   } catch (e) {
     setLogBadge('err', '● Rekam gagal');
     console.error('[Studio AI] gagal merekam:', e);
-    toast('Pencatatan ke Sheet gagal — buka "Pengaturan Rekaman".', 'err');
+    // Peserta tetap diberi tahu bila GAGAL, tanpa istilah teknis, agar tidak
+    // mengira pekerjaannya sudah terdokumentasi padahal belum.
+    toast(MODE_PANITIA
+      ? 'Pencatatan ke Sheet gagal — periksa Pengaturan Rekaman.'
+      : 'Dokumentasi percakapan belum tersimpan. Mohon beri tahu panitia.', 'warn');
     const s = $('logStatus');
     if (s) { s.textContent = 'Kesalahan terakhir: ' + String(e.message || e); s.className = 'text-xs mt-2 font-semibold text-rose-600 break-words'; }
   }
 }
 
-/* ---- pengaturan & tes koneksi ---- */
+/* ---- pengaturan & tes koneksi (hanya tampil untuk panitia) ---- */
+const MODE_PANITIA = /(^|[#&?])panitia\b/.test(location.hash + location.search);
+
 function initLogSettings() {
+  if (MODE_PANITIA) {
+    $('logSection').classList.remove('hidden');
+    $('logBadge').classList.remove('hidden');
+  }
   const f = $('scriptUrl');
   f.value = effectiveUrl();
   f.addEventListener('input', () => {
@@ -1891,10 +1984,14 @@ async function exportPDF() {
           filename, data: b64, waktuLokal: nowStamp(),
           jumlahPesan: history.filter(h => h.role === 'user').length
         });
-        toast(r.blind ? 'PDF terkirim ke Drive.' : 'PDF terunggah ke Drive & tercatat di Sheet ✓', 'ok');
+        toast(MODE_PANITIA
+          ? (r.blind ? 'PDF terkirim ke Drive.' : 'PDF terunggah ke Drive & tercatat di Sheet ✓')
+          : 'PDF tersimpan dan salinannya terkirim ke panitia ✓', 'ok');
       } catch (e) {
         console.error(e);
-        toast('PDF terunduh, tetapi unggah ke Drive gagal.', 'warn');
+        toast(MODE_PANITIA
+          ? 'PDF terunduh, tetapi unggah ke Drive gagal.'
+          : 'PDF sudah terunduh, tetapi salinan untuk panitia gagal terkirim.', 'warn');
       }
     }
   } catch (e) {

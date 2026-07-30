@@ -29,6 +29,88 @@
         .front, .back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .front { z-index: 2; transform: rotateY(0deg); }
         .back { transform: rotateY(180deg); position: relative; }
+    
+        /* ==================== KETERBACAAN ====================
+           Dua perbaikan: (1) menaikkan lantai ukuran huruf agar tidak ada
+           teks di bawah ~12px, (2) memperbaiki kontras warna abu-abu.
+           Catatan kontras di latar putih: slate-400 hanya 2,6:1 dan
+           slate-300 hanya 1,5:1 — keduanya di bawah ambang WCAG AA (4,5:1).
+           Karena itu keduanya digelapkan, KECUALI bila berada di dalam blok
+           berlatar gelap — di sana justru harus tetap terang. */
+
+        /* 1. Lantai ukuran huruf */
+        .text-\[9px\], .text-\[9\.5px\], .text-\[10px\], .text-\[10\.5px\] { font-size: 12px !important; line-height: 1.55 !important; }
+        .text-\[11px\], .text-\[11\.5px\], .text-\[12px\] { font-size: 12.5px !important; line-height: 1.6 !important; }
+        .text-\[13px\] { font-size: 13.5px !important; line-height: 1.65 !important; }
+        .text-xs   { font-size: 13px !important;   line-height: 1.65 !important; }
+        .text-sm   { font-size: 14.5px !important; line-height: 1.7 !important; }
+        .text-base { font-size: 16.5px !important; line-height: 1.75 !important; }
+        @media (min-width: 640px) {
+          .sm\:text-\[11px\] { font-size: 12.5px !important; }
+          .sm\:text-\[13px\] { font-size: 13.5px !important; }
+          .sm\:text-xs   { font-size: 13.5px !important; line-height: 1.65 !important; }
+          .sm\:text-sm   { font-size: 15px !important;   line-height: 1.7 !important; }
+          .sm\:text-base { font-size: 17px !important;   line-height: 1.75 !important; }
+        }
+
+        /* 2. Kontras huruf di latar terang */
+        .text-slate-400 { color: #64748b !important; }   /* 2,6:1 → 4,8:1 */
+        .text-slate-300 { color: #475569 !important; }   /* 1,5:1 → 7,6:1 */
+
+        /* 3. Kecualikan blok berlatar gelap: di sana huruf dikembalikan terang */
+        .bg-slate-900 .text-slate-400, .bg-slate-900 .text-slate-300, .bg-slate-900 .text-slate-500,
+        .bg-slate-800 .text-slate-400, .bg-slate-800 .text-slate-300,
+        .bg-slate-950 .text-slate-400, .bg-indigo-900 .text-slate-400,
+        .bg-indigo-950 .text-slate-400, .bg-indigo-950 .text-slate-300 { color: #cbd5e1 !important; }
+
+        /* 4. Teks di dalam kartu berwarna lembut: naikkan sedikit ketebalan
+              agar tetap tajam pada layar ponsel beresolusi rendah */
+        .text-slate-500, .text-slate-600 { -webkit-font-smoothing: antialiased; }
+    
+        /* ==================== GAMBAR / DIAGRAM SVG ====================
+           Semua diagram memakai viewBox tanpa width/height piksel, sehingga
+           menyusut mengikuti lebar layar tanpa berubah rasio. Tailwind Preflight
+           menjadikan <svg> display:block — untuk diagram hal itu justru
+           dikehendaki, jadi tidak perlu dilawan di sini. */
+        .fig {
+            margin: 0;
+            padding: 14px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            overflow-x: auto;
+        }
+        .fig > svg {
+            display: block;
+            width: 100%;
+            min-width: 460px;      /* di bawah ini diagram digeser, bukan digencet */
+            height: auto;
+            margin: 0 auto;
+        }
+        .fig figcaption {
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            text-align: center;
+        }
+        .fig figcaption strong { color: #1e293b; }
+        .fig-note {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: .75rem;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #334155;
+        }
+        /* teks di dalam SVG memakai font halaman agar seragam */
+        .fig svg text { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+        @media print {
+            .fig { break-inside: avoid; page-break-inside: avoid; }
+            .fig > svg { min-width: 0; }
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -156,9 +238,77 @@
                     <span class="bg-blue-100 text-blue-700 w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">2</span> 
                     4 Langkah Praktis Merancang HOTS
                 </h3>
-                <p class="text-slate-600 mb-8 text-sm sm:text-base leading-relaxed text-justify">
-                    Sebelum menggunakan AI, seorang guru harus memahami alur merancang asesmen secara manual. AI hanya membantu mempercepat proses ini, bukan menggantikan kerangka berpikir pedagogis Anda.
+                <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
+                    Sebelum menggunakan AI, seorang guru harus memahami alur merancang asesmen secara manual. AI hanya membantu mempercepat proses ini, bukan menggantikan kerangka berpikir pedagogis Anda. Perhatikan pada bagan berikut: <strong>keputusan di langkah 1 dan pemeriksaan di langkah 4 tetap sepenuhnya milik guru.</strong>
                 </p>
+
+                <figure class="fig mb-8">
+                    <svg viewBox="0 0 760 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="wTitle wDesc">
+                        <title id="wTitle">Empat langkah merancang asesmen dan pembagian peran dengan AI</title>
+                        <desc id="wDesc">Langkah satu menentukan tujuan dan level, langkah dua menyusun stimulus, langkah tiga merumuskan pertanyaan dan rubrik, langkah empat memeriksa. Langkah satu dan empat dikerjakan guru, langkah dua dan tiga dapat dipercepat AI.</desc>
+
+                        <!-- baris label peran -->
+                        <rect x="24" y="24" width="712" height="28" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+                        <text x="380" y="43" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">Alur tetap sama dengan atau tanpa AI — yang berubah hanya kecepatannya</text>
+
+                        <!-- langkah 1 -->
+                        <rect x="24" y="68" width="164" height="124" rx="14" fill="#eff6ff" stroke="#3b82f6" stroke-width="3"/>
+                        <circle cx="52" cy="96" r="16" fill="#1d4ed8"/>
+                        <text x="52" y="102" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">1</text>
+                        <text x="78" y="101" font-size="14.5" font-weight="800" fill="#1e3a8a">TUJUAN</text>
+                        <text x="42" y="130" font-size="13" fill="#1e40af">Tetapkan tujuan</text>
+                        <text x="42" y="149" font-size="13" fill="#1e40af">pembelajaran dan</text>
+                        <text x="42" y="168" font-size="13" fill="#1e40af">level kognitifnya</text>
+                        <text x="42" y="185" font-size="12.5" font-style="italic" fill="#64748b">(C4 / C5 / C6)</text>
+
+                        <!-- langkah 2 -->
+                        <rect x="206" y="68" width="164" height="124" rx="14" fill="#faf5ff" stroke="#a855f7" stroke-width="3"/>
+                        <circle cx="234" cy="96" r="16" fill="#7e22ce"/>
+                        <text x="234" y="102" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">2</text>
+                        <text x="260" y="101" font-size="14.5" font-weight="800" fill="#581c87">STIMULUS</text>
+                        <text x="224" y="130" font-size="13" fill="#6b21a8">Susun kasus nyata</text>
+                        <text x="224" y="149" font-size="13" fill="#6b21a8">yang dekat dengan</text>
+                        <text x="224" y="168" font-size="13" fill="#6b21a8">dunia siswa</text>
+                        <text x="224" y="185" font-size="12.5" font-style="italic" fill="#64748b">bagian paling lama</text>
+
+                        <!-- langkah 3 -->
+                        <rect x="388" y="68" width="164" height="124" rx="14" fill="#faf5ff" stroke="#a855f7" stroke-width="3"/>
+                        <circle cx="416" cy="96" r="16" fill="#7e22ce"/>
+                        <text x="416" y="102" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">3</text>
+                        <text x="442" y="101" font-size="14.5" font-weight="800" fill="#581c87">PERTANYAAN</text>
+                        <text x="406" y="130" font-size="13" fill="#6b21a8">Rumuskan pertanyaan,</text>
+                        <text x="406" y="149" font-size="13" fill="#6b21a8">kunci, rubrik, dan</text>
+                        <text x="406" y="168" font-size="13" fill="#6b21a8">kisi-kisi</text>
+                        <text x="406" y="185" font-size="12.5" font-style="italic" fill="#64748b">pekerjaan teknis</text>
+
+                        <!-- langkah 4 -->
+                        <rect x="570" y="68" width="166" height="124" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="3"/>
+                        <circle cx="598" cy="96" r="16" fill="#b45309"/>
+                        <text x="598" y="102" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">4</text>
+                        <text x="624" y="101" font-size="14.5" font-weight="800" fill="#78350f">PERIKSA</text>
+                        <text x="588" y="130" font-size="13" fill="#92400e">Cek kebenaran isi,</text>
+                        <text x="588" y="149" font-size="13" fill="#92400e">kepatutan konteks,</text>
+                        <text x="588" y="168" font-size="13" fill="#92400e">dan kesesuaian siswa</text>
+                        <text x="588" y="185" font-size="12.5" font-style="italic" fill="#b45309">tidak bisa dilewati</text>
+
+                        <!-- panah antar langkah -->
+                        <polygon points="192,124 202,130 192,137" fill="#94a3b8"/>
+                        <polygon points="374,124 384,130 374,137" fill="#94a3b8"/>
+                        <polygon points="556,124 566,130 556,137" fill="#94a3b8"/>
+
+                        <!-- pita peran -->
+                        <rect x="24" y="206" width="164" height="36" rx="9" fill="#1e3a8a"/>
+                        <text x="106" y="230" text-anchor="middle" font-size="13.5" font-weight="800" fill="#ffffff">KEPUTUSAN GURU</text>
+                        <rect x="206" y="206" width="346" height="36" rx="9" fill="#7e22ce"/>
+                        <text x="379" y="230" text-anchor="middle" font-size="13.5" font-weight="800" fill="#ffffff">DAPAT DIPERCEPAT AI</text>
+                        <rect x="570" y="206" width="166" height="36" rx="9" fill="#b45309"/>
+                        <text x="653" y="230" text-anchor="middle" font-size="13.5" font-weight="800" fill="#ffffff">WAJIB GURU</text>
+
+                        <!-- catatan -->
+                        <text x="380" y="272" text-anchor="middle" font-size="13.5" fill="#334155">AI mengambil bagian tengah — yang paling menyita waktu — sementara kedua ujungnya tetap di tangan Anda.</text>
+                    </svg>
+                    <figcaption>Bila langkah 1 dilewati, AI akan menebak tujuan pembelajaran Anda. Bila langkah 4 dilewati, kesalahan isi lolos ke tangan siswa.</figcaption>
+                </figure>
 
                 <div class="space-y-4">
                     <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md transition-shadow">
@@ -353,6 +503,80 @@
                 <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed text-justify">
                     Setiap guru datang dengan bekal berbeda. Ada yang sudah punya modul lengkap, ada yang hanya punya tumpukan soal lama, ada pula yang benar-benar mulai dari kertas kosong. Keenam situasi berikut mencakup hampir semua kemungkinan itu. Buka yang paling mirip dengan keadaan Anda hari ini — <strong>prompt di dalamnya bisa langsung dipakai</strong>.
                 </p>
+
+                <figure class="fig mb-7">
+                    <svg viewBox="0 0 760 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="kTitle kDesc">
+                        <title id="kTitle">Peta memilih skenario sesuai bekal yang dimiliki guru</title>
+                        <desc id="kDesc">Pertanyaan pertama: apa yang sudah Anda miliki? Bila belum ada apa pun pilih kasus 3. Bila punya soal lama pilih kasus 2 atau 6. Bila punya modul pilih kasus 1. Bila soal sudah jadi pilih kasus 4 atau 5.</desc>
+
+                        <!-- pertanyaan pangkal -->
+                        <rect x="238" y="16" width="284" height="56" rx="14" fill="#0f172a"/>
+                        <text x="380" y="40" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">APA YANG SUDAH ANDA MILIKI?</text>
+                        <text x="380" y="60" text-anchor="middle" font-size="13" fill="#cbd5e1">mulai dari sini</text>
+
+                        <!-- garis cabang -->
+                        <path d="M 380 74 L 380 96" stroke="#94a3b8" stroke-width="2.5"/>
+                        <path d="M 96 96 L 664 96" stroke="#94a3b8" stroke-width="2.5"/>
+                        <path d="M 96 96 L 96 122" stroke="#94a3b8" stroke-width="2.5"/>
+                        <path d="M 285 96 L 285 122" stroke="#94a3b8" stroke-width="2.5"/>
+                        <path d="M 475 96 L 475 122" stroke="#94a3b8" stroke-width="2.5"/>
+                        <path d="M 664 96 L 664 122" stroke="#94a3b8" stroke-width="2.5"/>
+
+                        <!-- cabang 1: belum ada apa-apa -->
+                        <rect x="16" y="122" width="160" height="50" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                        <text x="96" y="143" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">Belum ada</text>
+                        <text x="96" y="161" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">apa pun</text>
+                        <path d="M 96 172 L 96 198" stroke="#94a3b8" stroke-width="2.5"/>
+                        <polygon points="90,194 96,206 103,194" fill="#94a3b8"/>
+                        <rect x="16" y="208" width="160" height="76" rx="13" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.5"/>
+                        <text x="96" y="232" text-anchor="middle" font-size="15" font-weight="800" fill="#0f766e">KASUS 3</text>
+                        <text x="96" y="253" text-anchor="middle" font-size="13" fill="#115e59">Mulai dari nol —</text>
+                        <text x="96" y="271" text-anchor="middle" font-size="13" fill="#115e59">AI yang bertanya</text>
+
+                        <!-- cabang 2: modul/bahan -->
+                        <rect x="205" y="122" width="160" height="50" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                        <text x="285" y="143" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">Modul / buku /</text>
+                        <text x="285" y="161" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">tujuan belajar</text>
+                        <path d="M 285 172 L 285 198" stroke="#94a3b8" stroke-width="2.5"/>
+                        <polygon points="279,194 285,206 292,194" fill="#94a3b8"/>
+                        <rect x="205" y="208" width="160" height="76" rx="13" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.5"/>
+                        <text x="285" y="232" text-anchor="middle" font-size="15" font-weight="800" fill="#0f766e">KASUS 1</text>
+                        <text x="285" y="253" text-anchor="middle" font-size="13" fill="#115e59">Brainstorming ide</text>
+                        <text x="285" y="271" text-anchor="middle" font-size="13" fill="#115e59">stimulus</text>
+
+                        <!-- cabang 3: soal lama LOTS -->
+                        <rect x="395" y="122" width="160" height="50" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                        <text x="475" y="143" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">Bank soal lama</text>
+                        <text x="475" y="161" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">(banyak LOTS)</text>
+                        <path d="M 475 172 L 475 198" stroke="#94a3b8" stroke-width="2.5"/>
+                        <polygon points="469,194 475,206 482,194" fill="#94a3b8"/>
+                        <rect x="395" y="208" width="160" height="76" rx="13" fill="#ecfdf5" stroke="#10b981" stroke-width="4"/>
+                        <text x="475" y="232" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">KASUS 2 ★</text>
+                        <text x="475" y="253" text-anchor="middle" font-size="13" fill="#065f46">Naikkan LOTS</text>
+                        <text x="475" y="271" text-anchor="middle" font-size="13" fill="#065f46">menjadi HOTS</text>
+
+                        <!-- cabang 4: soal sudah jadi -->
+                        <rect x="584" y="122" width="160" height="50" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                        <text x="664" y="143" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">Soal HOTS</text>
+                        <text x="664" y="161" text-anchor="middle" font-size="13.5" font-weight="700" fill="#334155">sudah jadi</text>
+                        <path d="M 664 172 L 664 198" stroke="#94a3b8" stroke-width="2.5"/>
+                        <polygon points="658,194 664,206 671,194" fill="#94a3b8"/>
+                        <rect x="584" y="208" width="160" height="76" rx="13" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.5"/>
+                        <text x="664" y="232" text-anchor="middle" font-size="15" font-weight="800" fill="#0f766e">KASUS 4 / 5</text>
+                        <text x="664" y="253" text-anchor="middle" font-size="13" fill="#115e59">Rubrik, kisi-kisi,</text>
+                        <text x="664" y="271" text-anchor="middle" font-size="13" fill="#115e59">atau tiga versi</text>
+
+                        <!-- kasus 6 melintang -->
+                        <path d="M 96 284 L 96 320 L 664 320 L 664 284" fill="none" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 5"/>
+                        <rect x="230" y="336" width="300" height="72" rx="13" fill="#ffffff" stroke="#0d9488" stroke-width="2.5"/>
+                        <text x="380" y="360" text-anchor="middle" font-size="15" font-weight="800" fill="#0f766e">KASUS 6 · berlaku untuk semuanya</text>
+                        <text x="380" y="381" text-anchor="middle" font-size="13" fill="#115e59">Apa pun jalurnya, akhiri dengan meminta AI</text>
+                        <text x="380" y="399" text-anchor="middle" font-size="13" fill="#115e59">menelaah kritis hasil akhir Anda.</text>
+                        <path d="M 380 320 L 380 332" stroke="#0d9488" stroke-width="2.5"/>
+                        <polygon points="374,328 380,340 387,328" fill="#0d9488"/>
+                    </svg>
+                    <figcaption>Bekal terbanyak justru ada pada jalur ketiga. <strong>Soal lama Anda adalah modal, bukan beban</strong> — materinya sudah tervalidasi bertahun-tahun.</figcaption>
+                </figure>
 
                 <div class="space-y-3" id="kasusList">
 
