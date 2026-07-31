@@ -19,6 +19,11 @@
         main {
             flex-grow: 1;
         }
+        /* Jaring pengaman terhadap luapan mendatar di layar sempit.
+           Dipakai `clip`, BUKAN `hidden`: `overflow-x: hidden` membuat body
+           menjadi wadah gulir sehingga `position: sticky` pada navigasi bisa
+           berhenti bekerja. `clip` memangkas tanpa membuat wadah gulir. */
+        body { max-width: 100%; overflow-x: clip; }
     
         /* ==================== KETERBACAAN ====================
            Dua perbaikan: (1) menaikkan lantai ukuran huruf agar tidak ada
@@ -77,6 +82,11 @@
             height: auto;
             margin: 0 auto;
         }
+        /* Diagram yang sudah dirancang untuk layar sempit: biarkan menyusut penuh,
+           tidak perlu digeser. Tanpa ini, viewBox 860px pada layar 360px menyusut
+           ke skala 0,53 sehingga huruf 13px tampil hanya 7px. */
+        .fig-fit { padding: 8px; overflow-x: visible; }
+        .fig-fit > svg { min-width: 0; }
         .fig figcaption {
             margin-top: 10px;
             font-size: 13px;
@@ -100,6 +110,40 @@
         @media print {
             .fig { break-inside: avoid; page-break-inside: avoid; }
             .fig > svg { min-width: 0; }
+        }
+
+        /* ==================== JADWAL DI PONSEL ====================
+           Di layar sempit tabel dua kolom memaksa geser mendatar: kolom waktu
+           memakai whitespace-nowrap (±75px + padding) sehingga tabel melebihi
+           360px. Markup <table> dipertahankan agar strukturnya tetap terbaca
+           pembaca layar, tetapi barisnya ditumpuk: waktu di atas, kegiatan di
+           bawah. Hasilnya tidak ada lagi geseran mendatar. */
+        @media (max-width: 639px) {
+            .jadwal, .jadwal tbody { display: block; width: 100%; }
+            .jadwal thead { display: none; }
+            .jadwal tr {
+                display: block;
+                padding: 12px 16px;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .jadwal tr:last-child { border-bottom: 0; }
+            .jadwal td {
+                display: block;
+                padding: 0 !important;
+                white-space: normal !important;
+                border: 0;
+            }
+            /* kolom waktu jadi label di atas kegiatan */
+            .jadwal td:first-child {
+                font-size: 12.5px;
+                font-weight: 800;
+                letter-spacing: .02em;
+                margin-bottom: 5px;
+            }
+            .jadwal td:last-child { font-size: 14px; line-height: 1.6; }
+            /* baris bertanda (pretes, ishoma, postes) tetap terlihat khas */
+            .jadwal tr.tandai { border-left: 4px solid currentColor; }
+            .jadwal-scroll { overflow-x: visible !important; }
         }
     </style>
 </head>
@@ -161,34 +205,34 @@
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 py-10 sm:py-16">
+    <main class="max-w-4xl mx-auto px-3 sm:px-4 py-8 sm:py-16">
         <!-- Hero Title -->
-        <div class="text-center mb-12 sm:mb-16 relative">
+        <div class="text-center mb-8 sm:mb-16 relative">
             <div class="absolute inset-0 bg-blue-500/10 blur-[80px] rounded-full w-full h-full -z-10"></div>
             <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 sm:mb-6 leading-tight">
                 Penguatan Kompetensi Guru <br class="hidden sm:block">Pondok Pesantren Al Kautsar
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-medium px-4">
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-medium px-1 sm:px-4">
                 Dalam Mendesain Asesmen dan Tugas HOTS Berbantuan AI
             </p>
         </div>
 
         <!-- Latar Belakang -->
-        <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 sm:p-10 mb-12 relative overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300">
+        <div class="bg-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-5 sm:p-10 mb-8 sm:mb-12 relative overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300">
             <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-indigo-600"></div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <div class="w-10 h-10 shrink-0 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 Latar Belakang
             </h2>
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed text-justify">
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed text-left sm:text-justify">
                 Kegiatan Pengabdian Kepada Masyarakat (PKM) ini hadir sebagai wujud nyata dukungan akademisi dalam menjawab tantangan pendidikan di era digital. Guru Pondok Pesantren Al-Kautsar Pandaan memegang peran krusial dalam membentuk generasi pembelajar sepanjang hayat. Workshop ini fokus pada <strong class="text-indigo-900 font-semibold bg-indigo-50 px-1 rounded">penguasaan desain asesmen berbasis Higher Order Thinking Skills (HOTS) yang diintegrasikan dengan Artificial Intelligence (AI)</strong> sebagai akselerator efisiensi kerja guru.
             </p>
         </div>
 
         <!-- Alur Belajar (diagram) -->
-        <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 sm:p-10 mb-12">
+        <div class="bg-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-5 sm:p-10 mb-8 sm:mb-12">
             <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
@@ -197,8 +241,62 @@
             </h2>
             <p class="text-sm sm:text-base text-slate-600 mb-6 leading-relaxed">Tiga materi ini disusun berurutan. Setiap materi menjawab pertanyaan yang ditinggalkan materi sebelumnya.</p>
 
-            <figure class="fig">
-                <svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="alurTitle alurDesc">
+            <!-- Ponsel: tersusun tegak, muat penuh tanpa digeser -->
+            <figure class="fig fig-fit sm:hidden">
+                        <svg viewBox="0 0 360 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="alurMTitle alurMDesc">
+                        <title id="alurMTitle">Alur belajar tiga materi menuju Studio AI</title>
+                        <desc id="alurMDesc">Materi 1 membahas HOTS dan asesmen autentik, Materi 2 membahas AI dan prompting, Materi 3 praktik studi kasus, lalu berlanjut ke Studio AI.</desc>
+
+                        <!-- MATERI 1 -->
+                        <rect x="8" y="8" width="344" height="116" rx="16" fill="#ecfdf5" stroke="#10b981" stroke-width="2.5"/>
+                        <circle cx="46" cy="66" r="25" fill="#047857"/>
+                        <text x="46" y="74" text-anchor="middle" font-size="23" font-weight="800" fill="#ffffff">1</text>
+                        <text x="84" y="38" font-size="13.5" font-weight="800" fill="#047857">MATERI 1</text>
+                        <text x="84" y="63" font-size="17.5" font-weight="800" fill="#0f172a">HOTS &amp; Asesmen Autentik</text>
+                        <text x="84" y="86" font-size="14.5" fill="#475569">Apa yang harus kita tuju?</text>
+                        <text x="84" y="112" font-size="13.5" font-weight="700" fill="#64748b">08.50 – 09.20</text>
+                        <line x1="46" y1="128" x2="46" y2="142" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6 5"/>
+                        <polygon points="46,152 39,141 53,141" fill="#94a3b8"/>
+
+                        <!-- MATERI 2 -->
+                        <rect x="8" y="154" width="344" height="116" rx="16" fill="#faf5ff" stroke="#a855f7" stroke-width="2.5"/>
+                        <circle cx="46" cy="212" r="25" fill="#7e22ce"/>
+                        <text x="46" y="220" text-anchor="middle" font-size="23" font-weight="800" fill="#ffffff">2</text>
+                        <text x="84" y="184" font-size="13.5" font-weight="800" fill="#7e22ce">MATERI 2</text>
+                        <text x="84" y="209" font-size="17.5" font-weight="800" fill="#0f172a">AI &amp; Prompting</text>
+                        <text x="84" y="232" font-size="14.5" fill="#475569">Cara AI membantu dan memerintahnya</text>
+                        <text x="84" y="258" font-size="13.5" font-weight="700" fill="#64748b">09.20 – 09.50</text>
+                        <line x1="46" y1="274" x2="46" y2="288" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6 5"/>
+                        <polygon points="46,298 39,287 53,287" fill="#94a3b8"/>
+
+                        <!-- MATERI 3 -->
+                        <rect x="8" y="300" width="344" height="116" rx="16" fill="#f0fdfa" stroke="#14b8a6" stroke-width="2.5"/>
+                        <circle cx="46" cy="358" r="25" fill="#0f766e"/>
+                        <text x="46" y="366" text-anchor="middle" font-size="23" font-weight="800" fill="#ffffff">3</text>
+                        <text x="84" y="330" font-size="13.5" font-weight="800" fill="#0f766e">MATERI 3</text>
+                        <text x="84" y="355" font-size="17.5" font-weight="800" fill="#0f172a">Praktik &amp; Studi Kasus</text>
+                        <text x="84" y="378" font-size="14.5" fill="#475569">Enam situasi nyata di meja guru</text>
+                        <text x="84" y="404" font-size="13.5" font-weight="700" fill="#64748b">09.50 – 11.30</text>
+                        <line x1="46" y1="420" x2="46" y2="434" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6 5"/>
+                        <polygon points="46,444 39,433 53,433" fill="#94a3b8"/>
+
+                        <!-- RUANG PRAKTIK -->
+                        <rect x="8" y="446" width="344" height="116" rx="16" fill="#eef2ff" stroke="#4f46e5" stroke-width="2.5"/>
+                        <circle cx="46" cy="504" r="25" fill="#4f46e5"/>
+                        <text x="46" y="512" text-anchor="middle" font-size="23" font-weight="800" fill="#ffffff">✨</text>
+                        <text x="84" y="476" font-size="13.5" font-weight="800" fill="#3730a3">RUANG PRAKTIK</text>
+                        <text x="84" y="501" font-size="17.5" font-weight="800" fill="#0f172a">Studio AI</text>
+                        <text x="84" y="524" font-size="14.5" fill="#475569">Menyusun asesmen Anda sendiri</text>
+                        <text x="84" y="550" font-size="13.5" font-weight="700" fill="#64748b">12.30 – 13.30</text>
+
+                        <rect x="8" y="596" width="344" height="46" rx="11" fill="#f8fafc" stroke="#e2e8f0"/>
+                        <text x="24" y="618" font-size="13.5" fill="#334155">Pretes 08.30 · Ishoma 11.30 · Presentasi 13.30</text>
+                        <text x="24" y="635" font-size="13.5" fill="#334155">Postes &amp; angket respon 13.45</text>
+                    </svg>
+            </figure>
+            <!-- Layar lebar: mendatar -->
+            <figure class="fig hidden sm:block">
+                        <svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="alurTitle alurDesc">
                     <title id="alurTitle">Alur belajar tiga materi menuju Studio AI</title>
                     <desc id="alurDesc">Materi 1 membahas apa itu HOTS dan asesmen autentik, Materi 2 membahas AI dan prompting, Materi 3 praktik studi kasus, lalu berlanjut ke Studio AI.</desc>
 
@@ -268,8 +366,8 @@
         </div>
 
         <!-- Jadwal -->
-        <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-slate-50 to-white p-6 sm:p-8 text-center border-b border-slate-100 relative">
+        <div class="bg-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-slate-50 to-white p-5 sm:p-8 text-center border-b border-slate-100 relative">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Jadwal Kegiatan PKM</h2>
                 <div class="inline-flex items-center gap-2 mt-3 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-semibold">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -277,8 +375,8 @@
                 </div>
             </div>
             
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs sm:text-sm">
+            <div class="overflow-x-auto jadwal-scroll">
+                <table class="jadwal w-full text-left text-xs sm:text-sm">
                     <thead class="bg-slate-50 border-b border-slate-200">
                         <tr>
                             <th class="p-4 sm:p-5 font-bold text-slate-700 whitespace-nowrap w-[20%]">Waktu</th>
@@ -300,7 +398,7 @@
                                 </ul>
                             </td>
                         </tr>
-                        <tr class="bg-indigo-50/60 border-l-4 border-indigo-400">
+                        <tr class="tandai bg-indigo-50/60 border-l-4 border-indigo-400 text-indigo-500">
                             <td class="p-4 sm:p-5 whitespace-nowrap text-indigo-700 font-bold border-l-0">08.30–08.50</td>
                             <td class="p-4 sm:p-5 font-bold text-indigo-900">Pretes</td>
                         </tr>
@@ -316,7 +414,7 @@
                             <td class="p-4 sm:p-5 whitespace-nowrap text-slate-500 font-medium">09.50–11.30</td>
                             <td class="p-4 sm:p-5 text-slate-700"><span class="inline-block px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded font-bold mr-2 mb-1 sm:mb-0">Materi 3</span> Mendesain Tugas HOTS dan Pemanfaatan AI</td>
                         </tr>
-                        <tr class="bg-orange-50/60 border-l-4 border-orange-400">
+                        <tr class="tandai bg-orange-50/60 border-l-4 border-orange-400 text-orange-500">
                             <td class="p-4 sm:p-5 whitespace-nowrap text-orange-700 font-bold border-l-0">11.30–12.30</td>
                             <td class="p-4 sm:p-5 font-bold text-orange-900">Ishoma</td>
                         </tr>
@@ -328,7 +426,7 @@
                             <td class="p-4 sm:p-5 whitespace-nowrap text-slate-500 font-medium">13.30–13.45</td>
                             <td class="p-4 sm:p-5 text-slate-700 font-semibold leading-relaxed">Presentasi singkat hasil kerja beberapa peserta/perwakilan kelompok</td>
                         </tr>
-                        <tr class="bg-indigo-50/60 border-l-4 border-indigo-400">
+                        <tr class="tandai bg-indigo-50/60 border-l-4 border-indigo-400 text-indigo-500">
                             <td class="p-4 sm:p-5 whitespace-nowrap text-indigo-700 font-bold border-l-0">13.45–14.15</td>
                             <td class="p-4 sm:p-5 font-bold text-indigo-900">Postes dan Angket Respon</td>
                         </tr>
