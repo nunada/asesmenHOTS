@@ -716,12 +716,25 @@
           <button id="btnAttach" title="Lampirkan gambar / dokumen / PDF" class="p-3 bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl transition shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.17 7l-6.59 6.59a2 2 0 102.83 2.83l8.49-8.49a4 4 0 10-5.66-5.66l-8.48 8.49a6 6 0 108.48 8.48L21 13"/></svg>
           </button>
-          <span id="attachHint" class="text-[11px] sm:text-xs text-slate-400 font-semibold flex-1 leading-tight">Gambar, PDF, atau dokumen — maks. 15 MB/berkas</span>
+          <button id="btnTopikBaru" title="Mulai topik baru: percakapan sebelumnya tidak lagi ikut dikirim ke AI, sehingga kuota jauh lebih hemat. Riwayat di layar tetap utuh." class="p-3 bg-white border border-slate-200 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-slate-600 rounded-xl transition shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </button>
+          <span id="attachHint" class="text-[11px] sm:text-xs text-slate-500 font-semibold flex-1 leading-tight">Gambar, PDF, dokumen — maks. 15 MB</span>
           <button id="btnSend" class="px-5 sm:px-7 py-3 bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-xl shadow-md transition flex items-center gap-2 shrink-0">
             <svg id="sendIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
             <span id="sendLabel">Kirim</span>
           </button>
         </div>
+
+        <!-- Penunjuk pemakaian kuota -->
+        <div class="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span id="tokMeter" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-slate-50 text-slate-600 border-slate-200 whitespace-nowrap">
+            ± 0 token
+          </span>
+          <span id="ctxMeter" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap"></span>
+          <span id="tokTotal" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap"></span>
+        </div>
+        <p id="tokTip" class="hidden mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 leading-relaxed"></p>
       </div>
 
       <!-- ===== BARIS TOMBOL BAWAH: SIMPAN PDF / CETAK / HAPUS ===== -->
@@ -806,34 +819,23 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5frU3xxbY5nT2MBuOx
 
 const MODEL_CANDIDATES = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-flash-latest", "gemini-2.0-flash"];
 const MAX_FILE_MB   = 15;
-const MAX_TURNS_CTX = 30;          // jumlah giliran terakhir yang dikirim sebagai konteks
 
-const LS = { key:'sai_apikey', ident:'sai_identity', hist:'sai_history', model:'sai_model', calc:'sai_calc', url:'sai_scripturl', sk:'sai_skenario' };
+const LS = { key:'sai_apikey', ident:'sai_identity', hist:'sai_history', model:'sai_model', calc:'sai_calc', url:'sai_scripturl', sk:'sai_skenario', ctx:'sai_ctxstart', tok:'sai_tokens' };
 
 /* SEMUA aturan teknis penyajian ditanamkan di sini (tidak terlihat guru),
    supaya prompt yang ditulis guru tetap murni soal substansi pembelajaran.
    Halaman ini sudah bisa merender LaTeX, tulisan Arab, tabel, dan SVG. */
-const SYSTEM_PROMPT = `Anda adalah asisten AI untuk guru Pondok Pesantren Al-Kautsar Pandaan dalam pelatihan "Mendesain Asesmen dan Tugas HOTS Berbantuan AI".
+/* Dipadatkan dari 1.883 → ±700 karakter. Prompt sistem dikirim pada SETIAP
+   permintaan, jadi setiap kalimat di sini dibayar berulang kali. */
+const SYSTEM_PROMPT = `Asisten guru Pondok Pesantren Al-Kautsar Pandaan untuk menyusun asesmen HOTS.
 
-ISI JAWABAN
-1. Bahasa Indonesia yang komunikatif dan ramah untuk guru; hindari jargon tanpa penjelasan.
-2. Untuk soal HOTS, selalu sebutkan level kognitif (C4/C5/C6) dan indikator yang diukur.
-3. Langsung ke inti, tanpa pembuka yang berputar-putar.
-
-PENYAJIAN (tampilan sudah ditangani otomatis oleh aplikasi)
-4. Gunakan Markdown terstruktur: judul (##), daftar bernomor, tebal untuk istilah kunci, serta tabel untuk kisi-kisi, daftar soal, dan rubrik.
-5. Tulis SETIAP notasi matematika, fisika, kimia, atau statistika dalam LaTeX: $...$ untuk yang menyatu dengan kalimat, dan $$...$$ untuk persamaan pada baris tersendiri. Jangan memakai gambar atau tabel untuk rumus.
-6. Tulis teks Arab dengan huruf Arab asli berharakat lengkap, dan berikan terjemahan Indonesianya.
-7. Bila sebuah diagram, bagan, grafik, garis bilangan, atau ilustrasi geometri akan membantu pemahaman, gambarlah langsung sebagai SVG sebaris (inline) di dalam jawaban:
-   - selalu sertakan atribut viewBox, contoh <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
-   - jangan tetapkan width/height dalam piksel; aplikasi yang mengatur ukurannya
-   - pakai garis dan teks yang kontras di atas latar putih, ukuran font minimal 12
-   - beri <title> singkat sebagai keterangan gambar
-   - hanya bentuk dasar: rect, circle, ellipse, line, polyline, polygon, path, text, g. Tanpa script, tanpa gambar dari luar, tanpa animasi.
-
-LARANGAN
-8. JANGAN menyebut hal teknis apa pun dalam jawaban Anda: nama atau versi model AI, LaTeX, MathJax, SVG, Markdown, HTML, token, atau cara kerja aplikasi. Guru hanya perlu melihat hasil akhirnya yang sudah rapi.
-9. Jangan menulis kalimat seperti "berikut dalam format LaTeX" atau "saya buatkan SVG". Sajikan saja rumus dan gambarnya.`;
+- Bahasa Indonesia ramah untuk guru, langsung ke inti, tanpa pembuka.
+- Sebutkan level kognitif (C4/C5/C6) dan indikator tiap butir soal.
+- Markdown terstruktur; tabel untuk kisi-kisi, daftar soal, dan rubrik.
+- Rumus matematika/fisika/kimia WAJIB LaTeX: $...$ inline, $$...$$ baris sendiri.
+- Teks Arab: huruf Arab berharakat lengkap + terjemahan Indonesia.
+- Bila diagram membantu, gambar sebagai SVG inline: wajib ada viewBox, tanpa width/height piksel, beri <title>, hanya rect/circle/line/polyline/polygon/path/text/g, tanpa script maupun animasi.
+- JANGAN menyebut hal teknis (nama model, LaTeX, SVG, Markdown) dalam jawaban. Sajikan hasilnya saja.`;
 
 /* ===================== UTIL ===================== */
 const $  = id => document.getElementById(id);
@@ -1496,6 +1498,7 @@ function drawPending() {
   }).join('');
   w.querySelectorAll('[data-rm]').forEach(b =>
     b.addEventListener('click', () => { pending.splice(+b.dataset.rm, 1); drawPending(); }));
+  if (typeof updateTok === 'function') updateTok();
 }
 
 /* ===================== TEXTAREA: TINGGI MANUAL + AUTO ===================== */
@@ -1530,19 +1533,125 @@ $('msgInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) { e.preventDefault(); send(); }
 });
 
+/* ===================== PENUNJUK PEMAKAIAN KUOTA ===================== */
+let tokSesi = store.get(LS.tok, 0);
+
+function updateTok() {
+  const t = perkiraanToken($('msgInput').value || '', pending);
+  const m = $('tokMeter');
+  const berat = t > 4000, sedang = t > 2000;
+  m.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border whitespace-nowrap ' +
+    (berat ? 'bg-rose-50 text-rose-700 border-rose-200'
+           : sedang ? 'bg-amber-50 text-amber-700 border-amber-200'
+                    : 'bg-emerald-50 text-emerald-700 border-emerald-200');
+  m.textContent = '± ' + t.toLocaleString('id-ID') + ' token';
+  m.title = 'Perkiraan token yang dikirim: prompt sistem + riwayat yang masih aktif + pesan Anda + lampiran.';
+
+  const n = ctxTurns().length;
+  $('ctxMeter').textContent = n ? `riwayat aktif: ${n} giliran` : 'riwayat aktif: kosong (topik baru)';
+  $('tokTotal').textContent = tokSesi ? `terpakai sesi ini: ± ${tokSesi.toLocaleString('id-ID')}` : '';
+
+  const tip = $('tokTip');
+  const lampiranBesar = pending.some(f => (f.mime || '') === 'application/pdf');
+  if (berat) {
+    tip.classList.remove('hidden');
+    tip.innerHTML = 'Permintaan ini cukup besar. Untuk menghemat kuota: tekan tombol <strong>+</strong> di sebelah kiri untuk memulai topik baru bila pertanyaan Anda tidak berkaitan dengan percakapan sebelumnya'
+                  + (lampiranBesar ? ', dan pertimbangkan menempel bagian penting PDF sebagai teks alih-alih melampirkan seluruh berkasnya' : '') + '.';
+  } else tip.classList.add('hidden');
+}
+
+$('btnTopikBaru').addEventListener('click', () => {
+  if (ctxStart >= history.length) { toast('Sudah dalam topik baru.', 'info'); return; }
+  ctxStart = history.length;
+  store.set(LS.ctx, ctxStart);
+  const box = $('chatBox');
+  const pemisah = document.createElement('div');
+  pemisah.className = 'flex items-center gap-3 py-1 fade-in';
+  pemisah.innerHTML = `<div class="flex-1 h-px bg-emerald-200"></div>
+    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-[11px] font-bold whitespace-nowrap">Topik baru — riwayat di atas tidak lagi dikirim</span>
+    <div class="flex-1 h-px bg-emerald-200"></div>`;
+  box.appendChild(pemisah);
+  box.scrollTop = box.scrollHeight;
+  updateTok();
+  toast('Topik baru dimulai. Kuota jauh lebih hemat.', 'ok');
+});
+
+$('msgInput').addEventListener('input', updateTok);
+
 /* ===================== PANGGIL GEMINI ===================== */
+/* ===================== PEMANGGILAN API =====================
+   CATATAN PENTING TENTANG KUOTA.
+   Versi sebelumnya menelusuri daftar model dan melanjutkan ke model berikutnya
+   pada SETIAP kegagalan kecuali API key salah. Akibatnya, satu kali klik bisa
+   menembakkan 4 permintaan API: bila model pertama menolak karena batas laju
+   (HTTP 429), ketiga model lain dicoba dan juga ditolak. Dua kali klik
+   "Simpan & Uji" = 8 permintaan. Pada tingkat gratis yang batasnya dihitung
+   per permintaan, kuota bisa habis sebelum dipakai sama sekali.
+
+   Perbaikan:
+   - Penelusuran model HANYA dilakukan bila model benar-benar tidak ada (404).
+     Batas laju, kuota, dan izin langsung dilempar tanpa mencoba model lain.
+   - Pengujian API key memakai endpoint DAFTAR MODEL (GET) yang tidak memotong
+     kuota generasi sama sekali, sekaligus memberi tahu model apa yang tersedia
+     sehingga tidak perlu menebak-nebak.
+   - Ada jeda antar permintaan dan penghitung permintaan.
+   =========================================================== */
+let nReq = store.get(LS.req, 0);
+let reqTerakhir = 0;
+const JEDA_MIN_MS = 2500;         // cegah klik ganda menembakkan dua permintaan
+
+function catatReq() {
+  nReq++; reqTerakhir = Date.now();
+  store.set(LS.req, nReq);
+  const el = $('reqMeter');
+  if (el) el.textContent = `permintaan API: ${nReq}`;
+}
+
+/** Uji API key TANPA memotong kuota generasi, sekaligus ambil daftar model. */
+async function ambilDaftarModel(apiKey) {
+  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(apiKey));
+  const raw = await r.text();
+  if (!r.ok) throw new Error(raw || ('HTTP ' + r.status));
+  let j; try { j = JSON.parse(raw); } catch (e) { throw new Error('Balasan tidak dapat dibaca.'); }
+  return (j.models || [])
+    .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+    .map(m => String(m.name || '').replace(/^models\//, ''));
+}
+
+/** Pilih model terbaik yang benar-benar tersedia untuk key tersebut. */
+function pilihModel(tersedia) {
+  for (const m of MODEL_CANDIDATES) if (tersedia.includes(m)) return m;
+  const flash = tersedia.filter(m => /flash/i.test(m) && !/thinking|image|audio|tts|embedding/i.test(m));
+  if (flash.length) return flash[0];
+  return tersedia[0] || MODEL_CANDIDATES[0];
+}
+
 async function callGemini(contents, apiKey, quick) {
-  const saved = store.get(LS.model, null);
-  const order = saved ? [saved, ...MODEL_CANDIDATES.filter(m => m !== saved)] : MODEL_CANDIDATES.slice();
-  let lastErr = null;
-  for (const model of order) {
+  // jeda pengaman: klik ganda tidak boleh menjadi dua permintaan
+  const jeda = Date.now() - reqTerakhir;
+  if (jeda < JEDA_MIN_MS) {
+    const sisa = Math.ceil((JEDA_MIN_MS - jeda) / 1000);
+    throw new Error(`__JEDA__Mohon tunggu ${sisa} detik sebelum mengirim lagi, agar kuota tidak terbuang.`);
+  }
+
+  let model = store.get(LS.model, null);
+  if (!model) {
+    const tersedia = await ambilDaftarModel(apiKey);   // GET, tidak memotong kuota generasi
+    model = pilihModel(tersedia);
+    store.set(LS.model, model);
+    store.set(LS.models, tersedia);
+  }
+
+  // satu permintaan generasi saja; percobaan ulang hanya bila model tak ada
+  for (let coba = 0; coba < 2; coba++) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
     const body = {
       contents,
       systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: quick ? 64 : 8192 }
+      generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: quick ? 32 : 3000 }
     };
     let res;
+    catatReq();
     try {
       res = await fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(body) });
     } catch (netErr) { throw new Error('Failed to fetch'); }
@@ -1550,16 +1659,35 @@ async function callGemini(contents, apiKey, quick) {
     if (res.ok) {
       const j = await res.json();
       const txt = extractText(j);
-      if (!txt) { lastErr = new Error('Jawaban kosong (kemungkinan diblokir filter keamanan).'); continue; }
-      store.set(LS.model, model);
+      if (!txt) throw new Error('Jawaban kosong — kemungkinan tertahan filter keamanan. Coba ubah redaksi pertanyaan.');
+      const u = j.usageMetadata;
+      if (u && !quick && typeof tokSesi === 'number') {
+        tokSesi += (u.totalTokenCount || ((u.promptTokenCount || 0) + (u.candidatesTokenCount || 0)));
+        store.set(LS.tok, tokSesi);
+      }
       return txt;
     }
+
     const t = await res.text();
-    lastErr = new Error(t || ('HTTP ' + res.status));
-    if (/API_KEY_INVALID|API key not valid/i.test(t)) throw lastErr;   // tidak perlu coba model lain
-    // 404 / model tidak dikenal / 400 → coba kandidat berikutnya
+    const err = new Error(t || ('HTTP ' + res.status));
+    err.status = res.status;
+
+    // HANYA kasus "model tidak ada" yang layak dicoba ulang dengan model lain
+    const modelHilang = res.status === 404 || /NOT_FOUND|is not found|not supported/i.test(t);
+    if (modelHilang && coba === 0) {
+      store.del(LS.model);
+      const tersedia = await ambilDaftarModel(apiKey);
+      const lain = pilihModel(tersedia.filter(m => m !== model));
+      if (!lain || lain === model) throw err;
+      model = lain;
+      store.set(LS.model, model);
+      store.set(LS.models, tersedia);
+      reqTerakhir = 0;               // percobaan ulang ini tidak perlu menunggu jeda
+      continue;
+    }
+    throw err;                        // 429 / 403 / 400 → berhenti, jangan bakar kuota
   }
-  throw lastErr || new Error('Semua model gagal dipanggil.');
+  throw new Error('Model tidak tersedia untuk API Key ini.');
 }
 function extractText(j) {
   const c = j && j.candidates && j.candidates[0];
@@ -1567,26 +1695,74 @@ function extractText(j) {
   const parts = (c.content && c.content.parts) || [];
   return parts.map(p => p.text || '').join('').trim();
 }
+/* ===================== PENGHEMATAN TOKEN =====================
+   Tiga hal berikut dulu membuat kuota habis hanya dalam beberapa kirim:
+
+   1. LAMPIRAN DIKIRIM ULANG. Setiap giliran lama ikut membawa gambar/PDF-nya
+      lagi. Satu gambar ±258 token, jadi pada giliran ke-6 saja sudah ada
+      1.548 token hanya untuk gambar yang sama. Sekarang lampiran hanya
+      dikirim pada giliran terbaru; giliran lama diganti catatan singkat.
+
+   2. RIWAYAT 60 GILIRAN. Seluruh percakapan dikirim ulang setiap kali,
+      sehingga biayanya menumpuk kuadratik. Sekarang dibatasi anggaran
+      karakter — giliran terbaru diambil sampai anggaran habis.
+
+   3. Batas keluaran 8.192 token → diturunkan ke 3.000, cukup untuk 5 butir
+      soal beserta rubrik.
+
+   Ditambah tombol "Topik Baru" yang memutus konteks tanpa menghapus riwayat.
+   ============================================================== */
+const CTX_CHAR_BUDGET = 7000;   // ± 1.750 token untuk riwayat
+const estTok = n => Math.max(1, Math.round(n / 4));
+
+// batas awal konteks: giliran sebelum penanda ini tidak ikut dikirim
+let ctxStart = 0;
+
+function ctxTurns() {
+  const dipakai = history.slice(ctxStart);
+  const out = [];
+  let sisa = CTX_CHAR_BUDGET;
+  // ambil dari yang terbaru ke belakang agar yang relevan tidak terpangkas
+  for (let i = dipakai.length - 1; i >= 0; i--) {
+    const n = (dipakai[i].text || '').length;
+    if (out.length && sisa - n < 0) break;
+    sisa -= n;
+    out.unshift(dipakai[i]);
+  }
+  return out;
+}
+
 function buildContents(userText, files) {
-  const ctx = history.slice(-MAX_TURNS_CTX * 2);
   const contents = [];
-  ctx.forEach(t => {
-    const parts = [];
-    (t.files || []).forEach(f => {
-      const d = b64of(f);
-      if (d && isInlineable(f.mime)) parts.push({ inlineData: { mimeType: f.mime, data: d } });
-    });
-    parts.push({ text: t.text || '' });
-    contents.push({ role: t.role === 'user' ? 'user' : 'model', parts });
+  ctxTurns().forEach(t => {
+    // Lampiran giliran lama TIDAK dikirim ulang — cukup disebut keberadaannya.
+    const catatan = (t.files || []).length
+      ? `[sebelumnya saya melampirkan: ${t.files.map(f => f.name).join(', ')}]\n`
+      : '';
+    contents.push({ role: t.role === 'user' ? 'user' : 'model',
+                    parts: [{ text: catatan + (t.text || '') }] });
   });
   const parts = [];
   (files || []).forEach(f => {
     if (isInlineable(f.mime)) parts.push({ inlineData: { mimeType: f.mime, data: f.b64 } });
-    else parts.push({ text: `[Lampiran "${f.name}" (${f.mime}) tidak dapat dibaca langsung oleh AI. Berkas tetap tersimpan di Google Drive panitia.]` });
+    else parts.push({ text: `[Lampiran "${f.name}" tidak dapat dibaca langsung oleh AI. Berkas tetap tersimpan untuk panitia.]` });
   });
   parts.push({ text: userText });
   contents.push({ role:'user', parts });
   return contents;
+}
+
+/* Perkiraan token permintaan berikutnya, untuk ditampilkan kepada guru. */
+function perkiraanToken(userText, files) {
+  let t = estTok(SYSTEM_PROMPT.length) + estTok((userText || '').length);
+  ctxTurns().forEach(x => { t += estTok((x.text || '').length); });
+  (files || []).forEach(f => {
+    if (!isInlineable(f.mime)) return;
+    t += (f.mime || '').startsWith('image/') ? 300
+       : (f.mime || '') === 'application/pdf' ? 1400
+       : estTok(((f.b64 || '').length * 3) / 4);
+  });
+  return t;
 }
 const isInlineable = m => /^image\/(png|jpeg|jpg|webp|heic|heif|gif)$/i.test(m || '')
   || /^application\/pdf$/i.test(m || '')
@@ -1653,6 +1829,7 @@ async function send() {
   box.scrollTop = box.scrollHeight;
   setBusy(false);
   updateMeta();
+  updateTok();
 
   if (!failed) logChat(ident, userTurn, aiTurn, files);
 }
@@ -1806,7 +1983,9 @@ function initLogSettings() {
 $('btnClear').addEventListener('click', () => {
   if (!history.length) { toast('Riwayat masih kosong.', 'info'); return; }
   if (!confirm('Hapus seluruh riwayat percakapan di perangkat ini?\n\nData yang sudah tercatat di Google Sheet tidak terhapus.')) return;
-  history = []; store.del(LS.hist); renderAll();
+  history = []; ctxStart = 0; tokSesi = 0;
+  store.del(LS.hist); store.del(LS.ctx); store.del(LS.tok);
+  renderAll(); updateTok();
   toast('Riwayat percakapan dihapus.', 'ok');
 });
 
@@ -2026,6 +2205,7 @@ accordion($('calcToggle'),  $('calcBody'),  $('calcChevron'),  !!skDariTautan);
 accordion($('logToggle'),   $('logBody'),   $('logChevron'),   false);
 loadSettings();
 initLogSettings();
+ctxStart = Math.min(store.get(LS.ctx, 0), history.length);
 restoreCalc();
 
 if (skDariTautan && SKENARIO[skDariTautan]) {
@@ -2040,6 +2220,7 @@ if (skDariTautan && SKENARIO[skDariTautan]) {
 }
 
 renderAll();
+updateTok();
 if (!scriptReady()) console.warn('[Studio AI] URL Apps Script belum diisi. Pencatatan ke Google Sheet tidak aktif.');
 </script>
 </body>
