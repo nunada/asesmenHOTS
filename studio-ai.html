@@ -733,6 +733,7 @@
           </span>
           <span id="ctxMeter" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap"></span>
           <span id="tokTotal" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap"></span>
+          <span id="reqMeter" class="text-[11px] text-slate-500 font-semibold whitespace-nowrap"></span>
         </div>
         <p id="tokTip" class="hidden mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 leading-relaxed"></p>
       </div>
@@ -820,7 +821,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5frU3xxbY5nT2MBuOx
 const MODEL_CANDIDATES = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-flash-latest", "gemini-2.0-flash"];
 const MAX_FILE_MB   = 15;
 
-const LS = { key:'sai_apikey', ident:'sai_identity', hist:'sai_history', model:'sai_model', calc:'sai_calc', url:'sai_scripturl', sk:'sai_skenario', ctx:'sai_ctxstart', tok:'sai_tokens' };
+const LS = { key:'sai_apikey', ident:'sai_identity', hist:'sai_history', model:'sai_model', calc:'sai_calc', url:'sai_scripturl', sk:'sai_skenario', ctx:'sai_ctxstart', tok:'sai_tokens', req:'sai_requests', models:'sai_models' };
 
 /* SEMUA aturan teknis penyajian ditanamkan di sini (tidak terlihat guru),
    supaya prompt yang ditulis guru tetap murni soal substansi pembelajaran.
@@ -920,27 +921,56 @@ $('idInstitusi').addEventListener('change', () => { toggleInstLain(); saveIdenti
 ['idNama','idMapel','idInstitusiLain'].forEach(i => $(i).addEventListener('input', () => saveIdentity(true)));
 $('saveIdentity').addEventListener('click', () => saveIdentity(false));
 
+/* Pengujian API Key memakai endpoint DAFTAR MODEL (GET), bukan generateContent.
+   Endpoint itu tidak memotong kuota generasi sama sekali — jadi menekan tombol
+   ini berkali-kali pun tidak menghabiskan apa pun. Sebelumnya tombol ini
+   mengirim permintaan generasi sungguhan, dan karena penelusuran model, satu
+   klik bisa menjadi empat permintaan. */
+let ujiSedang = false;
 $('saveKey').addEventListener('click', async () => {
+  if (ujiSedang) return;
   const k = $('apiKey').value.trim();
   if (!k) { setKeyStatus('API Key masih kosong.', 'err'); return; }
   store.set(LS.key, k);
-  setKeyStatus('Menguji koneksi…', 'warn');
+  ujiSedang = true;
+  $('saveKey').disabled = true;
+  setKeyStatus('Memeriksa API Key…', 'warn');
   try {
-    const r = await callGemini([{ role:'user', parts:[{ text:'Balas hanya dengan kata: OK' }] }], k, true);
-    setKeyStatus('API Key valid dan siap dipakai ✓', 'ok');
-    toast('API Key valid dan tersimpan.', 'ok');
+    const tersedia = await ambilDaftarModel(k);
+    if (!tersedia.length) throw new Error('Tidak ada model yang tersedia untuk API Key ini.');
+    const m = pilihModel(tersedia);
+    store.set(LS.model, m);
+    store.set(LS.models, tersedia);
+    setKeyStatus(`API Key valid dan siap dipakai ✓ (${tersedia.length} model tersedia)`, 'ok');
+    toast('API Key valid. Pemeriksaan ini tidak memakai kuota.', 'ok');
   } catch (e) {
     setKeyStatus('Gagal: ' + shortErr(e), 'err');
-    toast('API Key belum bisa dipakai. Periksa kembali.', 'err');
+    toast('API Key belum bisa dipakai.', 'err');
+  } finally {
+    ujiSedang = false;
+    $('saveKey').disabled = false;
   }
 });
+
 function shortErr(e) {
   let m = (e && e.message) ? e.message : String(e);
-  if (/API_KEY_INVALID|API key not valid/i.test(m)) return 'API Key tidak valid.';
-  if (/PERMISSION_DENIED/i.test(m)) return 'Akses ditolak. Aktifkan Generative Language API pada project Anda.';
-  if (/RESOURCE_EXHAUSTED|quota/i.test(m)) return 'Kuota habis. Coba beberapa saat lagi.';
+  if (m.startsWith('__JEDA__')) return m.slice(8);
+  if (/API_KEY_INVALID|API key not valid/i.test(m)) return 'API Key tidak valid. Periksa kembali salinannya.';
+  if (/SERVICE_DISABLED|has not been used in project|is disabled/i.test(m))
+    return 'Generative Language API belum aktif pada project API Key ini.';
+  if (/PERMISSION_DENIED/i.test(m)) return 'Akses ditolak untuk API Key ini.';
+  if (/RESOURCE_EXHAUSTED|RATE_LIMIT|429|quota/i.test(m)) {
+    // pisahkan batas per menit (sementara) dari batas harian (habis sampai besok)
+    const tunda = m.match(/"?retryDelay"?\s*:\s*"?(\d+)s/i);
+    const harian = /per\s*day|PerDay|daily/i.test(m);
+    if (harian) return 'Batas pemakaian HARIAN API Key ini sudah tercapai. Kuota pulih otomatis besok, atau pakai API Key lain.';
+    return 'Terlalu banyak permintaan dalam waktu singkat (batas per menit).'
+         + (tunda ? ` Coba lagi dalam ${tunda[1]} detik.` : ' Tunggu ±60 detik, lalu coba lagi.')
+         + ' Kuota harian Anda TIDAK terpotong oleh penolakan ini.';
+  }
   if (/Failed to fetch|NetworkError/i.test(m)) return 'Koneksi internet bermasalah.';
-  return m.slice(0, 180);
+  const pesan = m.match(/"message"\s*:\s*"([^"]{6,160})"/);
+  return pesan ? pesan[1] : m.slice(0, 180);
 }
 
 /* ===================== KALKULATOR PROMPT ===================== */
@@ -1550,6 +1580,7 @@ function updateTok() {
   const n = ctxTurns().length;
   $('ctxMeter').textContent = n ? `riwayat aktif: ${n} giliran` : 'riwayat aktif: kosong (topik baru)';
   $('tokTotal').textContent = tokSesi ? `terpakai sesi ini: ± ${tokSesi.toLocaleString('id-ID')}` : '';
+  $('reqMeter').textContent = nReq ? `permintaan API: ${nReq}` : '';
 
   const tip = $('tokTip');
   const lampiranBesar = pending.some(f => (f.mime || '') === 'application/pdf');
@@ -1779,6 +1810,13 @@ function setBusy(on) {
 
 async function send() {
   if (busy) return;
+  // jeda diperiksa DI SINI agar penolakan karena klik terlalu cepat tidak
+  // sampai menambah gelembung pesan gagal di layar
+  const jeda = Date.now() - reqTerakhir;
+  if (jeda < JEDA_MIN_MS) {
+    toast(`Mohon tunggu ${Math.ceil((JEDA_MIN_MS - jeda) / 1000)} detik — mencegah kuota terbuang.`, 'warn');
+    return;
+  }
   const apiKey = ($('apiKey').value || '').trim();
   if (!apiKey) { toast('Isi API Key terlebih dahulu (Langkah 2).', 'warn'); $('apiKey').focus(); return; }
   const ident = saveIdentity(true);
@@ -1983,8 +2021,8 @@ function initLogSettings() {
 $('btnClear').addEventListener('click', () => {
   if (!history.length) { toast('Riwayat masih kosong.', 'info'); return; }
   if (!confirm('Hapus seluruh riwayat percakapan di perangkat ini?\n\nData yang sudah tercatat di Google Sheet tidak terhapus.')) return;
-  history = []; ctxStart = 0; tokSesi = 0;
-  store.del(LS.hist); store.del(LS.ctx); store.del(LS.tok);
+  history = []; ctxStart = 0; tokSesi = 0; nReq = 0;
+  store.del(LS.hist); store.del(LS.ctx); store.del(LS.tok); store.del(LS.req);
   renderAll(); updateTok();
   toast('Riwayat percakapan dihapus.', 'ok');
 });
